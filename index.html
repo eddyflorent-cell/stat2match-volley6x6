@@ -1,0 +1,3886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+</body>
+</html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mon équipe volley 6x6</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 10px;
+      background: #202124;
+      color: #f5f5f5;
+    }
+    h1, h2, h3 { margin: 8px 0; }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+#app-signature {
+  margin-top: 8px;
+  font-size: 11px;
+  text-align: center;
+  color: #888;
+}
+
+    .no-select,
+    .no-select * {
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    /* Boutons en haut */
+    #btn-toggle-roster,
+    #btn-dashboard,
+    #btn-history {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      border: none;
+      margin-bottom: 8px;
+      margin-right: 6px;
+    }
+    #btn-help {
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid #29b6f6;
+  margin-bottom: 8px;
+  margin-right: 6px;
+  background: #171717;
+  color: #29b6f6;
+}
+
+    #btn-toggle-roster {
+      background: #0077ff;
+      color: #fff;
+    }
+    #btn-dashboard {
+      background: #171717;
+      color: #00e676;
+      border: 1px solid #00e676;
+    }
+    #btn-history {
+      background: #171717;
+      color: #ffb300;
+      border: 1px solid #ffb300;
+    }
+    #team-name-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    #team-name-bar input {
+      flex: 1 1 140px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #171717;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    /* Bloc effectif */
+    #roster {
+      background: #303134;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      margin-bottom: 12px;
+    }
+    #player-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    #player-form input,
+    #player-form select,
+    #player-form button {
+      padding: 6px 8px;
+      font-size: 14px;
+    }
+    #player-form input,
+    #player-form select {
+      flex: 1 1 100px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background:#171717;
+      color:#fff;
+    }
+    #player-form button {
+      flex: 1 1 120px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #0077ff;
+      color: #fff;
+      font-weight: 600;
+    }
+        #config-transfer {
+      margin-top: 8px;
+      padding: 6px;
+      border-radius: 6px;
+      background: #252628;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #config-transfer textarea {
+      width: 100%;
+      min-height: 70px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #171717;
+      color: #eee;
+      font-size: 12px;
+      padding: 4px 6px;
+      resize: vertical;
+      font-family: "SF Mono","Consolas",monospace;
+    }
+    #config-transfer button {
+      border-radius: 999px;
+      border: none;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    #btn-export-config {
+      background: #00c853;
+      color: #fff;
+    }
+    #btn-import-config {
+      background: #0077ff;
+      color: #fff;
+    }
+    #config-transfer small {
+      font-size: 11px;
+      color: #aaa;
+    }
+
+    #player-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+    .player-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid #444;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .player-main {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      cursor: pointer;
+    }
+    .badge-jersey {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 13px;
+    }
+    .player-actions button {
+      padding: 3px 6px;
+      font-size: 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-edit { background: #ffc107; }
+    .btn-delete { background: #e53935; color: #fff; }
+
+         /* Couleurs maillots */
+     .c-blue  { background: #1e88e5; }
+     .c-green { background: #43a047; }
+     .c-red   { background: #e53935; }
+     .c-yellow{ background: #fdd835; color:#222; }
+     .c-purple{ background: #8e24aa; }
+     .c-orange{ background: #fb8c00; }
+     .c-teal  { background: #00897b; }
+     .c-pink  { background: #d81b60; }
+
+
+    /* Terrain 6x6 */
+    #court {
+      background: #303134;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      margin-bottom: 12px;
+    }
+    .court-grid {
+      background: #e0a96d;
+      border-radius: 8px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 140px);
+      gap: 6px;
+    }
+    @media (min-width: 700px) {
+      .court-grid {
+        grid-template-rows: repeat(2, 170px);
+      }
+    }
+    .court-pos {
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 8px;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #fff;
+      cursor: pointer;
+    }
+    /* halo rouge quand delta très négatif */
+    .court-pos.danger-delta {
+      box-shadow: 0 0 0 3px rgba(229,57,53,0.9);
+      border-color: #e53935;
+    }
+
+    .pos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pos-label {
+      font-weight: 600;
+    }
+    .pos-select {
+      width: 100%;
+      margin-top: 4px;
+      font-size: 12px;
+      padding: 2px 4px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+    }
+    .pos-jersey {
+      margin-top: 4px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 13px;
+      text-align: center;
+      padding: 4px;
+      color: #fff;
+      pointer-events: none;
+    }
+    .pos-jersey span { display: block; }
+    .pos-jersey .name {
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Banc */
+    #bench {
+      margin-top: 10px;
+    }
+    #bench-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .bench-player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 11px;
+    }
+    .bench-player .badge-jersey {
+      margin-bottom: 2px;
+    }
+
+    small { color: #aaa; }
+
+    /* Score du match */
+    #score-section {
+      background: #303134;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      margin-bottom: 12px;
+    }
+    #score-title span {
+      font-size: 13px;
+      font-weight: 400;
+      margin-left: 4px;
+      color: #ccc;
+    }
+    #set-selector-main,
+    #set-selector-stats,
+    #set-selector-dashboard {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .set-btn-main,
+    .set-btn-stats,
+    .set-btn-dashboard {
+      border-radius: 999px;
+      border: 1px solid #0077ff;
+      padding: 4px 10px;
+      background: #171717;
+      color: #0077ff;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .set-btn-main.active,
+    .set-btn-stats.active,
+    .set-btn-dashboard.active {
+      background: #0077ff;
+      color: #fff;
+    }
+    .score-board {
+      display: flex;
+      gap: 10px;
+      justify-content: space-around;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+    .score-team {
+      background: #171717;
+      border-radius: 8px;
+      padding: 8px;
+      flex: 1 1 120px;
+      text-align: center;
+    }
+    .score-label {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .score-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .score-controls button {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .score-btn-minus { background: #e53935; color: #fff; }
+    .score-btn-plus  { background: #43a047; color: #fff; }
+    .score-value {
+      font-size: 22px;
+      font-weight: 700;
+      min-width: 32px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .tm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    .tm-label {
+      flex: 1;
+      color: #dddddd;
+    }
+    .tm-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+        /* Temps morts compacts sous le score */
+    #timeout-inline {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      font-size: 11px;
+      align-items: center;
+    }
+    .tm-inline {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tm-inline-label {
+      color: #dddddd;
+      margin-right: 4px;
+    }
+    .tm-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid #888;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+    .tm-dot.tm-used {
+      background: #ffb300;
+      border-color: #ffb300;
+    }
+    .tm-inline-count {
+      font-size: 10px;
+      color: #aaaaaa;
+      margin-left: 2px;
+    }
+
+    .tm-controls button {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      background: #555555;
+      color: #ffffff;
+    }
+    .tm-controls span {
+      min-width: 40px;
+      text-align: center;
+      font-size: 13px;
+    }
+        /* Bandeau rallye */
+    #rally-bar {
+      margin-top: 8px;
+      padding: 6px;
+      background: #171717;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: space-between;
+    }
+    .rally-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      flex: 1 1 70px;
+      font-size: 11px;
+    }
+    .rally-label {
+      color: #ddd;
+      font-size: 11px;
+    }
+    .rally-group .rally-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .rally-group .rally-btn[data-outcome="plus"] {
+      background: #43a047;
+      color: #fff;
+    }
+    .rally-group .rally-btn[data-outcome="minus"] {
+      background: #e53935;
+      color: #fff;
+    }
+
+    /* Overlay rallye */
+    #rally-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    #rally-overlay-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+    }
+    #rally-overlay-panel {
+      position: relative;
+      background: #202124;
+      border-radius: 10px;
+      padding: 12px;
+      width: 90%;
+      max-width: 360px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.7);
+      z-index: 1;
+    }
+    #rally-overlay-title {
+      margin: 0 0 4px;
+      font-size: 16px;
+    }
+    #rally-overlay-hint {
+      margin: 0 0 8px;
+      font-size: 11px;
+      color: #ccc;
+    }
+    #rally-player-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .rally-player-btn {
+      flex: 1 1 45%;
+      border-radius: 999px;
+      border: 1px solid #0077ff;
+      background: #171717;
+      color: #fff;
+      padding: 6px 8px;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .rally-player-btn span {
+      display: inline-block;
+      margin-right: 4px;
+      font-weight: 600;
+    }
+    .rally-count {
+  margin-left: 4px;
+  font-weight: 400;
+  color: #ccc;
+}
+
+    #rally-close-btn {
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      padding: 8px;
+      background: #0077ff;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+
+   /* Cartes stats (joueuse / adversaire / dashboard / historique / aide) */
+#stats-view,
+#opponent,
+#dashboard,
+#history,
+#help {
+  background: #303134;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 12px;
+}
+
+
+        #btn-back,
+    #btn-back-from-dashboard,
+    #btn-back-from-history,
+    #btn-back-from-history-bottom {
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      background: #555;
+      color: #fff;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+
+    #stats-player-title {
+      margin: 4px 0 8px;
+    }
+
+    #stats-list,
+    #opponent-stats-list,
+    #dash-team-body {
+      border-top: 1px solid #444;
+      padding-top: 6px;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #444;
+      font-size: 14px;
+    }
+    .stat-label { font-weight: 500; }
+    .stat-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+    }
+    .stat-controls button {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .btn-stat-minus {
+      background: #e53935;
+      color: #fff;
+    }
+    .btn-stat-plus {
+      background: #43a047;
+      color: #fff;
+    }
+    .stat-value {
+      min-width: 22px;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .stat-sep {
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    #opponent-title span {
+      font-size: 13px;
+      margin-left: 4px;
+      color: #ccc;
+      font-weight: 400;
+    }
+
+    #dash-score-box {
+      background:#171717;
+      border-radius:8px;
+      padding:8px;
+      margin-bottom:8px;
+    }
+    #dash-score-line {
+      font-size: 18px;
+      font-weight:600;
+      text-align:center;
+    }
+    #dash-comment {
+      font-size: 12px;
+      color:#bbb;
+      margin-top:4px;
+      display:block;
+    }
+
+    #btn-close-match {
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #d81b60;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Historique */
+    .history-item {
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
+      background: #202124;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .history-meta {
+      font-size: 12px;
+      color: #bbb;
+      margin-bottom: 6px;
+    }
+    .btn-history-toggle,
+    .btn-history-delete,
+    .btn-history-copy {
+      border-radius: 999px;
+      border: none;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-right: 6px;
+      margin-top: 4px;
+    }
+    .btn-history-toggle {
+      background: #0077ff;
+      color: #fff;
+    }
+    .btn-history-delete {
+      background: #b71c1c;
+      color: #fff;
+    }
+    .btn-history-copy {
+      background: #00c853;
+      color: #fff;
+    }
+    .history-body {
+      margin-top: 6px;
+    }
+    .history-body textarea {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #171717;
+      color: #eee;
+      padding: 6px;
+      resize: vertical;
+      font-size: 12px;
+      font-family: "SF Mono", "Consolas", monospace;
+      margin-bottom: 4px;
+    }
+    /* Distinctions du match (MVP / soutien) */
+    #match-awards {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #18191c;
+    }
+    #match-awards h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+    }
+    .award-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .award-row label {
+      flex: 0 0 140px;
+      font-size: 12px;
+    }
+    .award-row select {
+      flex: 1 1 auto;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #171717;
+      color: #fff;
+      font-size: 12px;
+      padding: 3px 6px;
+    }
+
+    /* Export / import saison complète */
+    #season-transfer {
+      margin-top: 8px;
+      padding: 6px;
+      border-radius: 6px;
+      background: #252628;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #season-transfer textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #171717;
+      color: #eee;
+      font-size: 12px;
+      padding: 4px 6px;
+      resize: vertical;
+      font-family: "SF Mono","Consolas",monospace;
+    }
+    #season-transfer button {
+      border-radius: 999px;
+      border: none;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    #btn-export-season {
+      background: #00c853;
+      color: #fff;
+    }
+    #btn-import-season {
+      background: #0077ff;
+      color: #fff;
+    }
+
+    /* Fiche individuelle */
+    #player-report-text {
+      width: 100%;
+      min-height: 90px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #171717;
+      color: #eee;
+      padding: 6px;
+      resize: vertical;
+      font-size: 12px;
+      font-family: "SF Mono","Consolas",monospace;
+      margin-top: 4px;
+      margin-bottom: 6px;
+    }
+    #btn-player-report-copy {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: #00c853;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- VUE PRINCIPALE -->
+ <div class="container" id="main-view">
+  <h1 id="app-title">Mon équipe volley 6x6</h1>
+
+  <div id="team-name-bar">
+    <input id="team-name-input" type="text" placeholder="Nom de notre équipe" />
+    <input id="opponent-name-input" type="text" placeholder="Nom de l'adversaire" />
+  </div>
+
+  <button id="btn-toggle-roster">Gérer l'effectif</button>
+  <button id="btn-dashboard">Tableau de bord</button>
+  <button id="btn-history">Historique</button>
+  <button id="btn-help">Tutoriel</button>
+
+ 
+
+    <!-- EFFECTIF -->
+    <section id="roster" style="display:none;">
+      <h2>Effectif</h2>
+      <form id="player-form">
+        <input type="hidden" id="player-id" />
+        <input id="player-name" type="text" placeholder="Prénom" required />
+        <input id="player-number" type="number" placeholder="N°" min="0" />
+          <input id="player-license" type="text" placeholder="N° licence" />
+        <select id="player-role">
+          <option value="">Poste</option>
+          <option value="Passeur">Passeur</option>
+          <option value="Récep/attaq">Récep/attaq</option>
+          <option value="Central">Central</option>
+          <option value="Libero">Libero</option>
+          <option value="Opposé">Opposé</option>
+        </select>
+                 <select id="player-color">
+           <option value="blue">Bleu</option>
+           <option value="green">Vert</option>
+           <option value="red">Rouge</option>
+           <option value="yellow">Jaune</option>
+           <option value="purple">Violet</option>
+           <option value="orange">Orange</option>
+           <option value="teal">Turquoise</option>
+           <option value="pink">Rose</option>
+         </select>
+
+        <label style="font-size:11px;color:#ccc;display:flex;align-items:center;gap:4px;">
+  <input type="checkbox" id="player-in-match" checked />
+  Dans l’effectif du match
+</label>
+
+        <button type="submit">Enregistrer joueuse</button>
+      </form>
+
+      <div id="config-transfer">
+        <textarea id="config-json" placeholder="Zone de transfert de configuration (export / import)"></textarea>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button type="button" id="btn-export-config">Exporter la configuration</button>
+          <button type="button" id="btn-import-config">Importer la configuration</button>
+        </div>
+        <small>
+          Export : clique sur “Exporter”, puis colle le texte dans WhatsApp / mail / notes.<br>
+          Import : colle ici une configuration reçue, puis clique sur “Importer”.
+        </small>
+      </div>
+
+      <ul id="player-list"></ul>
+      <small>Tout est sauvegardé dans ton navigateur, même hors ligne.</small>
+    </section>
+
+
+    <!-- TERRAIN 6x6 -->
+    <section id="court" class="no-select">
+      <h2>Terrain (6 joueuses)</h2>
+             <div class="court-grid" id="court-grid">
+         <!-- Ligne avant -->
+         <div class="court-pos" data-pos="AG">
+           <div class="pos-header">
+             <span class="pos-label">Avant gauche</span>
+           </div>
+           <select class="pos-select"></select>
+           <div class="pos-jersey"></div>
+         </div>
+         <div class="court-pos" data-pos="AC">
+           <div class="pos-header">
+             <span class="pos-label">Avant centre</span>
+           </div>
+           <select class="pos-select"></select>
+           <div class="pos-jersey"></div>
+         </div>
+         <div class="court-pos" data-pos="AD">
+           <div class="pos-header">
+             <span class="pos-label">Avant droit</span>
+           </div>
+           <select class="pos-select"></select>
+           <div class="pos-jersey"></div>
+         </div>
+
+         <!-- Ligne arrière -->
+         <div class="court-pos" data-pos="ARG">
+           <div class="pos-header">
+             <span class="pos-label">Arrière gauche</span>
+           </div>
+           <select class="pos-select"></select>
+           <div class="pos-jersey"></div>
+         </div>
+         <div class="court-pos" data-pos="ARC">
+           <div class="pos-header">
+             <span class="pos-label">Arrière centre</span>
+           </div>
+           <select class="pos-select"></select>
+           <div class="pos-jersey"></div>
+         </div>
+         <div class="court-pos" data-pos="ARD">
+           <div class="pos-header">
+             <span class="pos-label">Arrière droit</span>
+           </div>
+           <select class="pos-select"></select>
+           <div class="pos-jersey"></div>
+         </div>
+       </div>
+
+
+           <!-- SCORE DU MATCH -->
+    <section id="score-section" class="no-select">
+      <h2 id="score-title">
+        Score du match <span id="score-set-label">(set 1)</span>
+      </h2>
+
+      <div id="set-selector-main">
+        <span>Set :</span>
+        <button class="set-btn-main active" data-set="1">1</button>
+        <button class="set-btn-main" data-set="2">2</button>
+        <button class="set-btn-main" data-set="3">3</button>
+        <button class="set-btn-main" data-set="4">4</button>
+        <button class="set-btn-main" data-set="5">5</button>
+      </div>
+
+      <div class="score-board">
+        <div class="score-team">
+          <div class="score-label" id="score-label-nous">Nous</div>
+          <div class="score-controls">
+            <button class="score-btn-minus" data-team="nous">-</button>
+            <span class="score-value" data-team="nous">0</span>
+            <button class="score-btn-plus" data-team="nous">+</button>
+          </div>
+        </div>
+
+        <div class="score-team">
+          <div class="score-label" id="score-label-adv">Adversaire</div>
+          <div class="score-controls">
+            <button class="score-btn-minus" data-team="eux">-</button>
+            <span class="score-value" data-team="eux">0</span>
+            <button class="score-btn-plus" data-team="eux">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANDEAU RALLYE -->
+      <div id="rally-bar">
+        <div class="rally-group" data-skill="attaque">
+          <span class="rally-label">Attaque</span>
+          <button class="rally-btn" data-skill="attaque" data-outcome="plus">+</button>
+          <button class="rally-btn" data-skill="attaque" data-outcome="minus">-</button>
+        </div>
+        <div class="rally-group" data-skill="service">
+          <span class="rally-label">Service</span>
+          <button class="rally-btn" data-skill="service" data-outcome="plus">+</button>
+          <button class="rally-btn" data-skill="service" data-outcome="minus">-</button>
+        </div>
+        <div class="rally-group" data-skill="bloc">
+          <span class="rally-label">Bloc</span>
+          <button class="rally-btn" data-skill="bloc" data-outcome="plus">+</button>
+          <button class="rally-btn" data-skill="bloc" data-outcome="minus">-</button>
+        </div>
+        <div class="rally-group" data-skill="reception">
+          <span class="rally-label">Récep.</span>
+          <button class="rally-btn" data-skill="reception" data-outcome="plus">+</button>
+          <button class="rally-btn" data-skill="reception" data-outcome="minus">-</button>
+        </div>
+        <div class="rally-group" data-skill="defense">
+          <span class="rally-label">Défense</span>
+          <button class="rally-btn" data-skill="defense" data-outcome="plus">+</button>
+          <button class="rally-btn" data-skill="defense" data-outcome="minus">-</button>
+        </div>
+        <div class="rally-group" data-skill="passe">
+          <span class="rally-label">Passe</span>
+          <button class="rally-btn" data-skill="passe" data-outcome="plus">+</button>
+          <button class="rally-btn" data-skill="passe" data-outcome="minus">-</button>
+        </div>
+      </div>
+
+      <!-- TEMPS MORTS – VERSION COMPACTE -->
+      <div id="timeout-inline" class="no-select" style="margin-top:8px;">
+        <!-- Temps morts techniques (communs) -->
+        <div class="tm-inline tm-inline-tech">
+          <span class="tm-inline-label">TM tech.</span>
+          <button type="button" class="tm-dot" data-tm-type="tech" data-tm-index="1"></button>
+          <button type="button" class="tm-dot" data-tm-type="tech" data-tm-index="2"></button>
+          <span class="tm-inline-count" id="tm-tech-count">0/2</span>
+        </div>
+
+        <!-- Temps morts pour notre équipe -->
+        <div class="tm-inline tm-inline-nous">
+          <span class="tm-inline-label">Temps morts nous</span>
+          <button type="button" class="tm-dot" data-tm-type="nous" data-tm-index="1"></button>
+          <button type="button" class="tm-dot" data-tm-type="nous" data-tm-index="2"></button>
+          <span class="tm-inline-count" id="tm-nous-count">0/2</span>
+        </div>
+
+        <!-- Temps morts pour l'adversaire -->
+        <div class="tm-inline tm-inline-eux">
+          <span class="tm-inline-label">Temps morts eux</span>
+          <button type="button" class="tm-dot" data-tm-type="eux" data-tm-index="1"></button>
+          <button type="button" class="tm-dot" data-tm-type="eux" data-tm-index="2"></button>
+          <span class="tm-inline-count" id="tm-eux-count">0/2</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- STATS ADVERSAIRES -->
+    <section id="opponent" class="no-select">
+      <h2 id="opponent-title">Stats adversaires <span id="opponent-set-label">(set 1)</span></h2>
+      <div id="opponent-stats-list">
+        <div class="stat-row" data-ocat="service">
+          <div class="stat-label">Services</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus" data-type="minus">-</button>
+            <span class="stat-value opp-value-minus">0</span>
+            <span class="stat-sep">fautes / points</span>
+            <span class="stat-value opp-value-plus">0</span>
+            <button class="btn-stat-plus" data-type="plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-ocat="bloc">
+          <div class="stat-label">Bloc</div>
+          <div class="stat-controls">
+            <span class="stat-sep">points pour eux</span>
+            <span class="stat-value opp-value-plus">0</span>
+            <button class="btn-stat-plus" data-type="plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-ocat="cadeaux">
+          <div class="stat-label">Cadeaux (points offerts)</div>
+          <div class="stat-controls">
+            <span class="stat-sep">points pour nous</span>
+            <span class="stat-value opp-value-plus">0</span>
+            <button class="btn-stat-plus" data-type="plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-ocat="points">
+          <div class="stat-label">Points (hors service)</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus" data-type="minus">-</button>
+            <span class="stat-value opp-value-minus">0</span>
+            <span class="stat-sep">pour nous / pour eux</span>
+            <span class="stat-value opp-value-plus">0</span>
+            <button class="btn-stat-plus" data-type="plus">+</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- FICHE STATS JOUEUSE -->
+  <div class="container" id="stats-container" style="display:none;">
+    <section id="stats-view" class="no-select">
+      <button id="btn-back">← Retour au terrain</button>
+      <h2 id="stats-player-title">Statistiques :</h2>
+
+      <div id="set-selector-stats">
+        <span>Set :</span>
+        <button class="set-btn-stats active" data-set="1">1</button>
+        <button class="set-btn-stats" data-set="2">2</button>
+        <button class="set-btn-stats" data-set="3">3</button>
+        <button class="set-btn-stats" data-set="4">4</button>
+        <button class="set-btn-stats" data-set="5">5</button>
+      </div>
+
+      <div id="stats-list">
+        <div class="stat-row" data-cat="attaque">
+          <div class="stat-label">Attaque</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus">-</button>
+            <span class="stat-value stat-value-minus">0</span>
+            <span class="stat-sep">fautes / points</span>
+            <span class="stat-value stat-value-plus">0</span>
+            <button class="btn-stat-plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-cat="service">
+          <div class="stat-label">Service</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus">-</button>
+            <span class="stat-value stat-value-minus">0</span>
+            <span class="stat-sep">fautes / points</span>
+            <span class="stat-value stat-value-plus">0</span>
+            <button class="btn-stat-plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-cat="bloc">
+          <div class="stat-label">Bloc</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus">-</button>
+            <span class="stat-value stat-value-minus">0</span>
+            <span class="stat-sep">fautes / points</span>
+            <span class="stat-value stat-value-plus">0</span>
+            <button class="btn-stat-plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-cat="reception">
+          <div class="stat-label">Réception</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus">-</button>
+            <span class="stat-value stat-value-minus">0</span>
+            <span class="stat-sep">fautes / points</span>
+            <span class="stat-value stat-value-plus">0</span>
+            <button class="btn-stat-plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-cat="defense">
+          <div class="stat-label">Défense</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus">-</button>
+            <span class="stat-value stat-value-minus">0</span>
+            <span class="stat-sep">fautes / points</span>
+            <span class="stat-value stat-value-plus">0</span>
+            <button class="btn-stat-plus">+</button>
+          </div>
+        </div>
+        <div class="stat-row" data-cat="passe">
+          <div class="stat-label">Passe</div>
+          <div class="stat-controls">
+            <button class="btn-stat-minus">-</button>
+            <span class="stat-value stat-value-minus">0</span>
+            <span class="stat-sep">fautes / points</span>
+            <span class="stat-value stat-value-plus">0</span>
+            <button class="btn-stat-plus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="player-stats-summary">
+        <h3>Impact dans le set <span id="player-summary-set">1</span></h3>
+        <p>
+          Fautes : <strong><span id="player-total-fautes">0</span></strong> ·
+          Points : <strong><span id="player-total-points">0</span></strong> ·
+          Delta : <strong><span id="player-delta">0</span></strong>
+        </p>
+        <p>
+          Contribution au score du set :
+          <strong><span id="player-pct-set-points">0%</span></strong> des points marqués,
+          <strong><span id="player-pct-set-fautes">0%</span></strong> des points concédés.
+        </p>
+        <p>
+          Sur tout le match :
+          <strong><span id="player-pct-match-points">0%</span></strong> des points marqués,
+          <strong><span id="player-pct-match-fautes">0%</span></strong> des points concédés.
+        </p>
+      </div>
+
+      <h3>Rapport individuel à partager</h3>
+      <textarea id="player-report-text"
+        placeholder="Le rapport sera généré automatiquement après chaque rallye."></textarea>
+      <button id="btn-player-report-copy" type="button">
+        Générer & copier le rapport individuel
+      </button>
+    </section>
+  </div>
+
+
+   <!-- TABLEAU DE BORD -->
+  <div class="container" id="dashboard-container" style="display:none;">
+    <section id="dashboard" class="no-select">
+      <button id="btn-back-from-dashboard">← Retour au terrain</button>
+      <h2>Tableau de bord</h2>
+
+      <div id="set-selector-dashboard">
+        <span>Set :</span>
+        <button class="set-btn-dashboard active" data-set="1">1</button>
+        <button class="set-btn-dashboard" data-set="2">2</button>
+        <button class="set-btn-dashboard" data-set="3">3</button>
+        <button class="set-btn-dashboard" data-set="4">4</button>
+        <button class="set-btn-dashboard" data-set="5">5</button>
+      </div>
+
+      <div id="dash-score-box">
+        <h3 id="dash-score-set-label">Set 1</h3>
+        <div id="dash-score-line">
+          <span id="dash-team-name-us">Nous</span>
+          <span id="dash-score-nous">0</span> -
+          <span id="dash-score-eux">0</span>
+          <span id="dash-team-name-opponent">Eux</span>
+        </div>
+
+        <span id="dash-comment">
+          Total de nos fautes estimées pour ce set :
+          <strong><span id="dash-total-fautes-pour-eux">0</span></strong> (≈ points offerts).
+        </span>
+      </div>
+
+      <div id="dash-team-summary">
+        <h3>Nos stats (set <span id="dash-team-set-label">1</span>)</h3>
+        <div id="dash-team-body"></div>
+      </div>
+
+      <div id="dash-opponent-summary">
+        ...
+      </div>
+
+           <div id="match-awards">
+        <h3>Distinctions du match</h3>
+
+        <!-- MVP -->
+        <div class="award-row">
+          <label for="select-mvp">Joueur·euse du match (MVP)</label>
+          <select id="select-mvp">
+            <option value="">— Aucune —</option>
+          </select>
+        </div>
+        <div id="mvp-suggestion" class="award-hint"></div>
+
+        <!-- Meilleur·e bloqueur·euse -->
+        <div class="award-row">
+          <label for="select-best-block">Meilleur·e bloqueur·euse</label>
+          <select id="select-best-block">
+            <option value="">— Aucune —</option>
+          </select>
+        </div>
+        <div id="block-suggestion" class="award-hint"></div>
+
+        <!-- Meilleur soutien -->
+        <div class="award-row">
+          <label for="select-best-support">Meilleur soutien</label>
+          <select id="select-best-support">
+            <option value="">— Aucune —</option>
+          </select>
+        </div>
+        <div id="support-suggestion" class="award-hint"></div>
+      </div>
+
+      <button id="btn-close-match">Clôturer ce match et l’archiver</button>
+
+    </section>
+  </div>
+
+  <!-- HISTORIQUE -->
+  <div class="container" id="history-container" style="display:none;">
+    <section id="history" class="no-select">
+      <button id="btn-back-from-history">← Retour au terrain</button>
+      <h2>Historique des matchs</h2>
+
+      <div id="history-list"></div>
+
+      <!-- Bouton retour en bas de la page aussi -->
+      <button id="btn-back-from-history-bottom" style="margin-top:8px;">
+        ← Retour au terrain
+      </button>
+    </section>
+  </div>
+    <!-- TUTORIEL / AIDE -->
+  <div class="container" id="help-container" style="display:none;">
+       <section id="help" class="no-select">
+      <button id="btn-back-from-help">← Retour au terrain</button>
+      <h2>Tutoriel rapide – stat2match-volley (v1.3)</h2>
+
+      <p style="font-size:13px;color:#ccc;">
+        Cette page résume comment utiliser l’application en match : préparer l’effectif,
+        placer les joueur·euses, utiliser le mode <strong>rallye</strong>, gérer le score,
+        les temps morts, lire les bilans et archiver les matchs.
+      </p>
+
+      <h3>1. Préparer l’effectif et l’effectif de match</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Clique sur <strong>« Gérer l’effectif »</strong>.</li>
+        <li>Ajoute chaque joueur·euse : <strong>Prénom, n°, poste, licence, couleur</strong>.</li>
+        <li>La case <strong>« Dans l’effectif du match »</strong> détermine qui est disponible pour ce match :
+          seuls les joueurs cochés apparaissent sur le terrain et sur le banc.</li>
+        <li>Tu peux décocher quelqu’un (blessure, absence) : il disparaît du banc et des listes du terrain,
+          mais reste dans l’effectif général.</li>
+        <li>Tout est <strong>enregistré automatiquement</strong> dans le navigateur (même hors ligne).</li>
+      </ul>
+
+      <h3>2. Placer les joueur·euses sur le terrain et gérer le banc</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Dans la zone <strong>« Terrain (6 joueuses) »</strong>, choisis une joueuse dans chaque liste déroulante
+          (Avant gauche, Avant droit, Arrière gauche, Arrière droit).</li>
+        <li>Une joueuse déjà sur le terrain ne peut pas être choisie à un autre poste :
+          elle est marquée comme déjà utilisée.</li>
+        <li>Le <strong>banc</strong> liste automatiquement tous les joueurs :
+          <ul>
+            <li>cochés « dans l’effectif du match » ;</li>
+            <li>et qui ne sont pas actuellement sur le terrain.</li>
+          </ul>
+        </li>
+        <li>La composition du terrain est <strong>mémorisée</strong> : si tu rafraîchis la page,
+          les postes et le banc sont récupérés depuis la sauvegarde.</li>
+      </ul>
+
+      <h3>3. Utiliser le bandeau « rallye » en live</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Le bandeau sous le score propose 6 catégories :
+          <strong>Attaque, Service, Bloc, Récep., Défense, Passe</strong>, chacune avec un bouton <strong>+ / -</strong>.</li>
+        <li>À chaque <strong>rallye</strong> :
+          <ul>
+            <li>appuie sur la catégorie concernée (<strong>+ = point marqué</strong>,
+              <strong>- = faute / point perdu</strong>) ;</li>
+            <li>une fenêtre s’ouvre avec les <strong>joueuses du terrain</strong> ;</li>
+            <li>tapote sur le nom de la ou des joueuses impliquées :
+              chaque clic ajoute 1 action, le compteur <strong>x2, x3…</strong> s’affiche à côté du nom.</li>
+          </ul>
+        </li>
+        <li>Quand l’échange est terminé, appuie sur <strong>« Terminer le rallye »</strong> pour fermer la fenêtre.</li>
+        <li>Les stats sont automatiquement ajoutées dans la fiche individuelle de chaque joueuse,
+          pour le <strong>set en cours</strong>.</li>
+        <li>Tu peux ensuite affiner / corriger dans la fiche stats si besoin.</li>
+      </ul>
+
+      <h3>4. Voir et corriger les stats individuelles</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Sur le terrain ou le banc, clique sur une joueuse pour ouvrir sa <strong>fiche stats</strong>.</li>
+        <li>Choisis le <strong>set</strong> en haut, puis utilise <strong>+ / -</strong> pour ajuster attaque,
+          service, bloc, réception, défense, passe.</li>
+        <li>Le bloc <strong>« Récap du set »</strong> affiche fautes, points, delta et impact
+          dans le set / dans le match.</li>
+        <li>Le bloc <strong>« Bilan saison (matchs archivés) »</strong> résume ses stats sur tous les matchs clos.</li>
+      </ul>
+
+      <h3>5. Gérer le score du match et les temps morts</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Dans <strong>« Score du match »</strong> :
+          <ul>
+            <li>choisis le set (1 à 5) avec les boutons en haut ;</li>
+            <li>utilise <strong>+ / -</strong> pour mettre à jour le score de chaque équipe.</li>
+          </ul>
+        </li>
+        <li>Les <strong>temps morts</strong> sont gérés dans la barre juste sous le score :
+          <ul>
+            <li><strong>TM tech.</strong> : 2 temps morts techniques communs aux deux équipes ;</li>
+            <li><strong>Temps morts nous</strong> : 2 temps morts pour ton équipe ;</li>
+            <li><strong>Temps morts eux</strong> : 2 temps morts pour l’adversaire.</li>
+          </ul>
+        </li>
+        <li>Clique sur chaque <strong>pastille</strong> pour marquer un temps mort pris
+          (le compteur passe de 0/2 à 1/2, puis 2/2).</li>
+      </ul>
+
+      <h3>6. Renseigner les stats adverses</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Dans la carte <strong>« Stats adversaires – [Nom] »</strong>, tu peux suivre :
+          <strong>services, bloc, cadeaux, points hors service</strong>.</li>
+        <li>Ces données alimentent le tableau de bord et le rapport final,
+          notamment pour mesurer les <strong>points offerts</strong> à l’adversaire.</li>
+      </ul>
+
+      <h3>7. Utiliser le tableau de bord</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Clique sur <strong>« Tableau de bord »</strong> pour ouvrir la vue synthèse.</li>
+        <li>Choisis le set en haut : tu vois alors le score, nos fautes estimées,
+          et une <strong>vue d’ensemble par secteur de jeu</strong> (attaque, service, bloc, etc.).</li>
+        <li>Le bloc <strong>« Distinctions du match »</strong> te permet de choisir :
+          <strong>MVP, meilleur·e bloqueur·euse, meilleur soutien</strong>.</li>
+        <li>Quand tout est saisi, clique sur <strong>« Clôturer ce match et l’archiver »</strong>
+          pour enregistrer le match dans l’historique.</li>
+      </ul>
+
+      <h3>8. Historique des matchs & rapports PDF</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Dans <strong>« Historique »</strong>, chaque match archivé affiche :
+          <strong>nom du match, score, adversaire, date</strong>.</li>
+        <li>Pour chaque match, tu peux :
+          <ul>
+            <li>Afficher / cacher les <strong>résumés</strong> (détaillé + court).</li>
+            <li><strong>Copier</strong> un résumé pour l’envoyer dans WhatsApp / mail.</li>
+            <li>Ouvrir une <strong>page imprimable</strong> :
+              depuis cette page tu peux imprimer ou exporter en PDF.</li>
+            <li><strong>Supprimer</strong> un match de l’historique si besoin.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>9. Rapport individuel joueuse / joueur</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Dans la fiche stats d’une joueuse, la zone
+          <strong>« Rapport individuel à partager »</strong> génère un texte prêt à envoyer.</li>
+        <li>Clique sur <strong>« Générer & copier le rapport individuel »</strong> :
+          le texte est copié, tu peux le coller dans WhatsApp, mail, etc.</li>
+        <li>Ce rapport ne concerne que la joueuse affichée : pour le bilan complet,
+          utilise l’onglet <strong>« Historique »</strong>.</li>
+      </ul>
+
+      <h3>10. Sauvegarder / partager la configuration</h3>
+      <ul style="font-size:13px;color:#ddd;">
+        <li>Dans <strong>« Effectif »</strong>, la zone <strong>« Export / import configuration »</strong> te permet de :
+          <ul>
+            <li>cliquer sur <strong>« Exporter la configuration »</strong> pour copier effectif + noms d’équipes +
+              composition du terrain ;</li>
+            <li>coller ce texte dans WhatsApp, mail ou notes ;</li>
+            <li>sur un autre appareil, coller ce texte puis cliquer sur
+              <strong>« Importer la configuration »</strong> pour retrouver la même équipe.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p style="font-size:12px;color:#888;margin-top:10px;">
+        Astuce : tu peux utiliser l’app sur un seul téléphone pendant le match, ou bien
+        partager la configuration à un adjoint (deuxième appareil) pour qu’il suive
+        les stats pendant que tu te concentres sur le coaching.
+      </p>
+    </section>
+
+  </div>
+
+
+
+  <script>
+       const STORAGE_KEY  = "volley-team-4x4";
+    const STATS_KEY    = "volley-team-4x4-stats";
+    const SETS_KEY     = "volley-team-4x4-sets";
+    const OPP_KEY      = "volley-team-4x4-opponent";
+    const HISTORY_KEY  = "volley-team-4x4-history";
+    const TEAM_KEY     = "volley-team-4x4-teamnames";
+    const COURT_KEY   = "volley-team-4x4-court";
+    
+
+    const DEFAULT_OUR_TEAM_NAME = "Mon équipe volley 6x6";
+    const DEFAULT_US_LABEL      = "Nous";
+    const DEFAULT_OPP_LABEL     = "Adversaire";
+
+    const STAT_CATEGORIES   = ["attaque","service","bloc","reception","defense","passe"];
+
+    const POINT_CATEGORIES  = ["attaque","service","bloc"];
+    const FAULT_CATEGORIES  = ["attaque","service","bloc","reception","defense","passe"];
+    const OPP_CATEGORIES    = ["service","bloc","cadeaux","points"];
+
+    const NEG_DELTA_THRESHOLD = -3; // delta <= -3 -> halo rouge
+
+    let players = [];
+    let stats = {};          // { playerId: { setNumber: {attaquePlus, attaqueMinus,...} } }
+    let setScores = {};      // { setNumber: { nous, eux } }
+    let opponentStats = {};  // { setNumber: { servicePlus, serviceMinus, blocPlus, ... } }
+    let historyMatches = []; // matches archivés
+
+    let currentStatsPlayerId = null;
+    let currentSet = 1;
+
+    let mainSetButtons = [];
+    let statsSetButtons = [];
+    let dashboardSetButtons = [];
+        let teamNames = {
+      our: DEFAULT_OUR_TEAM_NAME,
+      opp: DEFAULT_OPP_LABEL
+    };
+
+
+    /* --------- stockage joueurs ---------- */
+    function loadPlayers() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      try { players = JSON.parse(raw) || []; }
+      catch(e){ players = []; }
+    }
+    function savePlayers() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
+    }
+
+    /* --------- stockage stats joueurs ---------- */
+    function loadStats() {
+      const raw = localStorage.getItem(STATS_KEY);
+      if (!raw) return;
+      try { stats = JSON.parse(raw) || {}; }
+      catch(e){ stats = {}; }
+    }
+    function saveStats() {
+      localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+    }
+    function createEmptyStats() {
+      const o = {};
+      STAT_CATEGORIES.forEach(cat => {
+        o[cat + "Plus"] = 0;
+        o[cat + "Minus"] = 0;
+      });
+      return o;
+    }
+    function getPlayerSetStats(playerId, setNumber) {
+      if (!stats[playerId]) stats[playerId] = {};
+      if (!stats[playerId][setNumber]) stats[playerId][setNumber] = createEmptyStats();
+      return stats[playerId][setNumber];
+    }
+    // --------- MODE RALLYE : logique centrale ----------
+    let rallyCurrentCat = null;
+    let rallyCurrentOutcome = null;
+
+    function getOnCourtPlayers() {
+      const ids = getSelectedIds();
+      const idSet = new Set(ids.filter(Boolean));
+      return players.filter(p => idSet.has(p.id));
+    }
+
+    function addRallyStat(playerId, cat, isPlus) {
+      const s = getPlayerSetStats(playerId, currentSet);
+      const key = cat + (isPlus ? "Plus" : "Minus");
+      s[key] = (s[key] || 0) + 1;
+      saveStats();
+      updateCourtWarningsForSet();
+      renderDashboard();
+    }
+
+    function openRallyOverlay(cat, outcome) {
+  rallyCurrentCat = cat;
+  rallyCurrentOutcome = outcome;
+
+  const overlay = document.getElementById("rally-overlay");
+  const titleEl = document.getElementById("rally-overlay-title");
+  const hintEl = document.getElementById("rally-overlay-hint");
+  const listEl = document.getElementById("rally-player-list");
+
+  if (!overlay || !titleEl || !listEl) return;
+
+  const labelMap = {
+    attaque: "Attaque",
+    service: "Service",
+    bloc: "Bloc",
+    reception: "Réception",
+    defense: "Défense",
+    passe: "Passe"
+  };
+  const outcomeLabel = outcome === "plus"
+    ? "point gagné"
+    : "faute / point perdu";
+
+  titleEl.textContent = labelMap[cat] || cat;
+  hintEl.textContent =
+    "Tape sur le ou les noms pour ajouter " + outcomeLabel + " sur ce rallye.";
+
+  // On vide la liste et on recrée les boutons
+  listEl.innerHTML = "";
+
+  const onCourt = getOnCourtPlayers();
+  if (onCourt.length === 0) {
+    const msg = document.createElement("div");
+    msg.textContent = "Aucune joueuse sur le terrain. Renseigne les 4 postes.";
+    msg.style.fontSize = "12px";
+    msg.style.color = "#f88";
+    listEl.appendChild(msg);
+  } else {
+    onCourt.forEach((p) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "rally-player-btn";
+
+      const numSpan = document.createElement("span");
+      numSpan.textContent = p.number || "-";
+
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = p.name || "";
+
+      const countSpan = document.createElement("span");
+      countSpan.className = "rally-count";
+      countSpan.textContent = "";
+
+      btn.appendChild(numSpan);
+      btn.appendChild(nameSpan);
+      btn.appendChild(countSpan);
+
+      let count = 0;
+      btn.addEventListener("click", () => {
+        const isPlus = outcome === "plus";
+        addRallyStat(p.id, cat, isPlus);
+        count++;
+        countSpan.textContent = count > 0 ? " x" + count : "";
+      });
+
+      listEl.appendChild(btn);
+    });
+  }
+
+  overlay.style.display = "flex";
+}
+
+
+    function closeRallyOverlay() {
+      const overlay = document.getElementById("rally-overlay");
+      if (overlay) {
+        overlay.style.display = "none";
+      }
+      rallyCurrentCat = null;
+      rallyCurrentOutcome = null;
+    }
+
+    /* --------- stockage scores sets ---------- */
+    function loadSetScores() {
+      const raw = localStorage.getItem(SETS_KEY);
+      if (!raw) return;
+      try { setScores = JSON.parse(raw) || {}; }
+      catch(e){ setScores = {}; }
+    }
+    function saveSetScores() {
+      localStorage.setItem(SETS_KEY, JSON.stringify(setScores));
+    }
+        function createEmptySetScore() {
+      return {
+        nous: 0,
+        eux: 0,
+        tmTech: 0, // temps morts techniques (communs)
+        tmNous: 0, // temps morts pour notre équipe
+        tmEux: 0   // temps morts pour l'adversaire
+      };
+    }
+
+    function getSetScore(setNumber) {
+      if (!setScores[setNumber]) setScores[setNumber] = createEmptySetScore();
+      return setScores[setNumber];
+    }
+
+    /* --------- stockage stats adverses ---------- */
+    function loadOpponentStats() {
+      const raw = localStorage.getItem(OPP_KEY);
+      if (!raw) return;
+      try { opponentStats = JSON.parse(raw) || {}; }
+      catch(e){ opponentStats = {}; }
+    }
+    function saveOpponentStats() {
+      localStorage.setItem(OPP_KEY, JSON.stringify(opponentStats));
+    }
+    function createEmptyOpponentStats() {
+      const o = {};
+      OPP_CATEGORIES.forEach(cat => {
+        o[cat + "Plus"] = 0;
+        o[cat + "Minus"] = 0;
+      });
+      return o;
+    }
+    function getOpponentSetStats(setNumber) {
+      if (!opponentStats[setNumber]) opponentStats[setNumber] = createEmptyOpponentStats();
+      return opponentStats[setNumber];
+    }
+
+    /* --------- historique ---------- */
+    function loadHistory() {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (!raw) return;
+      try { historyMatches = JSON.parse(raw) || []; }
+      catch(e){ historyMatches = []; }
+    }
+    function saveHistory() {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(historyMatches));
+    }
+        /* --------- stockage terrain (positions) ---------- */
+    function loadCourtFromStorage() {
+      const raw = localStorage.getItem(COURT_KEY);
+      if (!raw) return {};
+      try {
+        return JSON.parse(raw) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveCourtToStorage() {
+      const map = getCourtAssignments();
+      try {
+        localStorage.setItem(COURT_KEY, JSON.stringify(map));
+      } catch (e) {
+        // silencieux, on ne bloque pas l'app si le stockage échoue
+      }
+    }
+
+    function applyCourtFromStorage() {
+      const saved = loadCourtFromStorage();
+      if (!saved) return;
+
+      // on ne garde que les IDs encore existants
+      const validIds = new Set(players.map(p => p.id));
+
+      document.querySelectorAll(".court-pos").forEach(posDiv => {
+        const posKey = posDiv.dataset.pos || "";
+        const select = posDiv.querySelector(".pos-select");
+        if (!select) return;
+
+        const savedId = saved[posKey];
+        if (savedId && validIds.has(savedId)) {
+          select.value = savedId;
+        }
+
+        updatePositionJersey(select);
+      });
+
+      renderBench();
+      updateCourtWarningsForSet();
+    }
+
+    /* --------- noms d’équipes ---------- */
+    function loadTeamNames() {
+      const raw = localStorage.getItem(TEAM_KEY);
+      if (!raw) return;
+      try {
+        const parsed = JSON.parse(raw) || {};
+        teamNames.our = parsed.our || DEFAULT_OUR_TEAM_NAME;
+        teamNames.opp = parsed.opp || DEFAULT_OPP_LABEL;
+      } catch (e) {
+        teamNames.our = DEFAULT_OUR_TEAM_NAME;
+        teamNames.opp = DEFAULT_OPP_LABEL;
+      }
+    }
+
+    function saveTeamNames() {
+      localStorage.setItem(TEAM_KEY, JSON.stringify({
+        our: teamNames.our || "",
+        opp: teamNames.opp || ""
+      }));
+    }
+
+    function getOurTeamName() {
+      return (teamNames.our && teamNames.our.trim()) || DEFAULT_US_LABEL;
+    }
+
+    function getOppTeamName() {
+      return (teamNames.opp && teamNames.opp.trim()) || DEFAULT_OPP_LABEL;
+    }
+
+       function updateTeamNamesUI() {
+      const our = getOurTeamName();
+      const opp = getOppTeamName();
+
+      const titleEl = document.getElementById("app-title");
+      if (titleEl) {
+        if (teamNames.our && teamNames.our.trim()) {
+          titleEl.textContent = teamNames.our.trim();
+        } else {
+          titleEl.textContent = DEFAULT_OUR_TEAM_NAME;
+        }
+      }
+
+      const inpOur = document.getElementById("team-name-input");
+      if (inpOur && inpOur.value !== (teamNames.our || "")) {
+        inpOur.value = teamNames.our || "";
+      }
+
+      const inpOpp = document.getElementById("opponent-name-input");
+      if (inpOpp && inpOpp.value !== (teamNames.opp || "")) {
+        inpOpp.value = teamNames.opp || "";
+      }
+
+      const lblNous = document.getElementById("score-label-nous");
+      if (lblNous) {
+        lblNous.textContent = our;
+      }
+
+      const lblAdv = document.getElementById("score-label-adv");
+      if (lblAdv) {
+        lblAdv.textContent = opp;
+      }
+
+      const dashNameUs = document.getElementById("dash-team-name-us");
+      if (dashNameUs) {
+        dashNameUs.textContent = our;
+      }
+
+      const dashNameOpp = document.getElementById("dash-team-name-opponent");
+      if (dashNameOpp) {
+        dashNameOpp.textContent = opp;
+      }
+
+      const oppTitle = document.getElementById("opponent-title");
+      if (oppTitle) {
+        if (opp) {
+          oppTitle.textContent = "Stats adversaires – " + opp;
+        } else {
+          oppTitle.textContent = "Stats adversaires";
+        }
+      }
+
+      // Noms dans le panneau "Temps morts"
+      const tmNousName = document.getElementById("tm-nous-name");
+      if (tmNousName) {
+        tmNousName.textContent = our;
+      }
+
+      const tmEuxName = document.getElementById("tm-eux-name");
+      if (tmEuxName) {
+        tmEuxName.textContent = opp;
+      }
+
+      try {
+        if (our) {
+          document.title = "Stats volley – " + our;
+        } else {
+          document.title = DEFAULT_OUR_TEAM_NAME;
+        }
+      } catch (e) {}
+    }
+
+    /* --------- export / import configuration ---------- */
+    function exportConfigToTextarea() {
+      const textarea = document.getElementById("config-json");
+      if (!textarea) return;
+
+      // on prend l'effectif, les noms d'équipes et la compo terrain actuelle
+      const payload = {
+        version: "stat2match-volley_v1.3",
+        generatedAt: new Date().toISOString(),
+        teamNames: {
+          our: teamNames.our || "",
+          opp: teamNames.opp || ""
+        },
+        players: players || [],
+        court: (typeof getCourtAssignments === "function")
+          ? getCourtAssignments()
+          : {}
+      };
+
+      textarea.value = JSON.stringify(payload, null, 2);
+      textarea.focus();
+      textarea.select();
+    }
+
+    function importConfigFromTextarea() {
+      const textarea = document.getElementById("config-json");
+      if (!textarea) return;
+
+      const raw = textarea.value.trim();
+      if (!raw) {
+        alert("Colle d’abord une configuration à importer dans la zone de texte.");
+        return;
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (e) {
+        alert("Texte invalide. Assure-toi de coller un JSON complet.");
+        return;
+      }
+
+      
+
+      if (Array.isArray(parsed.players)) {
+        players = parsed.players;
+        savePlayers();
+      }
+
+      // Noms d’équipes
+      if (parsed.teamNames) {
+        teamNames.our = parsed.teamNames.our || teamNames.our;
+        teamNames.opp = parsed.teamNames.opp || teamNames.opp;
+        saveTeamNames();
+      }
+
+      // Compo terrain
+      if (parsed.court && typeof parsed.court === "object") {
+        try {
+          localStorage.setItem(COURT_KEY, JSON.stringify(parsed.court));
+        } catch (e) {
+          // on ignore si stockage impossible
+        }
+      }
+
+      // On rafraîchit l’UI
+      renderRoster();
+      applyCourtFromStorage();
+      updateTeamNamesUI();
+
+      alert("Configuration importée. Effectif, noms d’équipes et terrain ont été mis à jour.");
+    }
+
+    /* --------- utils ---------- */
+        function colorClass(color) {
+       return {
+         blue: "c-blue",
+         green: "c-green",
+         red: "c-red",
+         yellow: "c-yellow",
+         purple: "c-purple",
+         orange: "c-orange",
+         teal: "c-teal",
+         pink: "c-pink"
+       }[color] || "c-blue";
+     }
+
+
+    function deepClone(obj) {
+      return JSON.parse(JSON.stringify(obj || {}));
+    }
+    // Copie de secours pour les navigateurs / contextes où navigator.clipboard ne marche pas
+    function fallbackCopy(textarea) {
+      if (!textarea) {
+        alert("Sélectionne le texte et copie-le manuellement.");
+        return;
+      }
+
+      try {
+        textarea.focus();
+        textarea.select();
+
+        const ok = document.execCommand("copy");
+        if (ok) {
+          alert("Texte copié, tu peux le coller dans WhatsApp / mail.");
+        } else {
+          alert("Sélectionne le texte et copie-le manuellement.");
+        }
+      } catch (e) {
+        alert("Sélectionne le texte et copie-le manuellement.");
+      }
+    }
+
+       /* --------- rendu effectif ---------- */
+    function renderRoster() {
+      const list = document.getElementById("player-list");
+      if (!list) return;
+      list.innerHTML = "";
+
+      const sorted = (players || []).slice().sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      );
+
+      sorted.forEach((p) => {
+        const li = document.createElement("li");
+        li.className = "player-item";
+
+        const main = document.createElement("div");
+        main.className = "player-main";
+        main.onclick = () => openPlayerStats(p.id);
+
+        const badge = document.createElement("div");
+        badge.className = "badge-jersey " + colorClass(p.color);
+        badge.textContent = p.number || "-";
+
+        const info = document.createElement("div");
+        let line = p.name || "";
+        if (p.role) line += " · " + p.role;
+        if (p.license) line += " · Lic. " + p.license;
+        info.textContent = line;
+
+        main.appendChild(badge);
+        main.appendChild(info);
+
+        const actions = document.createElement("div");
+        actions.className = "player-actions";
+
+        // ✅ coche : dans l'effectif de match ou non
+        const chk = document.createElement("input");
+        chk.type = "checkbox";
+        chk.title = "Inclure dans l'effectif de match";
+        chk.checked = p.inMatch !== false; // undefined => true par défaut
+
+        // on évite que le clic sur la case ouvre la fiche stats
+        chk.onclick = (ev) => {
+          ev.stopPropagation();
+        };
+
+        chk.onchange = (ev) => {
+          ev.stopPropagation();
+          p.inMatch = chk.checked;
+          savePlayers();
+
+          // si on enlève la joueuse du match, on la retire aussi du terrain
+          if (!p.inMatch) {
+            document.querySelectorAll(".pos-select").forEach((sel) => {
+              if (sel.value === p.id) {
+                sel.value = "";
+                updatePositionJersey(sel);
+              }
+            });
+            if (typeof saveCourtToStorage === "function") {
+              saveCourtToStorage();
+            }
+          }
+
+          // on met à jour banc + listes terrain
+          refreshPositionSelects();
+          renderBench();
+          refreshAwardsSelectors();
+        };
+
+        const btnEdit = document.createElement("button");
+        btnEdit.className = "btn-edit";
+        btnEdit.textContent = "✏️";
+        btnEdit.onclick = (ev) => {
+          ev.stopPropagation();
+          fillFormForEdit(p.id);
+        };
+
+        const btnDelete = document.createElement("button");
+        btnDelete.className = "btn-delete";
+        btnDelete.textContent = "🗑️";
+        btnDelete.onclick = (ev) => {
+          ev.stopPropagation();
+          deletePlayer(p.id);
+        };
+
+        actions.appendChild(chk);
+        actions.appendChild(btnEdit);
+        actions.appendChild(btnDelete);
+
+        li.appendChild(main);
+        li.appendChild(actions);
+        list.appendChild(li);
+      });
+
+      refreshPositionSelects();
+      renderBench();
+      refreshAwardsSelectors();
+    }
+
+  function refreshAwardsSelectors() {
+  const mvpSelect     = document.getElementById("select-mvp");
+  const supportSelect = document.getElementById("select-best-support");
+  const blockSelect   = document.getElementById("select-best-block");
+  if (!mvpSelect && !supportSelect && !blockSelect) return;
+
+  function fillSelect(select) {
+    if (!select) return;
+    const current = select.value;
+    select.innerHTML = "";
+
+    const optNone = document.createElement("option");
+    optNone.value = "";
+    optNone.textContent = "— Aucune —";
+    select.appendChild(optNone);
+
+    players
+      .slice()
+      .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
+      .forEach(p => {
+        const o = document.createElement("option");
+        o.value = p.id;
+        o.textContent =
+          (p.number ? "#" + p.number + " " : "") + (p.name || "");
+        if (current && current === p.id) o.selected = true;
+        select.appendChild(o);
+      });
+  }
+
+  fillSelect(mvpSelect);
+  fillSelect(supportSelect);
+  fillSelect(blockSelect);
+}
+
+
+   function fillFormForEdit(id) {
+  const p = players.find((x) => x.id === id);
+  if (!p) return;
+  document.getElementById("player-id").value = p.id;
+  document.getElementById("player-name").value = p.name || "";
+  document.getElementById("player-number").value = p.number || "";
+  document.getElementById("player-license").value = p.license || "";
+  document.getElementById("player-role").value = p.role || "";
+  document.getElementById("player-color").value = p.color || "blue";
+  const chk = document.getElementById("player-in-match");
+  if (chk) chk.checked = (p.inMatch !== false); // undefined => true par défaut
+}
+
+
+    function deletePlayer(id) {
+      if (!confirm("Supprimer cette joueuse ?")) return;
+      players = players.filter((p) => p.id !== id);
+      savePlayers();
+      renderRoster();
+    }
+
+    /* --------- terrain / banc ---------- */
+    function getSelectedIds() {
+      return Array.from(document.querySelectorAll(".pos-select"))
+        .map((s) => s.value)
+        .filter((v) => v);
+    }
+function getCourtAssignments() {
+  const map = {};
+  document.querySelectorAll(".court-pos").forEach((posDiv) => {
+    const key = posDiv.dataset.pos || "";
+    const select = posDiv.querySelector(".pos-select");
+    map[key] = select ? select.value : "";
+  });
+  return map;
+}
+     function refreshPositionSelects() {
+      // Qui est déjà sur le terrain ?
+      const assignments = getCourtAssignments();
+      const usedIds = new Set(Object.values(assignments).filter((v) => v));
+
+      const selects = document.querySelectorAll(".pos-select");
+      selects.forEach((select) => {
+        const posDiv = select.closest(".court-pos");
+        const posKey = posDiv ? posDiv.dataset.pos || "" : "";
+        const current = posKey ? assignments[posKey] || "" : select.value;
+
+        // On reconstruit la liste des options
+        select.innerHTML = "";
+        const optEmpty = document.createElement("option");
+        optEmpty.value = "";
+        optEmpty.textContent = "- Vide -";
+        select.appendChild(optEmpty);
+
+        // 👉 seulement les joueur·euses sélectionné·es pour ce match
+        const matchPlayers = (players || [])
+          .filter((p) => p.inMatch !== false)
+          .slice()
+          .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+        matchPlayers.forEach((p) => {
+          const opt = document.createElement("option");
+          opt.value = p.id;
+          opt.textContent =
+            (p.number ? "#" + p.number + " " : "") + (p.name || "");
+
+          if (p.id === current) {
+            opt.selected = true; // elle reste à ce poste
+          } else if (usedIds.has(p.id)) {
+            opt.disabled = true;
+            opt.textContent += " (sur le terrain)";
+          }
+
+          select.appendChild(opt);
+        });
+
+        updatePositionJersey(select);
+
+        // Quand on change une joueuse
+        select.onchange = (e) => {
+          e.stopPropagation();
+          updatePositionJersey(select);
+          renderBench();
+          updateCourtWarningsForSet();
+          if (typeof saveCourtToStorage === "function") {
+            saveCourtToStorage();
+          }
+          // On recharge les listes pour la règle "une fois max"
+          refreshPositionSelects();
+        };
+
+        if (posDiv) {
+          posDiv.onclick = (ev) => {
+            if (ev.target.tagName === "SELECT") return;
+            const id = select.value;
+            if (id) openPlayerStats(id);
+          };
+        }
+      });
+    }
+
+    function updatePositionJersey(select) {
+      const posDiv = select.parentElement;
+      const jersey = posDiv.querySelector(".pos-jersey");
+      const id = select.value;
+
+      // reset
+      jersey.innerHTML = "";
+      jersey.className = "pos-jersey";
+      jersey.style.background = "";
+
+      if (!id) {
+        jersey.textContent = "—";
+        jersey.style.background = "rgba(0,0,0,0.1)";
+        return;
+      }
+
+      const p = players.find((x) => x.id === id);
+      if (!p) return;
+
+      jersey.className = "pos-jersey " + colorClass(p.color);
+
+      const num = document.createElement("span");
+      num.textContent = p.number || "";
+
+      const name = document.createElement("span");
+      name.textContent = p.name || "";
+      name.className = "name";
+
+      const role = document.createElement("span");
+      role.textContent = p.role || "";
+
+      jersey.appendChild(num);
+      jersey.appendChild(name);
+      if (p.role) jersey.appendChild(role);
+    }
+    function renderBench() {
+      const selectedIds = new Set(getSelectedIds());
+      const benchDiv = document.getElementById("bench-list");
+      if (!benchDiv) return;
+      benchDiv.innerHTML = "";
+
+      // 👉 seulement les joueur·euses cochés "dans l’effectif du match"
+      const matchPlayers = (players || [])
+        .filter(p => p.inMatch !== false)
+        .slice()
+        .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+      matchPlayers
+        .filter((p) => !selectedIds.has(p.id))  // pas déjà sur le terrain
+        .forEach((p) => {
+          const div = document.createElement("div");
+          div.className = "bench-player";
+
+          // clic sur le banc → fiche stats
+          div.onclick = () => {
+            if (!p.id) return;
+            openPlayerStats(p.id);
+          };
+
+          const badge = document.createElement("div");
+          badge.className = "badge-jersey " + colorClass(p.color);
+          badge.textContent = p.number || "-";
+
+          const name = document.createElement("span");
+          name.textContent = p.name || "";
+
+          div.appendChild(badge);
+          div.appendChild(name);
+          benchDiv.appendChild(div);
+        });
+    }
+
+
+    /* --------- halo rouge selon delta set ---------- */
+    function updateCourtWarningsForSet() {
+      document.querySelectorAll(".court-pos").forEach(pos => {
+        pos.classList.remove("danger-delta");
+        const select = pos.querySelector(".pos-select");
+        if (!select) return;
+        const id = select.value;
+        if (!id) return;
+        const s = stats[id] && stats[id][currentSet];
+        if (!s) return;
+
+        let totalMinus = 0;
+        let totalPlus  = 0;
+        FAULT_CATEGORIES.forEach(cat => {
+          totalMinus += s[cat + "Minus"] || 0;
+        });
+        POINT_CATEGORIES.forEach(cat => {
+          totalPlus  += s[cat + "Plus"] || 0;
+        });
+        const delta = totalPlus - totalMinus;
+        if (delta <= NEG_DELTA_THRESHOLD) {
+          pos.classList.add("danger-delta");
+        }
+      });
+    }
+
+    /* --------- sets ---------- */
+    function initSetButtonsMain() {
+      document.querySelectorAll(".set-btn-main").forEach(btn => {
+        mainSetButtons.push(btn);
+        btn.addEventListener("click", () => {
+          setCurrentSet(parseInt(btn.dataset.set, 10));
+        });
+      });
+    }
+    function initSetButtonsStats() {
+      document.querySelectorAll(".set-btn-stats").forEach(btn => {
+        statsSetButtons.push(btn);
+        btn.addEventListener("click", () => {
+          setCurrentSet(parseInt(btn.dataset.set, 10));
+        });
+      });
+    }
+    function initSetButtonsDashboard() {
+      document.querySelectorAll(".set-btn-dashboard").forEach(btn => {
+        dashboardSetButtons.push(btn);
+        btn.addEventListener("click", () => {
+          setCurrentSet(parseInt(btn.dataset.set, 10));
+        });
+      });
+    }
+
+    function updateSetButtons() {
+      mainSetButtons.forEach(b => {
+        b.classList.toggle("active", parseInt(b.dataset.set, 10) === currentSet);
+      });
+      statsSetButtons.forEach(b => {
+        b.classList.toggle("active", parseInt(b.dataset.set, 10) === currentSet);
+      });
+      dashboardSetButtons.forEach(b => {
+        b.classList.toggle("active", parseInt(b.dataset.set, 10) === currentSet);
+      });
+    }
+
+    function setCurrentSet(n) {
+      currentSet = n;
+      updateSetButtons();
+      renderSetScore();
+      renderOpponentStats();
+      if (currentStatsPlayerId) renderStatsForCurrent();
+      renderDashboard();
+      updateCourtWarningsForSet();
+    }
+
+    /* --------- score du set ---------- */
+           function renderTimeouts() {
+      const s = getSetScore(currentSet);
+
+      let tmTech = s.tmTech || 0;
+      let tmNous = s.tmNous || 0;
+      let tmEux = s.tmEux || 0;
+
+      // On borne entre 0 et 2
+      if (tmTech < 0) tmTech = 0;
+      if (tmTech > 2) tmTech = 2;
+      if (tmNous < 0) tmNous = 0;
+      if (tmNous > 2) tmNous = 2;
+      if (tmEux < 0) tmEux = 0;
+      if (tmEux > 2) tmEux = 2;
+
+      s.tmTech = tmTech;
+      s.tmNous = tmNous;
+      s.tmEux = tmEux;
+
+      const techSpan = document.getElementById("tm-tech-count");
+      const ourSpan  = document.getElementById("tm-nous-count");
+      const oppSpan  = document.getElementById("tm-eux-count");
+
+      if (techSpan) techSpan.textContent = tmTech + "/2";
+      if (ourSpan)  ourSpan.textContent  = tmNous + "/2";
+      if (oppSpan)  oppSpan.textContent  = tmEux + "/2";
+
+      // Mise à jour visuelle des pastilles
+      const updateDots = (type, count) => {
+        const dots = document.querySelectorAll('.tm-dot[data-tm-type="' + type + '"]');
+        dots.forEach((btn, index) => {
+          if (index < count) {
+            btn.classList.add("tm-used");
+          } else {
+            btn.classList.remove("tm-used");
+          }
+        });
+      };
+
+      updateDots("tech", tmTech);
+      updateDots("nous", tmNous);
+      updateDots("eux", tmEux);
+    }
+
+
+    function renderSetScore() {
+      const s = getSetScore(currentSet);
+      const labelEl = document.getElementById("score-set-label");
+      const valNous = document.querySelector('.score-value[data-team="nous"]');
+      const valEux = document.querySelector('.score-value[data-team="eux"]');
+
+      if (labelEl) {
+        labelEl.textContent = "(set " + currentSet + ")";
+      }
+      if (valNous) {
+        valNous.textContent = s.nous;
+      }
+      if (valEux) {
+        valEux.textContent = s.eux;
+      }
+
+      renderTimeouts();
+    }
+
+
+        function initScoreControls() {
+      const scoreSec = document.getElementById("score-section");
+      if (!scoreSec) {
+        return;
+      }
+
+      scoreSec.addEventListener("click", function (e) {
+        const plusBtn = e.target.closest(".score-btn-plus");
+        const minusBtn = e.target.closest(".score-btn-minus");
+        const valueSpan = e.target.closest(".score-value");
+        const tmBtn = e.target.closest("button[data-tm-type]");
+
+        // Gestion du score + / -
+        if (plusBtn || minusBtn) {
+          const btn = plusBtn || minusBtn;
+          const team = btn.dataset.team;
+          const s = getSetScore(currentSet);
+
+          if (plusBtn) {
+            s[team] = (s[team] || 0) + 1;
+          } else {
+            s[team] = Math.max(0, (s[team] || 0) - 1);
+          }
+
+          saveSetScores();
+          renderSetScore();
+          renderDashboard();
+          return;
+        }
+
+        // Correction du score en cliquant sur le nombre
+        if (valueSpan) {
+          const team = valueSpan.dataset.team;
+          const s = getSetScore(currentSet);
+          const current = s[team] || 0;
+          const labelScore = team === "nous" ? "notre score" : "score adverse";
+          const input = prompt(
+            "Corriger " + labelScore + " (set " + currentSet + ")",
+            String(current)
+          );
+
+          if (input === null) {
+            return;
+          }
+
+          const val = parseInt(input, 10);
+          if (!Number.isNaN(val) && val >= 0) {
+            s[team] = val;
+            saveSetScores();
+            renderSetScore();
+            renderDashboard();
+          }
+          return;
+        }
+
+               
+
+        if (tmBtn) {
+          const s = getSetScore(currentSet);
+          const type = tmBtn.dataset.tmType;        // "tech" | "nous" | "eux"
+          const dir = tmBtn.dataset.tmDir || null;  // "plus" | "minus" (anciens boutons)
+          const indexStr = tmBtn.dataset.tmIndex || null; // "1" | "2" pour les pastilles
+
+          let key;
+          if (type === "tech") {
+            key = "tmTech";
+          } else if (type === "nous") {
+            key = "tmNous";
+          } else {
+            key = "tmEux";
+          }
+
+          let val = s[key] || 0;
+
+          // Nouveau mode : pastilles à cocher (data-tm-index)
+          if (indexStr !== null) {
+            const usedClass = "tm-used";
+            const alreadyUsed = tmBtn.classList.contains(usedClass);
+
+            if (alreadyUsed) {
+              // On "rend" ce temps mort
+              val = Math.max(0, val - 1);
+              tmBtn.classList.remove(usedClass);
+            } else {
+              if (val < 2) {
+                val = val + 1;
+                tmBtn.classList.add(usedClass);
+              }
+            }
+
+            s[key] = val;
+            saveSetScores();
+            renderTimeouts();
+            return;
+          }
+
+          // Ancien mode +/- (au cas où tu remets des boutons plus tard)
+          if (dir) {
+            const delta = dir === "plus" ? 1 : -1;
+            val = val + delta;
+
+            if (val < 0) val = 0;
+            if (val > 2) val = 2;
+
+            s[key] = val;
+            saveSetScores();
+            renderTimeouts();
+          }
+          return;
+        }
+
+      });
+    }
+
+
+    /* --------- stats adversaires ---------- */
+   function renderOpponentStats() {
+  const s = getOpponentSetStats(currentSet);
+
+  // Sélecteur du label de set adversaire (si présent)
+  const setLabel = document.getElementById("opponent-set-label");
+  if (setLabel) {
+    setLabel.textContent = "(set " + currentSet + ")";
+  }
+
+  // Mise à jour des valeurs + / - dans la liste
+  document.querySelectorAll("#opponent-stats-list .stat-row").forEach(row => {
+    const cat = row.dataset.ocat;
+    const minusSpan = row.querySelector(".opp-value-minus");
+    const plusSpan  = row.querySelector(".opp-value-plus");
+
+    if (minusSpan) {
+      minusSpan.textContent = s[cat + "Minus"] || 0;
+    }
+    if (plusSpan) {
+      plusSpan.textContent  = s[cat + "Plus"]  || 0;
+    }
+  });
+}
+
+
+    function initOpponentControls() {
+      const container = document.getElementById("opponent-stats-list");
+      container.addEventListener("click", function(e) {
+        const btn = e.target.closest("button[data-type]");
+        const valueSpan = e.target.closest(".opp-value-minus, .opp-value-plus");
+        const s = getOpponentSetStats(currentSet);
+
+        if (btn) {
+          const type = btn.dataset.type;
+          const row = btn.closest(".stat-row");
+          const cat = row.dataset.ocat;
+          const key = cat + (type === "plus" ? "Plus" : "Minus");
+          s[key] = (s[key] || 0) + 1;
+          saveOpponentStats();
+          renderOpponentStats();
+          renderDashboard();
+          return;
+        }
+
+        if (valueSpan) {
+          const row = valueSpan.closest(".stat-row");
+          const cat = row.dataset.ocat;
+          const isPlus = valueSpan.classList.contains("opp-value-plus");
+          const key = cat + (isPlus ? "Plus" : "Minus");
+          const current = s[key] || 0;
+          const labelRow = row.querySelector(".stat-label").textContent.trim();
+          const typeLabel = (cat === "cadeaux")
+            ? "points"
+            : (isPlus ? "points pour eux" : "points pour nous");
+          const input = prompt("Corriger " + labelRow + " (" + typeLabel + ", set " + currentSet + ")", current);
+          if (input === null) return;
+          const val = parseInt(input, 10);
+          if (!Number.isNaN(val) && val >= 0) {
+            s[key] = val;
+            saveOpponentStats();
+            renderOpponentStats();
+            renderDashboard();
+          }
+        }
+      });
+    }
+
+    /* --------- vue stats joueuse ---------- */
+    function openPlayerStats(playerId) {
+      const p = players.find(x => x.id === playerId);
+      if (!p) return;
+      currentStatsPlayerId = playerId;
+      document.getElementById("stats-player-title").textContent =
+        "Statistiques : " + (p.number ? "#" + p.number + " " : "") + (p.name || "");
+
+      updateSetButtons();
+      renderStatsForCurrent();
+
+      document.getElementById("main-view").style.display = "none";
+      document.getElementById("stats-container").style.display = "block";
+    }
+
+    function buildPlayerReportText(playerId) {
+      const p = players.find(x => x.id === playerId) || { name: "Joueuse", number: "" };
+
+      const pStatsAllSets = stats[playerId] || {};
+      let plusMatch = 0;
+      let minusMatch = 0;
+      for (const sn in pStatsAllSets) {
+        const st = pStatsAllSets[sn];
+        FAULT_CATEGORIES.forEach(cat => {
+          minusMatch += st[cat + "Minus"] || 0;
+        });
+        POINT_CATEGORIES.forEach(cat => {
+          plusMatch += st[cat + "Plus"] || 0;
+        });
+      }
+
+      let ourMatchPts = 0;
+      let oppMatchPts = 0;
+      for (const sn in setScores) {
+        const sc = setScores[sn];
+        if (!sc) continue;
+        ourMatchPts += sc.nous || 0;
+        oppMatchPts += sc.eux || 0;
+      }
+
+      const delta = plusMatch - minusMatch;
+      const deltaStr = (delta > 0 ? "+" : "") + delta;
+
+      const pctMatchPoints = ourMatchPts > 0 ? Math.round(100 * plusMatch / ourMatchPts) : 0;
+      const pctMatchFautes = oppMatchPts > 0 ? Math.round(100 * minusMatch / oppMatchPts) : 0;
+
+      const header =
+        (p.number ? "#" + p.number + " " : "") +
+        (p.name || "Sans nom");
+
+      let txt = "";
+      txt += header + " – Rapport du match\n";
+      if (ourMatchPts + oppMatchPts > 0) {
+        txt += `Score global : Nous ${ourMatchPts} – ${oppMatchPts} Eux\n`;
+      }
+      txt += `\nPoints marqués : ${plusMatch}\n`;
+      txt += `Fautes directes (toutes rubriques) : ${minusMatch}\n`;
+      txt += `Delta (points - fautes) : ${deltaStr}\n`;
+      txt += `\nImpact sur le match :\n`;
+      txt += `- ${pctMatchPoints}% de nos points\n`;
+      txt += `- ${pctMatchFautes}% des points adverses (sur nos fautes)\n`;
+
+      return txt;
+    }
+
+    function renderStatsForCurrent() {
+      if (!currentStatsPlayerId) return;
+      const s = getPlayerSetStats(currentStatsPlayerId, currentSet);
+      document.querySelectorAll("#stats-list .stat-row").forEach(row => {
+        const cat = row.dataset.cat;
+        const minusSpan = row.querySelector(".stat-value-minus");
+        const plusSpan  = row.querySelector(".stat-value-plus");
+        minusSpan.textContent = s[cat + "Minus"] || 0;
+        plusSpan.textContent  = s[cat + "Plus"]  || 0;
+      });
+
+      // Totaux individuels pour ce set
+      let totalMinus = 0;
+      let totalPlus  = 0;
+      FAULT_CATEGORIES.forEach(cat => {
+        totalMinus += s[cat + "Minus"] || 0;
+      });
+      POINT_CATEGORIES.forEach(cat => {
+        totalPlus  += s[cat + "Plus"]  || 0;
+      });
+
+      document.getElementById("player-summary-set").textContent = currentSet;
+      document.getElementById("player-total-fautes").textContent = totalMinus;
+      document.getElementById("player-total-points").textContent = totalPlus;
+
+      const delta = totalPlus - totalMinus;
+      const deltaStr = (delta > 0 ? "+" : "") + delta;
+      document.getElementById("player-delta").textContent = deltaStr;
+
+      // Pourcentages vs score du set
+      const setScore = getSetScore(currentSet);
+      const ourSetPts = setScore.nous || 0;
+      const oppSetPts = setScore.eux || 0;
+
+      const pctSetPoints = ourSetPts > 0 ? Math.round(100 * totalPlus / ourSetPts) : 0;
+      const pctSetFautes = oppSetPts > 0 ? Math.round(100 * totalMinus / oppSetPts) : 0;
+
+      document.getElementById("player-pct-set-points").textContent = pctSetPoints + "%";
+      document.getElementById("player-pct-set-fautes").textContent = pctSetFautes + "%";
+
+      // Pourcentages vs score du match (tous sets)
+      let plusMatch = 0;
+      let minusMatch = 0;
+      const allSetsPlayer = stats[currentStatsPlayerId] || {};
+      for (const sn in allSetsPlayer) {
+        const st = allSetsPlayer[sn];
+        FAULT_CATEGORIES.forEach(cat => {
+          minusMatch += st[cat + "Minus"] || 0;
+        });
+        POINT_CATEGORIES.forEach(cat => {
+          plusMatch += st[cat + "Plus"] || 0;
+        });
+      }
+
+      let ourMatchPts = 0;
+      let oppMatchPts = 0;
+      for (const sn in setScores) {
+        const sc = setScores[sn];
+        if (!sc) continue;
+        ourMatchPts += sc.nous || 0;
+        oppMatchPts += sc.eux || 0;
+      }
+
+      const pctMatchPoints = ourMatchPts > 0 ? Math.round(100 * plusMatch / ourMatchPts) : 0;
+      const pctMatchFautes = oppMatchPts > 0 ? Math.round(100 * minusMatch / oppMatchPts) : 0;
+
+      document.getElementById("player-pct-match-points").textContent = pctMatchPoints + "%";
+      document.getElementById("player-pct-match-fautes").textContent = pctMatchFautes + "%";
+
+      // Pré-remplir la fiche individuelle
+      const reportArea = document.getElementById("player-report-text");
+      if (reportArea) {
+        reportArea.value = buildPlayerReportText(currentStatsPlayerId);
+      }
+
+      updateCourtWarningsForSet();
+    }
+
+    /* --------- STATS JOUEUSE : contrôles ---------- */
+    function initStatsControls() {
+      const statsList = document.getElementById("stats-list");
+      if (statsList) {
+        statsList.addEventListener("click", function(e) {
+          const minusBtn = e.target.closest(".btn-stat-minus");
+          const plusBtn  = e.target.closest(".btn-stat-plus");
+          if (!minusBtn && !plusBtn) return;
+          if (!currentStatsPlayerId) return;
+
+          const row = e.target.closest(".stat-row");
+          if (!row) return;
+          const cat = row.dataset.cat;
+          if (!cat) return;
+
+          const s = getPlayerSetStats(currentStatsPlayerId, currentSet);
+          if (minusBtn) {
+            const keyMinus = cat + "Minus";
+            s[keyMinus] = (s[keyMinus] || 0) + 1;
+          }
+          if (plusBtn) {
+            const keyPlus = cat + "Plus";
+            s[keyPlus] = (s[keyPlus] || 0) + 1;
+          }
+          saveStats();
+          renderStatsForCurrent();
+          renderDashboard();
+          updateCourtWarningsForSet();
+        });
+      }
+
+      const btnBack = document.getElementById("btn-back");
+      if (btnBack) {
+        btnBack.addEventListener("click", function() {
+          const statsContainer = document.getElementById("stats-container");
+          const mainView = document.getElementById("main-view");
+          if (statsContainer) statsContainer.style.display = "none";
+          if (mainView) mainView.style.display = "block";
+        });
+      }
+
+      const btnCopy = document.getElementById("btn-player-report-copy");
+      if (btnCopy) {
+        btnCopy.addEventListener("click", function() {
+          const area = document.getElementById("player-report-text");
+          if (!area) {
+            alert("Aucun rapport à copier.");
+            return;
+          }
+          const text = area.value || "";
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+              .then(() => {
+                alert("Rapport copié, prêt à coller dans WhatsApp / mail.");
+              })
+              .catch(() => {
+                fallbackCopy(area);
+              });
+          } else {
+            fallbackCopy(area);
+          }
+        });
+      }
+    }
+
+    /* --------- DASHBOARD ---------- */
+    function renderDashboard() {
+      const score = getSetScore(currentSet);
+      document.getElementById("dash-score-set-label").textContent = "Set " + currentSet;
+      document.getElementById("dash-score-nous").textContent = score.nous || 0;
+      document.getElementById("dash-score-eux").textContent  = score.eux || 0;
+
+      const acc = {};
+      STAT_CATEGORIES.forEach(cat => {
+        acc[cat + "Plus"] = 0;
+        acc[cat + "Minus"] = 0;
+      });
+      let totalPlus = 0;
+      let totalMinus = 0;
+
+      for (const pid in stats) {
+        const sets = stats[pid];
+        if (!sets) continue;
+        const s = sets[currentSet];
+        if (!s) continue;
+        STAT_CATEGORIES.forEach(cat => {
+          const plus  = s[cat + "Plus"]  || 0;
+          const minus = s[cat + "Minus"] || 0;
+          acc[cat + "Plus"]  += plus;
+          acc[cat + "Minus"] += minus;
+          if (POINT_CATEGORIES.includes(cat)) totalPlus  += plus;
+          if (FAULT_CATEGORIES.includes(cat)) totalMinus += minus;
+        });
+      }
+
+      const body = document.getElementById("dash-team-body");
+      body.innerHTML = "";
+      const namesMap = {
+        attaque: "Attaque",
+        service: "Service",
+        bloc:    "Bloc",
+        reception: "Réception",
+        defense: "Défense",
+        passe: "Passe"
+      };
+      STAT_CATEGORIES.forEach(cat => {
+        const row = document.createElement("div");
+        row.className = "stat-row";
+        const label = document.createElement("div");
+        label.className = "stat-label";
+        label.textContent = namesMap[cat] || cat;
+
+        const controls = document.createElement("div");
+        controls.className = "stat-controls";
+
+        const minusSpan = document.createElement("span");
+        minusSpan.className = "stat-value";
+        minusSpan.textContent = acc[cat + "Minus"] || 0;
+
+        const sep = document.createElement("span");
+        sep.className = "stat-sep";
+        sep.textContent = (cat === "reception" || cat === "defense" || cat === "passe")
+          ? "fautes / réussies"
+          : "perdus / marqués";
+
+        const plusSpan = document.createElement("span");
+        plusSpan.className = "stat-value";
+        plusSpan.textContent = acc[cat + "Plus"] || 0;
+
+        controls.appendChild(minusSpan);
+        controls.appendChild(sep);
+        controls.appendChild(plusSpan);
+
+        row.appendChild(label);
+        row.appendChild(controls);
+        body.appendChild(row);
+      });
+
+      const totalRow = document.createElement("div");
+      totalRow.className = "stat-row";
+      const totalLabel = document.createElement("div");
+      totalLabel.className = "stat-label";
+      totalLabel.textContent = "TOTAL (impact score)";
+      const totalControls = document.createElement("div");
+      totalControls.className = "stat-controls";
+
+      const tMinus = document.createElement("span");
+      tMinus.className = "stat-value";
+      tMinus.textContent = totalMinus;
+
+      const tSep = document.createElement("span");
+      tSep.className = "stat-sep";
+      tSep.textContent = "fautes / points marqués (Att + Serv + Bloc)";
+
+      const tPlus = document.createElement("span");
+      tPlus.className = "stat-value";
+      tPlus.textContent = totalPlus;
+
+      totalControls.appendChild(tMinus);
+      totalControls.appendChild(tSep);
+      totalControls.appendChild(tPlus);
+
+      totalRow.appendChild(totalLabel);
+      totalRow.appendChild(totalControls);
+      body.appendChild(totalRow);
+
+      document.getElementById("dash-team-set-label").textContent = currentSet;
+
+            const os = getOpponentSetStats(currentSet);
+
+      const elServFautes = document.getElementById("dash-opp-service-fautes");
+      const elServPts    = document.getElementById("dash-opp-service-points");
+      const elBlocPts    = document.getElementById("dash-opp-bloc-points");
+      const elCad        = document.getElementById("dash-opp-cadeaux");
+      const elPNous      = document.getElementById("dash-opp-points-pourNous");
+      const elPEux       = document.getElementById("dash-opp-points-pourEux");
+      const elSetLabel   = document.getElementById("dash-opp-set-label");
+      const elTotFautes  = document.getElementById("dash-total-fautes-pour-eux");
+
+      if (elServFautes) elServFautes.textContent = os.serviceMinus || 0;
+      if (elServPts)    elServPts.textContent    = os.servicePlus  || 0;
+      if (elBlocPts)    elBlocPts.textContent    = os.blocPlus     || 0;
+      if (elCad)        elCad.textContent        = os.cadeauxPlus  || 0;
+      if (elPNous)      elPNous.textContent      = os.pointsMinus  || 0;
+      if (elPEux)       elPEux.textContent       = os.pointsPlus   || 0;
+      if (elSetLabel)   elSetLabel.textContent   = currentSet;
+
+      const totalFautesPourEux = totalMinus;
+      if (elTotFautes) elTotFautes.textContent = totalFautesPourEux;
+
+    }
+
+          /* --------- ARCHIVER MATCH + RÉSUMÉS ---------- */
+
+    function computeMatchScoresFromSnapshot(setScoresSnapshot) {
+      let ourMatchPts = 0;
+      let oppMatchPts = 0;
+      setScoresSnapshot = setScoresSnapshot || {};
+      for (const sn in setScoresSnapshot) {
+        const sc = setScoresSnapshot[sn];
+        if (!sc) continue;
+        ourMatchPts += sc.nous || 0;
+        oppMatchPts += sc.eux || 0;
+      }
+      return { ourMatchPts, oppMatchPts };
+    }
+function computeOpponentTotalsFromSnapshot(opponentStatsSnapshot) {
+  const totals = {};
+  OPP_CATEGORIES.forEach(cat => {
+    totals[cat] = { plus: 0, minus: 0 };
+  });
+  opponentStatsSnapshot = opponentStatsSnapshot || {};
+  for (const sn in opponentStatsSnapshot) {
+    const st = opponentStatsSnapshot[sn] || {};
+    OPP_CATEGORIES.forEach(cat => {
+      totals[cat].plus  += st[cat + "Plus"]  || 0;
+      totals[cat].minus += st[cat + "Minus"] || 0;
+    });
+  }
+  return totals;
+}
+function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
+  const totals = {};
+  STAT_CATEGORIES.forEach(cat => {
+    totals[cat] = { plus: 0, minus: 0 };
+  });
+
+  statsSnapshot = statsSnapshot || {};
+
+  for (const pid in statsSnapshot) {
+    const sets = statsSnapshot[pid] || {};
+    for (const sn in sets) {
+      const st = sets[sn] || {};
+      STAT_CATEGORIES.forEach(cat => {
+        totals[cat].plus  += st[cat + "Plus"]  || 0;
+        totals[cat].minus += st[cat + "Minus"] || 0;
+      });
+    }
+  }
+
+  return totals;
+}
+
+    function findPlayerNameFromSnapshot(playersSnapshot, playerId) {
+      if (!playerId) return "";
+      const arr = playersSnapshot || [];
+      const p = arr.find(pl => pl.id === playerId);
+      if (!p) return "";
+      return (p.number ? "#" + p.number + " " : "") + (p.name || "");
+    }
+
+    // Résumé long (WhatsApp / mail)
+ function buildMatchSummaryText(entry) {
+  const {
+    label,
+    opponent,
+    createdAt,
+    playersSnapshot,
+    statsSnapshot,
+    setScoresSnapshot,
+    opponentStatsSnapshot,
+    mvpId,
+    bestSupportId,
+    bestBlockerId,
+    ourTeamName,
+    opponentTeamName
+  } = entry;
+
+  const dateStr = createdAt
+    ? new Date(createdAt).toLocaleString("fr-FR", {
+        dateStyle: "short",
+        timeStyle: "short"
+      })
+    : "";
+
+  const { ourMatchPts, oppMatchPts } =
+    computeMatchScoresFromSnapshot(setScoresSnapshot || {});
+
+  const nameUs =
+    (ourTeamName && ourTeamName.trim()) || getOurTeamName();
+  const nameOpp =
+    (opponentTeamName && opponentTeamName.trim()) ||
+    (opponent && opponent.trim()) ||
+    getOppTeamName();
+
+  let text = "";
+
+  // En-tête du match
+  text += (label || "Match") + "\n";
+  if (dateStr) text += "Date : " + dateStr + "\n";
+  if (nameOpp && nameOpp.trim()) {
+    text += "Adversaire : " + nameOpp.trim() + "\n";
+  }
+  text +=
+    "Score final : " +
+    nameUs +
+    " " +
+    ourMatchPts +
+    " - " +
+    oppMatchPts +
+    " " +
+    nameOpp +
+    "\n\n";
+
+  // Score par set
+  const setLines = [];
+  const scoresSnap = setScoresSnapshot || {};
+  for (let i = 1; i <= 5; i++) {
+    const sc = scoresSnap[i];
+    if (!sc) continue;
+    if ((sc.nous || 0) === 0 && (sc.eux || 0) === 0) continue;
+    setLines.push(
+      `Set ${i} : ${nameUs} ${sc.nous || 0} - ${sc.eux || 0} ${nameOpp}`
+    );
+  }
+  if (setLines.length > 0) {
+    text +=
+      "Score par set :\n" + setLines.map(l => "  • " + l).join("\n") + "\n\n";
+  }
+
+  // Stats adverses (agrégées sur tout le match)
+  const oppTotals = computeOpponentTotalsFromSnapshot(opponentStatsSnapshot || {});
+
+  text += "Statistiques de l'équipe adverse :\n";
+  text +=
+    `  • Services : ${oppTotals.service.minus} fautes / ` +
+    `${oppTotals.service.plus} points directs\n`;
+  text +=
+    `  • Bloc : ${oppTotals.bloc.plus} points marqués au bloc\n`;
+  text +=
+    `  • Cadeaux : ${oppTotals.cadeaux.plus} points offerts à notre équipe\n`;
+  text +=
+    `  • Points (hors service) : ${oppTotals.points.minus} points pour nous / ` +
+    `${oppTotals.points.plus} points pour eux\n\n`;
+
+  // 🔥 Stats générales de notre équipe (AVANT les fiches joueuses)
+  const ourTotals = computeOurTeamTotalsFromSnapshot(statsSnapshot || {});
+  const catLabels = {
+    attaque:  "Attaque",
+    service:  "Service",
+    bloc:     "Bloc",
+    reception:"Réception",
+    defense:  "Défense",
+    passe:    "Passe"
+  };
+
+  let teamPlus = 0;
+  let teamMinus = 0;
+
+  STAT_CATEGORIES.forEach(cat => {
+    const plus  = ourTotals[cat].plus;
+    const minus = ourTotals[cat].minus;
+    if (POINT_CATEGORIES.includes(cat))  teamPlus  += plus;
+    if (FAULT_CATEGORIES.includes(cat))  teamMinus += minus;
+  });
+
+  const teamDelta    = teamPlus - teamMinus;
+  const teamDeltaStr = (teamDelta > 0 ? "+" : "") + teamDelta;
+
+  const pctTeamPoints =
+    ourMatchPts > 0 ? Math.round(100 * teamPlus / ourMatchPts) : 0;
+  const pctTeamFautes =
+    oppMatchPts > 0 ? Math.round(100 * teamMinus / oppMatchPts) : 0;
+
+  text += "Statistiques générales de notre équipe :\n";
+  STAT_CATEGORIES.forEach(cat => {
+    const plus  = ourTotals[cat].plus;
+    const minus = ourTotals[cat].minus;
+    const deltaCat = plus - minus;
+    const deltaCatStr = (deltaCat > 0 ? "+" : "") + deltaCat;
+    const labelCat = catLabels[cat] || cat;
+    text +=
+      `  • ${labelCat} : ${plus} pts / ${minus} fautes (Δ ${deltaCatStr})\n`;
+  });
+
+  text +=
+    `  • Total équipe : ${teamPlus} pts / ${teamMinus} fautes (Δ ${teamDeltaStr})\n`;
+  text +=
+    `  • Impact global : ${pctTeamPoints}% de nos points / ` +
+    `${pctTeamFautes}% des points adverses (sur nos fautes)\n\n`;
+
+  // Distinctions individuelles
+  const mvpName     = findPlayerNameFromSnapshot(playersSnapshot, mvpId);
+  const supportName = findPlayerNameFromSnapshot(playersSnapshot, bestSupportId);
+  const blockerName = findPlayerNameFromSnapshot(playersSnapshot, bestBlockerId);
+
+  if (mvpName || supportName || blockerName) {
+    const parts = [];
+    if (mvpName)     parts.push(`MVP : ${mvpName}`);
+    if (supportName) parts.push(`Meilleur soutien : ${supportName}`);
+    if (blockerName) parts.push(`Meilleur·e bloqueur·euse : ${blockerName}`);
+    text += "Distinctions : " + parts.join(" | ") + "\n\n";
+  }
+
+  // Statistiques détaillées par joueuse
+  text += "Statistiques détaillées par joueuse :\n";
+
+  const ps = (playersSnapshot || []).slice().sort((a, b) =>
+    (a.name || "").localeCompare(b.name || "")
+  );
+
+   ps.forEach(p => {
+    const pStatsAllSets = (statsSnapshot && statsSnapshot[p.id]) || {};
+    const perCat = {};
+    STAT_CATEGORIES.forEach(cat => {
+      perCat[cat] = { plus: 0, minus: 0 };
+    });
+
+    // cumul sur tous les sets pour cette joueuse
+    for (const sn in pStatsAllSets) {
+      const st = pStatsAllSets[sn] || {};
+      STAT_CATEGORIES.forEach(cat => {
+        perCat[cat].plus  += st[cat + "Plus"]  || 0;
+        perCat[cat].minus += st[cat + "Minus"] || 0;
+      });
+    }
+
+    let plusMatch = 0;
+    let minusMatch = 0;
+    POINT_CATEGORIES.forEach(cat => {
+      plusMatch  += perCat[cat].plus;
+    });
+    FAULT_CATEGORIES.forEach(cat => {
+      minusMatch += perCat[cat].minus;
+    });
+
+    // ⚠️ si la joueuse n'a ni point ni faute → on NE L'AFFICHE PAS
+    if (plusMatch === 0 && minusMatch === 0) {
+      return; // on passe à la suivante
+    }
+
+    const delta = plusMatch - minusMatch;
+    const deltaStr = (delta > 0 ? "+" : "") + delta;
+
+    const pctMatchPoints =
+      ourMatchPts > 0 ? Math.round((100 * plusMatch) / ourMatchPts) : 0;
+    const pctMatchFautes =
+      oppMatchPts > 0 ? Math.round((100 * minusMatch) / oppMatchPts) : 0;
+
+    const header =
+      (p.number ? "#" + p.number + " " : "") + (p.name || "Sans nom");
+
+    text += `\n- ${header}\n`;
+
+    // détail par secteur
+    STAT_CATEGORIES.forEach(cat => {
+      const plus  = perCat[cat].plus;
+      const minus = perCat[cat].minus;
+      const deltaCat = plus - minus;
+      const deltaCatStr = (deltaCat > 0 ? "+" : "") + deltaCat;
+      const labelCat = catLabels[cat] || cat;
+      text +=
+        `    ${labelCat} : ${plus} pts / ${minus} fautes (Δ ${deltaCatStr})\n`;
+    });
+
+    text +=
+      `    Total : ${plusMatch} pts / ${minusMatch} fautes (Δ ${deltaStr})\n`;
+    text +=
+      `    Impact match : ${pctMatchPoints}% de nos points / ` +
+      `${pctMatchFautes}% de leurs points\n`;
+  });
+
+
+  text += "\nFin du rapport.";
+  return text.trim();
+}
+
+
+
+    // Résumé court WhatsApp (1 ligne par joueuse)
+    function buildMatchShortSummaryText(entry) {
+      const {
+        label,
+        opponent,
+        playersSnapshot,
+        statsSnapshot,
+        setScoresSnapshot,
+        mvpId,
+        bestSupportId,
+        bestBlockerId,
+        ourTeamName,
+        opponentTeamName
+      } = entry;
+
+      const { ourMatchPts, oppMatchPts } =
+        computeMatchScoresFromSnapshot(setScoresSnapshot || {});
+
+      const nameUs =
+        (ourTeamName && ourTeamName.trim()) || getOurTeamName();
+      const nameOpp =
+        (opponentTeamName && opponentTeamName.trim()) ||
+        (opponent && opponent.trim()) ||
+        getOppTeamName();
+
+      let txt = "";
+      txt +=
+        (label || "Match") +
+        " – Score : " +
+        nameUs +
+        " " +
+        ourMatchPts +
+        " - " +
+        oppMatchPts +
+        " " +
+        nameOpp +
+        "\n";
+      if (nameOpp && nameOpp.trim()) {
+        txt += "Adversaire : " + nameOpp.trim() + "\n";
+      }
+
+      const mvpName     = findPlayerNameFromSnapshot(playersSnapshot, mvpId);
+      const supportName = findPlayerNameFromSnapshot(playersSnapshot, bestSupportId);
+      const blockerName = findPlayerNameFromSnapshot(playersSnapshot, bestBlockerId);
+
+      if (mvpName || supportName || blockerName) {
+        const parts = [];
+        if (mvpName)     parts.push(`MVP : ${mvpName}`);
+        if (supportName) parts.push(`Meilleur soutien : ${supportName}`);
+        if (blockerName) parts.push(`Meilleur·e bloqueur·euse : ${blockerName}`);
+        txt += "\nDistinctions : " + parts.join(" | ") + "\n";
+      }
+
+      txt += "\nBilan rapide :\n";
+
+      const ps = (playersSnapshot || []).slice().sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      );
+
+      ps.forEach(p => {
+        const pStatsAllSets = (statsSnapshot && statsSnapshot[p.id]) || {};
+        let plusMatch = 0;
+        let minusMatch = 0;
+
+        for (const sn in pStatsAllSets) {
+          const st = pStatsAllSets[sn];
+          FAULT_CATEGORIES.forEach(cat => {
+            minusMatch += st[cat + "Minus"] || 0;
+          });
+          POINT_CATEGORIES.forEach(cat => {
+            plusMatch += st[cat + "Plus"] || 0;
+          });
+        }
+
+        const delta = plusMatch - minusMatch;
+        const deltaStr = (delta > 0 ? "+" : "") + delta;
+
+        const header =
+          (p.number ? "#" + p.number + " " : "") + (p.name || "Sans nom");
+
+        txt += `- ${header} : ${plusMatch} pts / ${minusMatch} fautes (Δ ${deltaStr})\n`;
+      });
+
+      return txt.trim();
+    }
+
+    function resetMatchData() {
+      stats = {};
+      setScores = {};
+      opponentStats = {};
+      saveStats();
+      saveSetScores();
+      saveOpponentStats();
+      setCurrentSet(1);
+      renderSetScore();
+      renderOpponentStats();
+      renderDashboard();
+    }
+
+    function archiveCurrentMatch() {
+      const hasAnyScore = Object.values(setScores || {}).some(
+        sc => (sc.nous || 0) > 0 || (sc.eux || 0) > 0
+      );
+      const hasAnyStats = Object.keys(stats || {}).length > 0;
+      if (!hasAnyScore && !hasAnyStats) {
+        if (!confirm("Aucune donnée ou presque pour ce match. L’archiver quand même ?")) {
+          return;
+        }
+      }
+
+      const defaultLabel = "Match " + new Date().toLocaleDateString("fr-FR");
+      const label = prompt(
+        "Nom du match (ex : Entraînement du jeudi, Tournoi X) :",
+        defaultLabel
+      );
+      if (label === null) return;
+
+      const opponent = prompt(
+        "Nom de l’adversaire (optionnel) :",
+        getOppTeamName()
+      );
+      const createdAt = new Date().toISOString();
+
+      const mvpSelect     = document.getElementById("select-mvp");
+      const supportSelect = document.getElementById("select-best-support");
+      const blockSelect   = document.getElementById("select-best-block");
+
+      const mvpId         = mvpSelect ? (mvpSelect.value || "") : "";
+      const bestSupportId = supportSelect ? (supportSelect.value || "") : "";
+      const bestBlockerId = blockSelect ? (blockSelect.value || "") : "";
+
+      if (opponent !== null) {
+        teamNames.opp = (opponent || "").trim();
+        saveTeamNames();
+      }
+
+      const ourNameNow = getOurTeamName();
+      const oppNameNow = getOppTeamName();
+
+      const entry = {
+        id: "m_" + Date.now() + "_" + Math.random().toString(16).slice(2),
+        createdAt,
+        label: (label || "").trim(),
+        opponent: (opponent || "").trim(),
+        ourTeamName: ourNameNow,
+        opponentTeamName: oppNameNow,
+        playersSnapshot: deepClone(players),
+        statsSnapshot: deepClone(stats),
+        setScoresSnapshot: deepClone(setScores),
+        opponentStatsSnapshot: deepClone(opponentStats),
+        mvpId,
+        bestSupportId,
+        bestBlockerId
+      };
+
+      entry.summaryText = buildMatchSummaryText(entry);
+      entry.shortSummaryText = buildMatchShortSummaryText(entry);
+
+      historyMatches.push(entry);
+      saveHistory();
+
+      resetMatchData();
+      alert(
+        "Match archivé dans l’historique. Tu peux le partager depuis l’onglet Historique."
+      );
+      renderHistory();
+    }
+
+    /* --------- HISTORIQUE UI ---------- */
+    function renderHistory() {
+      const listDiv = document.getElementById("history-list");
+      if (!listDiv) return;
+      listDiv.innerHTML = "";
+
+      if (!historyMatches || historyMatches.length === 0) {
+        listDiv.innerHTML = "<p>Aucun match archivé pour l’instant.</p>";
+        return;
+      }
+
+      const ordered = historyMatches.slice().sort((a, b) => {
+        return (b.createdAt || "").localeCompare(a.createdAt || "");
+      });
+
+      ordered.forEach(entry => {
+        if (!entry.shortSummaryText) {
+          entry.shortSummaryText = buildMatchShortSummaryText(entry);
+          saveHistory();
+        }
+
+        const {
+          id,
+          label,
+          opponent,
+          createdAt,
+          setScoresSnapshot,
+          summaryText,
+          shortSummaryText,
+          ourTeamName,
+          opponentTeamName
+        } = entry;
+
+        const { ourMatchPts, oppMatchPts } =
+          computeMatchScoresFromSnapshot(setScoresSnapshot || {});
+
+        const nameUs = (ourTeamName && ourTeamName.trim())
+          ? ourTeamName.trim()
+          : getOurTeamName();
+        const nameOpp = (opponentTeamName && opponentTeamName.trim())
+          ? opponentTeamName.trim()
+          : (opponent && opponent.trim()) || getOppTeamName();
+
+        const item = document.createElement("div");
+        item.className = "history-item";
+        item.dataset.id = id;
+
+        const header = document.createElement("div");
+        header.className = "history-header";
+
+        const titleEl = document.createElement("h3");
+        titleEl.textContent = label || "Match sans nom";
+
+        const scoreSpan = document.createElement("span");
+        scoreSpan.className = "history-score";
+        scoreSpan.textContent =
+          `${nameUs} ${ourMatchPts} – ${oppMatchPts} ${nameOpp}`;
+
+        header.appendChild(titleEl);
+        header.appendChild(scoreSpan);
+
+        const meta = document.createElement("div");
+        meta.className = "history-meta";
+        const dateStr = createdAt
+          ? new Date(createdAt).toLocaleString("fr-FR", {
+              dateStyle: "short",
+              timeStyle: "short"
+            })
+          : "";
+        const opponentLabel = (nameOpp && nameOpp.trim())
+          ? ` · Adversaire : ${nameOpp.trim()}`
+          : "";
+        meta.textContent =
+          `${dateStr ? "Date : " + dateStr : ""}${opponentLabel}`;
+
+        const btnToggle = document.createElement("button");
+        btnToggle.className = "btn-history-toggle";
+        btnToggle.textContent = "Voir / cacher les résumés";
+        btnToggle.dataset.id = id;
+
+        const btnDelete = document.createElement("button");
+        btnDelete.className = "btn-history-delete";
+        btnDelete.textContent = "Supprimer";
+        btnDelete.dataset.id = id;
+
+        const btnPrint = document.createElement("button");
+        btnPrint.className = "btn-history-print";
+        btnPrint.textContent = "Ouvrir en page imprimable";
+        btnPrint.dataset.id = id;
+
+        const body = document.createElement("div");
+        body.className = "history-body";
+        body.style.display = "none";
+
+        const labelLong = document.createElement("div");
+        labelLong.style.fontSize = "12px";
+        labelLong.style.marginBottom = "2px";
+        labelLong.textContent = "Résumé détaillé :";
+
+        const textareaLong = document.createElement("textarea");
+        textareaLong.readOnly = true;
+        textareaLong.className = "history-text-long";
+        textareaLong.value = summaryText || entry.summaryText || "";
+
+        const btnCopyLong = document.createElement("button");
+        btnCopyLong.className = "btn-history-copy";
+        btnCopyLong.textContent = "Copier le résumé détaillé";
+        btnCopyLong.dataset.id = id;
+        btnCopyLong.dataset.type = "long";
+
+        const labelShortEl = document.createElement("div");
+        labelShortEl.style.fontSize = "12px";
+        labelShortEl.style.margin = "8px 0 2px";
+        labelShortEl.textContent = "Résumé court :";
+
+        const textareaShort = document.createElement("textarea");
+        textareaShort.readOnly = true;
+        textareaShort.className = "history-text-short";
+        textareaShort.value = shortSummaryText || entry.shortSummaryText || "";
+
+        const btnCopyShort = document.createElement("button");
+        btnCopyShort.className = "btn-history-copy";
+        btnCopyShort.textContent = "Copier le résumé court";
+        btnCopyShort.dataset.id = id;
+        btnCopyShort.dataset.type = "short";
+
+        body.appendChild(labelLong);
+        body.appendChild(textareaLong);
+        body.appendChild(btnCopyLong);
+        body.appendChild(labelShortEl);
+        body.appendChild(textareaShort);
+        body.appendChild(btnCopyShort);
+
+        item.appendChild(header);
+        item.appendChild(meta);
+        item.appendChild(btnToggle);
+        item.appendChild(btnDelete);
+        item.appendChild(btnPrint);
+        item.appendChild(body);
+
+        listDiv.appendChild(item);
+      });
+    }
+
+    function initHistoryEvents() {
+      const listDiv = document.getElementById("history-list");
+      if (!listDiv) return;
+
+      listDiv.addEventListener("click", function (e) {
+        const btnToggle = e.target.closest(".btn-history-toggle");
+        const btnDelete = e.target.closest(".btn-history-delete");
+        const btnCopy   = e.target.closest(".btn-history-copy");
+        const btnPrint  = e.target.closest(".btn-history-print");
+
+        if (btnToggle) {
+          const id = btnToggle.dataset.id;
+          const item = listDiv.querySelector(`.history-item[data-id="${id}"]`);
+          if (!item) return;
+          const body = item.querySelector(".history-body");
+          if (!body) return;
+          const shown = body.style.display !== "none";
+          body.style.display = shown ? "none" : "block";
+        }
+
+        if (btnDelete) {
+          const id = btnDelete.dataset.id;
+          if (!confirm("Supprimer définitivement ce match de l’historique ?")) return;
+          historyMatches = historyMatches.filter(m => m.id !== id);
+          saveHistory();
+          renderHistory();
+        }
+
+        if (btnCopy) {
+          const id = btnCopy.dataset.id;
+          const type = btnCopy.dataset.type || "long";
+          const item = listDiv.querySelector(`.history-item[data-id="${id}"]`);
+          if (!item) return;
+          const textarea = item.querySelector(
+            type === "short" ? ".history-text-short" : ".history-text-long"
+          );
+          if (!textarea) return;
+          const text = textarea.value || "";
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(
+              () => alert("Résumé copié. Tu peux le coller dans WhatsApp."),
+              () => fallbackCopy(textarea)
+            );
+          } else {
+            fallbackCopy(textarea);
+          }
+        }
+
+        if (btnPrint) {
+          const id = btnPrint.dataset.id;
+          const entry = historyMatches.find(m => m.id === id);
+          if (!entry) return;
+          openPrintableMatchReport(entry);
+        }
+      });
+    }
+
+    function openPrintableMatchReport(entry) {
+      const fullText =
+        entry.summaryText && entry.summaryText.trim()
+          ? entry.summaryText
+          : buildMatchSummaryText(entry);
+
+      const win = window.open("", "_blank");
+      if (!win) {
+        alert(
+          "Impossible d’ouvrir la fenêtre d’impression. Autorise les pop-ups pour ce fichier si besoin."
+        );
+        return;
+      }
+
+      const title = entry.label || "Rapport de match";
+      const dateStr = entry.createdAt
+        ? new Date(entry.createdAt).toLocaleString("fr-FR", {
+            dateStyle: "short",
+            timeStyle: "short"
+          })
+        : "";
+
+      const safeText = (fullText || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      win.document.write(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>${title}</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 24px;
+      color: #222;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0 0 4px;
+    }
+    p.meta {
+      margin: 0 0 16px;
+      font-size: 12px;
+      color: #555;
+    }
+    pre {
+      white-space: pre-wrap;
+      font-family: inherit;
+      font-size: 13px;
+      line-height: 1.5;
+      border-top: 1px solid #ccc;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+    .print-btn {
+      margin-bottom: 16px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      background: #444;
+      color: #fff;
+      cursor: pointer;
+    }
+    @media print {
+      .print-btn {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="print-btn" onclick="window.print()">Imprimer / Exporter en PDF</button>
+  <h1>Rapport de match</h1>
+  <p class="meta">${title}${dateStr ? " · " + dateStr : ""}</p>
+  <pre>${safeText}</pre>
+</body>
+</html>`);
+      win.document.close();
+      win.focus();
+    }
+
+
+    /* --------- formulaire joueur ---------- */
+    document.getElementById("player-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const id = document.getElementById("player-id").value || null;
+      const name = document.getElementById("player-name").value.trim();
+      const number = document.getElementById("player-number").value.trim();
+      const license = document.getElementById("player-license").value.trim();
+      const role = document.getElementById("player-role").value;
+      const color = document.getElementById("player-color").value;
+      const inMatch = document.getElementById("player-in-match").checked;
+
+
+      if (!name) {
+        alert("Nom obligatoire");
+        return;
+      }
+
+      if (id) {
+        const p = players.find((x) => x.id === id);
+        if (p) {
+          p.name = name;
+          p.number = number;
+          p.role = role;
+          p.color = color;
+          p.license = license;
+
+        }
+            } else {
+        const newPlayer = {
+          id: "p_" + Date.now() + "_" + Math.random().toString(16).slice(2),
+          name,
+          number,
+          license,
+          role,
+          color,
+          inMatch: true // par défaut, elle fait partie de l’effectif du match
+        };
+        players.push(newPlayer);
+      }
+
+
+      savePlayers();
+        this.reset();
+  document.getElementById("player-id").value = "";
+  document.getElementById("player-in-match").checked = true;
+  renderRoster();
+
+    });
+
+    /* --------- boutons vue effectif / dashboard / historique ---------- */
+    document.getElementById("btn-toggle-roster").addEventListener("click", function(){
+      const roster = document.getElementById("roster");
+      const hidden = roster.style.display === "none" || roster.style.display === "";
+      roster.style.display = hidden ? "block" : "none";
+      this.textContent = hidden ? "Masquer l'effectif" : "Gérer l'effectif";
+    });
+
+    document.getElementById("btn-dashboard").addEventListener("click", function(){
+      document.getElementById("main-view").style.display = "none";
+      document.getElementById("stats-container").style.display = "none";
+      document.getElementById("history-container").style.display = "none";
+      document.getElementById("dashboard-container").style.display = "block";
+      renderDashboard();
+    });
+
+    document.getElementById("btn-back-from-dashboard").onclick = () => {
+      document.getElementById("dashboard-container").style.display = "none";
+      document.getElementById("main-view").style.display = "block";
+    };
+      // Bouton Historique
+    document.getElementById("btn-history").addEventListener("click", function(){
+      document.getElementById("main-view").style.display = "none";
+      document.getElementById("stats-container").style.display = "none";
+      document.getElementById("dashboard-container").style.display = "none";
+      document.getElementById("help-container").style.display = "none";
+      document.getElementById("history-container").style.display = "block";
+      renderHistory();
+    });
+
+     // Bouton Tutoriel / Aide
+  const btnHelp = document.getElementById("btn-help");
+  if (btnHelp) {
+    btnHelp.addEventListener("click", function() {
+      document.getElementById("main-view").style.display = "none";
+      document.getElementById("stats-container").style.display = "none";
+      document.getElementById("dashboard-container").style.display = "none";
+      document.getElementById("history-container").style.display = "none";
+      document.getElementById("help-container").style.display = "block";
+    });
+  }
+
+  const btnHelpBack = document.getElementById("btn-back-from-help");
+  if (btnHelpBack) {
+    btnHelpBack.onclick = () => {
+      document.getElementById("help-container").style.display = "none";
+      document.getElementById("main-view").style.display = "block";
+    };
+  }
+
+  // Bouton "Retour au terrain" depuis l'historique
+  function goBackFromHistory() {
+    document.getElementById("history-container").style.display = "none";
+    document.getElementById("main-view").style.display = "block";
+  }
+
+  const btnHistoryTop = document.getElementById("btn-back-from-history");
+  if (btnHistoryTop) btnHistoryTop.onclick = goBackFromHistory;
+
+  const btnHistoryBottom = document.getElementById("btn-back-from-history-bottom");
+  if (btnHistoryBottom) btnHistoryBottom.onclick = goBackFromHistory;
+
+  // Bouton "Clôturer ce match" (tableau de bord)
+  const btnCloseMatch = document.getElementById("btn-close-match");
+  if (btnCloseMatch) {
+    btnCloseMatch.addEventListener("click", archiveCurrentMatch);
+  }
+
+  /* --------- init globale ---------- */
+  loadPlayers();
+  loadStats();
+  loadSetScores();
+  loadOpponentStats();
+  loadHistory();
+  loadTeamNames();
+
+  renderRoster();
+  applyCourtFromStorage();      // réinjecte la compo sauvegardée (si elle existe)
+  initSetButtonsMain();
+  initSetButtonsStats();
+  initSetButtonsDashboard();
+  initStatsControls();
+  initScoreControls();
+  initOpponentControls();
+  initHistoryEvents();
+  setCurrentSet(1);
+  updateTeamNamesUI();
+
+  // écouteurs sur les champs de noms d’équipe
+  const inpOurTeam = document.getElementById("team-name-input");
+  const inpOppTeam = document.getElementById("opponent-name-input");
+
+  if (inpOurTeam) {
+    inpOurTeam.addEventListener("change", function() {
+      teamNames.our = this.value.trim();
+      saveTeamNames();
+      updateTeamNamesUI();
+    });
+  }
+
+  if (inpOppTeam) {
+    inpOppTeam.addEventListener("change", function() {
+      teamNames.opp = this.value.trim();
+      saveTeamNames();
+      updateTeamNamesUI();
+    });
+  }
+
+  const btnExportConfig = document.getElementById("btn-export-config");
+  if (btnExportConfig) {
+    btnExportConfig.addEventListener("click", exportConfigToTextarea);
+  }
+
+  const btnImportConfig = document.getElementById("btn-import-config");
+  if (btnImportConfig) {
+    btnImportConfig.addEventListener("click", importConfigFromTextarea);
+  }
+
+  // Mode rallye : boutons d'action
+  document.querySelectorAll(".rally-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cat = btn.dataset.skill;
+      const outcome = btn.dataset.outcome;
+      openRallyOverlay(cat, outcome);
+    });
+  });
+
+  // Fermeture overlay rallye
+  const rallyOverlay = document.getElementById("rally-overlay");
+  const rallyBackdrop = document.getElementById("rally-overlay-backdrop");
+  const rallyCloseBtn = document.getElementById("rally-close-btn");
+
+  if (rallyBackdrop) {
+    rallyBackdrop.onclick = closeRallyOverlay;
+  }
+  if (rallyCloseBtn) {
+    rallyCloseBtn.onclick = closeRallyOverlay;
+  }
+  // Sécurité : si le bouton de fin de rallye est créé après ce script,
+   // on capte le clic au niveau du document.
+   document.addEventListener("click", function(e) {
+     const target = e.target;
+    if (!target) return;
+    if (target.id === "rally-close-btn" ||
+        (typeof target.closest === "function" && target.closest("#rally-close-btn"))) {
+       e.preventDefault();
+       closeRallyOverlay();
+     }
+   });
+ 
+</script>
+
+  <!-- OVERLAY RALLYE : LISTE DES JOUEUSES SUR LE TERRAIN -->
+  <div id="rally-overlay">
+    <div id="rally-overlay-backdrop"></div>
+    <div id="rally-overlay-panel">
+      <h3 id="rally-overlay-title">Action</h3>
+      <p id="rally-overlay-hint">
+        Tape sur le ou les noms pour ajouter l’action à ce rallye.
+      </p>
+      <div id="rally-player-list"></div>
+      <button id="rally-close-btn" type="button">
+        Terminer le rallye
+      </button>
+    </div>
+  </div>
+
+  <div id="app-signature">
+    © Coach Eddy Takougang · stat2match-volley
+  </div>
+</body>
+</html>
