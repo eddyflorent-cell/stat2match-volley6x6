@@ -917,25 +917,43 @@
 
       <div id="config-transfer">
         <textarea id="config-json" placeholder="Zone de transfert de configuration (export / import)"></textarea>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          <button type="button" id="btn-export-config">Exporter la configuration</button>
-          <button type="button" id="btn-import-config">Importer la configuration</button>
-        </div>
-        <small>
-          Export : clique sur “Exporter”, puis colle le texte dans WhatsApp / mail / notes.<br>
-          Import : colle ici une configuration reçue, puis clique sur “Importer”.
-        </small>
-      </div>
+       <div style="display:flex;flex-wrap:wrap;gap:6px;">
+  <button type="button" id="btn-export-config">Exporter la configuration</button>
+  <button type="button" id="btn-import-config">Importer la configuration</button>
+</div>
+<small>
+  Export : clique sur “Exporter”, puis colle le texte dans WhatsApp / mail / notes.<br>
+  Import : colle ici une configuration reçue, puis clique sur “Importer”.
+</small>
+</div>
 
-      <ul id="player-list"></ul>
-      <small>Tout est sauvegardé dans ton navigateur, même hors ligne.</small>
-    </section>
+<button type="button" id="btn-validate-match-roster" style="margin:8px 0;">
+  Valider l’effectif du match
+</button>
+
+<ul id="player-list"></ul>
+<small>Tout est sauvegardé dans ton navigateur, même hors ligne.</small>
+</section>
+
 
 
     <!-- TERRAIN 6x6 -->
-    <section id="court" class="no-select">
-      <h2>Terrain (6 joueuses)</h2>
-             <div class="court-grid" id="court-grid">
+<!-- TERRAIN 6x6 -->
+<section id="court" class="no-select">
+  <h2>Terrain (6 joueuses)</h2>
+
+  <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px;">
+    <button type="button" id="btn-rotate-court">
+      Rotation (sens horaire)
+    </button>
+    <button type="button" id="btn-rotate-court-ccw">
+      Rotation (sens inverse)
+    </button>
+  </div>
+
+  <div class="court-grid" id="court-grid">
+
+
          <!-- Ligne avant -->
          <div class="court-pos" data-pos="AG">
            <div class="pos-header">
@@ -974,21 +992,26 @@
            <select class="pos-select"></select>
            <div class="pos-jersey"></div>
          </div>
-         <div class="court-pos" data-pos="ARD">
-           <div class="pos-header">
-             <span class="pos-label">Arrière droit</span>
-           </div>
-           <select class="pos-select"></select>
-           <div class="pos-jersey"></div>
-         </div>
-       </div>
+       <div class="court-pos" data-pos="ARD">
+  <div class="pos-header">
+    <span class="pos-label">Arrière droit</span>
+  </div>
+  <select class="pos-select"></select>
+  <div class="pos-jersey"></div>
+</div>
+</div>
 
+<div id="bench">
+  <h3>Banc</h3>
+  <div id="bench-list"></div>
+</div>
 
-           <!-- SCORE DU MATCH -->
-    <section id="score-section" class="no-select">
-      <h2 id="score-title">
-        Score du match <span id="score-set-label">(set 1)</span>
-      </h2>
+<!-- SCORE DU MATCH -->
+<section id="score-section" class="no-select">
+  <h2 id="score-title">
+    Score du match <span id="score-set-label">(set 1)</span>
+  </h2>
+
 
       <div id="set-selector-main">
         <span>Set :</span>
@@ -1325,7 +1348,7 @@
   <div class="container" id="help-container" style="display:none;">
        <section id="help" class="no-select">
       <button id="btn-back-from-help">← Retour au terrain</button>
-      <h2>Tutoriel rapide – stat2match-volley (v1.3)</h2>
+     <h2>Tutoriel rapide – stat2match-volley 6x6</h2>
 
       <p style="font-size:13px;color:#ccc;">
         Cette page résume comment utiliser l’application en match : préparer l’effectif,
@@ -1339,15 +1362,18 @@
         <li>Ajoute chaque joueur·euse : <strong>Prénom, n°, poste, licence, couleur</strong>.</li>
         <li>La case <strong>« Dans l’effectif du match »</strong> détermine qui est disponible pour ce match :
           seuls les joueurs cochés apparaissent sur le terrain et sur le banc.</li>
+        <li>Après avoir modifié ces cases, clique sur <strong>« Valider l’effectif du match »</strong> pour mettre à jour
+          les listes du terrain, le banc et les récompenses.</li>
         <li>Tu peux décocher quelqu’un (blessure, absence) : il disparaît du banc et des listes du terrain,
           mais reste dans l’effectif général.</li>
         <li>Tout est <strong>enregistré automatiquement</strong> dans le navigateur (même hors ligne).</li>
       </ul>
 
+
       <h3>2. Placer les joueur·euses sur le terrain et gérer le banc</h3>
       <ul style="font-size:13px;color:#ddd;">
         <li>Dans la zone <strong>« Terrain (6 joueuses) »</strong>, choisis une joueuse dans chaque liste déroulante
-          (Avant gauche, Avant droit, Arrière gauche, Arrière droit).</li>
+          (Avant gauche, Avant centre, Avant droit, Arrière gauche, Arrière centre, Arrière droit).</li>
         <li>Une joueuse déjà sur le terrain ne peut pas être choisie à un autre poste :
           elle est marquée comme déjà utilisée.</li>
         <li>Le <strong>banc</strong> liste automatiquement tous les joueurs :
@@ -1358,7 +1384,11 @@
         </li>
         <li>La composition du terrain est <strong>mémorisée</strong> : si tu rafraîchis la page,
           les postes et le banc sont récupérés depuis la sauvegarde.</li>
+        <li>Tu peux utiliser les boutons <strong>« Rotation (sens horaire) »</strong> et
+          <strong>« Rotation (sens inverse) »</strong> pour faire tourner automatiquement les 6 postes
+          dans le sens d’une rotation de volley.</li>
       </ul>
+
 
       <h3>3. Utiliser le bandeau « rallye » en live</h3>
       <ul style="font-size:13px;color:#ddd;">
@@ -2137,6 +2167,64 @@ function getCourtAssignments() {
   });
   return map;
 }
+function rotateCourtClockwise() {
+  const order = ["AG", "AC", "AD", "ARD", "ARC", "ARG"];
+
+  const assignments = getCourtAssignments();
+
+  const rotated = { ...assignments };
+  for (let i = 0; i < order.length; i++) {
+    const from = order[i];
+    const to = order[(i + 1) % order.length]; // poste suivant (sens horaire)
+    rotated[to] = assignments[from] || "";
+  }
+
+  applyCourtRotation(rotated);
+}
+
+function rotateCourtCounterClockwise() {
+  const order = ["AG", "AC", "AD", "ARD", "ARC", "ARG"];
+
+  const assignments = getCourtAssignments();
+
+  const rotated = { ...assignments };
+  for (let i = 0; i < order.length; i++) {
+    const from = order[i];
+    const to = order[(i - 1 + order.length) % order.length]; // poste précédent (sens inverse)
+    rotated[to] = assignments[from] || "";
+  }
+
+  applyCourtRotation(rotated);
+}
+
+// fonction commune pour appliquer la rotation
+function applyCourtRotation(rotated) {
+  document.querySelectorAll(".court-pos").forEach((posDiv) => {
+    const key = posDiv.dataset.pos || "";
+    const select = posDiv.querySelector(".pos-select");
+    if (!select) return;
+
+    if (key in rotated) {
+      select.value = rotated[key] || "";
+      updatePositionJersey(select);
+    }
+  });
+
+  if (typeof renderBench === "function") {
+    renderBench();
+  }
+  if (typeof updateCourtWarningsForSet === "function") {
+    updateCourtWarningsForSet();
+  }
+  if (typeof saveCourtToStorage === "function") {
+    saveCourtToStorage();
+  }
+  if (typeof refreshPositionSelects === "function") {
+    refreshPositionSelects();
+  }
+}
+
+
      function refreshPositionSelects() {
       // Qui est déjà sur le terrain ?
       const assignments = getCourtAssignments();
@@ -3664,53 +3752,55 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
 
 
     /* --------- formulaire joueur ---------- */
-    document.getElementById("player-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const id = document.getElementById("player-id").value || null;
-      const name = document.getElementById("player-name").value.trim();
-      const number = document.getElementById("player-number").value.trim();
-      const license = document.getElementById("player-license").value.trim();
-      const role = document.getElementById("player-role").value;
-      const color = document.getElementById("player-color").value;
-      const inMatch = document.getElementById("player-in-match").checked;
+   document.getElementById("player-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const id = document.getElementById("player-id").value || null;
+  const name = document.getElementById("player-name").value.trim();
+  const number = document.getElementById("player-number").value.trim();
+  const license = document.getElementById("player-license").value.trim();
+  const role = document.getElementById("player-role").value;
+  const color = document.getElementById("player-color").value;
+  const inMatch = document.getElementById("player-in-match").checked;
 
+  if (!name) {
+    alert("Nom obligatoire");
+    return;
+  }
 
-      if (!name) {
-        alert("Nom obligatoire");
-        return;
-      }
+  if (id) {
+    const p = players.find((x) => x.id === id);
+    if (p) {
+      p.name = name;
+      p.number = number;
+      p.role = role;
+      p.color = color;
+      p.license = license;
+      p.inMatch = inMatch;
+    }
+  } else {
+    const newPlayer = {
+      id: "p_" + Date.now() + "_" + Math.random().toString(16).slice(2),
+      name,
+      number,
+      license,
+      role,
+      color,
+      inMatch: inMatch
+    };
+    players.push(newPlayer);
+  }
 
-      if (id) {
-        const p = players.find((x) => x.id === id);
-        if (p) {
-          p.name = name;
-          p.number = number;
-          p.role = role;
-          p.color = color;
-          p.license = license;
+  savePlayers();
+  renderPlayerList();
+  refreshPositionSelects();
+  renderBench();
+  refreshAwardsSelectors();
 
-        }
-            } else {
-        const newPlayer = {
-          id: "p_" + Date.now() + "_" + Math.random().toString(16).slice(2),
-          name,
-          number,
-          license,
-          role,
-          color,
-          inMatch: true // par défaut, elle fait partie de l’effectif du match
-        };
-        players.push(newPlayer);
-      }
-
-
-      savePlayers();
-        this.reset();
-  document.getElementById("player-id").value = "";
+  this.reset();
   document.getElementById("player-in-match").checked = true;
-  renderRoster();
+  document.getElementById("player-id").value = "";
+});
 
-    });
 
     /* --------- boutons vue effectif / dashboard / historique ---------- */
     document.getElementById("btn-toggle-roster").addEventListener("click", function(){
@@ -3719,6 +3809,16 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
       roster.style.display = hidden ? "block" : "none";
       this.textContent = hidden ? "Masquer l'effectif" : "Gérer l'effectif";
     });
+
+const btnValidateRoster = document.getElementById("btn-validate-match-roster");
+if (btnValidateRoster) {
+  btnValidateRoster.addEventListener("click", function () {
+    refreshPositionSelects();
+    renderBench();
+    refreshAwardsSelectors();
+    alert("Effectif du match mis à jour.");
+  });
+}
 
     document.getElementById("btn-dashboard").addEventListener("click", function(){
       document.getElementById("main-view").style.display = "none";
@@ -3829,6 +3929,18 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
   if (btnImportConfig) {
     btnImportConfig.addEventListener("click", importConfigFromTextarea);
   }
+const btnRotateCourt = document.getElementById("btn-rotate-court");
+if (btnRotateCourt) {
+  btnRotateCourt.addEventListener("click", function () {
+    rotateCourtClockwise();
+  });
+}
+const btnRotateCourtCCW = document.getElementById("btn-rotate-court-ccw");
+if (btnRotateCourtCCW) {
+  btnRotateCourtCCW.addEventListener("click", function () {
+    rotateCourtCounterClockwise();
+  });
+}
 
   // Mode rallye : boutons d'action
   document.querySelectorAll(".rally-btn").forEach(btn => {
