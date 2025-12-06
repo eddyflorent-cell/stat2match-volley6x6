@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>stat2match-volley6x6</title>
 </head>
 <body>
 
@@ -2145,6 +2145,7 @@
 }
 
 
+
     function deletePlayer(id) {
       if (!confirm("Supprimer cette joueuse ?")) return;
       players = players.filter((p) => p.id !== id);
@@ -3751,9 +3752,10 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
     }
 
 
-    /* --------- formulaire joueur ---------- */
-   document.getElementById("player-form").addEventListener("submit", function (e) {
+   /* --------- formulaire joueur ---------- */
+document.getElementById("player-form").addEventListener("submit", function (e) {
   e.preventDefault();
+
   const id = document.getElementById("player-id").value || null;
   const name = document.getElementById("player-name").value.trim();
   const number = document.getElementById("player-number").value.trim();
@@ -3768,6 +3770,7 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
   }
 
   if (id) {
+    // édition d'une joueuse existante
     const p = players.find((x) => x.id === id);
     if (p) {
       p.name = name;
@@ -3778,6 +3781,7 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
       p.inMatch = inMatch;
     }
   } else {
+    // création d'une nouvelle joueuse
     const newPlayer = {
       id: "p_" + Date.now() + "_" + Math.random().toString(16).slice(2),
       name,
@@ -3791,15 +3795,14 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
   }
 
   savePlayers();
-  renderPlayerList();
-  refreshPositionSelects();
-  renderBench();
-  refreshAwardsSelectors();
+  renderRoster(); // remet à jour la liste, le banc, les sélecteurs
 
+  // remise à zéro du formulaire
   this.reset();
-  document.getElementById("player-in-match").checked = true;
   document.getElementById("player-id").value = "";
+  document.getElementById("player-in-match").checked = true;
 });
+
 
 
     /* --------- boutons vue effectif / dashboard / historique ---------- */
