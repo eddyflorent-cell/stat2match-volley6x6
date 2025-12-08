@@ -342,7 +342,7 @@
       color: #ccc;
     }
     #set-selector-main,
-    #set-selector-stats,
+    #set-selector-s,
     #set-selector-dashboard {
       margin-bottom: 10px;
       display: flex;
@@ -351,7 +351,7 @@
       flex-wrap: wrap;
     }
     .set-btn-main,
-    .set-btn-stats,
+    .set-btn-s,
     .set-btn-dashboard {
       border-radius: 999px;
       border: 1px solid #0077ff;
@@ -362,7 +362,7 @@
       font-size: 13px;
     }
     .set-btn-main.active,
-    .set-btn-stats.active,
+    .set-btn-s.active,
     .set-btn-dashboard.active {
       background: #0077ff;
       color: #fff;
@@ -589,8 +589,8 @@
     }
 
 
-   /* Cartes stats (joueuse / adversaire / dashboard / historique / aide) */
-#stats-view,
+   /* Cartes s (joueuse / adversaire / dashboard / historique / aide) */
+#s-view,
 #opponent,
 #dashboard,
 #history,
@@ -617,7 +617,7 @@
     }
 
 
-    #stats-player-title {
+    #s-player-title {
       margin: 4px 0 8px;
     }
 
@@ -2831,69 +2831,108 @@ function applyCourtRotation(rotated) {
     }
 
     /* --------- STATS JOUEUSE : contrôles ---------- */
-    function initStatsControls() {
-      const statsList = document.getElementById("stats-list");
-      if (statsList) {
-        statsList.addEventListener("click", function(e) {
-          const minusBtn = e.target.closest(".btn-stat-minus");
-          const plusBtn  = e.target.closest(".btn-stat-plus");
-          if (!minusBtn && !plusBtn) return;
-          if (!currentStatsPlayerId) return;
+function initStatsControls() {
+  const statsList = document.getElementById("stats-list");
+  if (statsList) {
+    statsList.addEventListener("click", function(e) {
+      const minusBtn  = e.target.closest(".btn-stat-minus");
+      const plusBtn   = e.target.closest(".btn-stat-plus");
+      const valueSpan = e.target.closest(".stat-value"); // clic direct sur le chiffre
 
-          const row = e.target.closest(".stat-row");
-          if (!row) return;
-          const cat = row.dataset.cat;
-          if (!cat) return;
+      // si ce n'est ni un bouton +/- ni un chiffre, on sort
+      if (!minusBtn && !plusBtn && !valueSpan) return;
+      if (!currentStatsPlayerId) return;
 
-          const s = getPlayerSetStats(currentStatsPlayerId, currentSet);
-          if (minusBtn) {
-            const keyMinus = cat + "Minus";
-            s[keyMinus] = (s[keyMinus] || 0) + 1;
-          }
-          if (plusBtn) {
-            const keyPlus = cat + "Plus";
-            s[keyPlus] = (s[keyPlus] || 0) + 1;
-          }
+      const row = e.target.closest(".stat-row");
+      if (!row) return;
+      const cat = row.dataset.cat;
+      if (!cat) return;
+
+      const s = getPlayerSetStats(currentStatsPlayerId, currentSet);
+
+      // 1) Gestion classique des boutons - / +
+      if (minusBtn || plusBtn) {
+        if (minusBtn) {
+          const keyMinus = cat + "Minus";
+          s[keyMinus] = (s[keyMinus] || 0) + 1;
+        }
+        if (plusBtn) {
+          const keyPlus = cat + "Plus";
+          s[keyPlus] = (s[keyPlus] || 0) + 1;
+        }
+        saveStats();
+        renderStatsForCurrent();
+        renderDashboard();
+        updateCourtWarningsForSet();
+        return;
+      }
+
+      // 2) Clic direct sur la valeur -> correction manuelle
+      if (valueSpan) {
+        const isPlus = valueSpan.classList.contains("stat-value-plus");
+        const key = cat + (isPlus ? "Plus" : "Minus");
+        const current = s[key] || 0;
+
+        const labelRow = row.querySelector(".stat-label")
+          ? row.querySelector(".stat-label").textContent.trim()
+          : cat;
+
+        const typeLabel = isPlus
+          ? "points marqués"
+          : "fautes / points concédés";
+
+        const input = prompt(
+          "Corriger " + labelRow + " (" + typeLabel + ", set " + currentSet + ")",
+          current
+        );
+        if (input === null) return;
+
+        const val = parseInt(input, 10);
+        if (!Number.isNaN(val) && val >= 0) {
+          s[key] = val;
           saveStats();
           renderStatsForCurrent();
           renderDashboard();
           updateCourtWarningsForSet();
-        });
+        }
       }
+    });
+  }
 
-      const btnBack = document.getElementById("btn-back");
-      if (btnBack) {
-        btnBack.addEventListener("click", function() {
-          const statsContainer = document.getElementById("stats-container");
-          const mainView = document.getElementById("main-view");
-          if (statsContainer) statsContainer.style.display = "none";
-          if (mainView) mainView.style.display = "block";
-        });
+  const btnBack = document.getElementById("btn-back");
+  if (btnBack) {
+    btnBack.addEventListener("click", function() {
+      const statsContainer = document.getElementById("stats-container");
+      const mainView = document.getElementById("main-view");
+      if (statsContainer) statsContainer.style.display = "none";
+      if (mainView) mainView.style.display = "block";
+    });
+  }
+
+  const btnCopy = document.getElementById("btn-player-report-copy");
+  if (btnCopy) {
+    btnCopy.addEventListener("click", function() {
+      const area = document.getElementById("player-report-text");
+      if (!area) {
+        alert("Aucun rapport à copier.");
+        return;
       }
-
-      const btnCopy = document.getElementById("btn-player-report-copy");
-      if (btnCopy) {
-        btnCopy.addEventListener("click", function() {
-          const area = document.getElementById("player-report-text");
-          if (!area) {
-            alert("Aucun rapport à copier.");
-            return;
-          }
-          const text = area.value || "";
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text)
-              .then(() => {
-                alert("Rapport copié, prêt à coller dans WhatsApp / mail.");
-              })
-              .catch(() => {
-                fallbackCopy(area);
-              });
-          } else {
+      const text = area.value || "";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            alert("Rapport copié, prêt à coller dans WhatsApp / mail.");
+          })
+          .catch(() => {
             fallbackCopy(area);
-          }
-        });
+          });
+      } else {
+        fallbackCopy(area);
       }
-    }
+    });
+  }
+}
+
 
     /* --------- DASHBOARD ---------- */
     function renderDashboard() {
