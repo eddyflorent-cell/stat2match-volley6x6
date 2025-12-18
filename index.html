@@ -861,7 +861,350 @@
       font-size: 13px;
       cursor: pointer;
     }
-  </style>
+  
+/* ===== Dashboard (v2 lisible + export) ===== */
+#dash-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:8px 0 12px;
+}
+#dash-actions .btn-dash{
+  border:1px solid rgba(255,255,255,.18);
+  background:#111;
+  color:#fff;
+  padding:7px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:12px;
+}
+#dash-actions .btn-dash:hover{ filter:brightness(1.08); }
+
+.dash-section{
+  margin-top:14px;
+  padding:12px;
+  border-radius:14px;
+  background: rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+}
+.dash-team{ border-left:6px solid #2e7d32; }
+.dash-opp{ border-left:6px solid #c62828; }
+.dash-compare{ border-left:6px solid #1565c0; }
+.dash-note{
+  margin-top:10px;
+  font-size:12px;
+  color:#cfcfcf;
+  opacity:.95;
+}
+.dash-opp-grid, .dash-compare-grid{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.dash-opp-row, .dash-compare-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  background: rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.06);
+}
+.dash-opp-label, .dash-compare-label{ color:#eee; font-weight:600; }
+.dash-opp-val, .dash-compare-val{ color:#ddd; text-align:right; }
+
+/* ===== Rallye (v2 flottant, déplaçable, multi Défense/Passe) ===== */
+#rally-overlay{
+  display:none; /* shown via JS */
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  pointer-events:none;
+}
+#rally-overlay-backdrop{
+  display:none; /* plus de blocage écran */
+}
+#rally-overlay-panel{
+  position:fixed;
+  top:120px;
+  right:18px;
+  width:380px;
+  max-width:calc(100vw - 36px);
+  background:#202124;
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;
+  box-shadow:0 14px 38px rgba(0,0,0,0.55);
+  padding:10px 10px 12px;
+  pointer-events:auto;
+}
+#rally-drag-handle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.06);
+  cursor:move;
+  user-select:none;
+  font-weight:700;
+}
+#rally-drag-handle small{
+  font-weight:500;
+  opacity:.85;
+}
+#rally-close-x{
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+  padding:2px 6px;
+  border-radius:8px;
+}
+#rally-close-x:hover{ background:rgba(255,255,255,0.08); }
+
+#rally-overlay-hint{ margin:8px 6px 10px; font-size:12px; color:#ddd; opacity:.95; }
+
+#rally-player-list{
+  display:none;
+}
+#rally-multi-wrap{
+  display:none;
+  gap:10px;
+}
+.rally-col{
+  flex:1;
+  min-width:0;
+  padding:8px;
+  border-radius:12px;
+  background:rgba(0,0,0,0.20);
+  border:1px solid rgba(255,255,255,0.06);
+}
+.rally-col h4{
+  margin:0 0 8px;
+  font-size:13px;
+  letter-spacing:.2px;
+}
+.rally-col.def{ border-left:5px solid #2e7d32; }
+.rally-col.pass{ border-left:5px solid #f9a825; }
+
+.rally-player-btn{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  margin:6px 0;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.10);
+  background:rgba(255,255,255,0.04);
+  color:#fff;
+  cursor:pointer;
+  font-size:12px;
+}
+.rally-player-btn:hover{ filter:brightness(1.12); }
+.rally-player-btn .rally-count{ opacity:.9; font-weight:700; }
+
+#rally-close-btn{
+  width:100%;
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+  display:none; /* only in multi */
+}
+#rally-close-btn:hover{ filter:brightness(1.08); }
+
+
+/* =========================
+   HELP / TUTORIEL (FUNKY)
+   ========================= */
+#help.help-page{
+  background: transparent;
+}
+#help-container{
+  padding-bottom: 16px;
+}
+#help-container #help{
+  background: transparent;
+}
+#help .help-back{
+  background:#171717;
+  color:#fff;
+  border:1px solid #4a4a4a;
+  border-radius:999px;
+  padding:8px 14px;
+  font-size:13px;
+  cursor:pointer;
+}
+#help .help-hero{
+  margin-top:10px;
+  padding:14px;
+  border-radius:16px;
+  background: linear-gradient(135deg, rgba(41,182,246,0.22), rgba(0,230,118,0.10), rgba(255,179,0,0.12));
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+}
+#help .help-hero-top{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+#help .help-hero h2{
+  margin:0 0 4px 0;
+  letter-spacing:0.2px;
+}
+#help .help-hero p{
+  margin:0;
+  color: rgba(255,255,255,0.80);
+  font-size: 13px;
+  line-height: 1.35;
+}
+#help .help-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+#help .help-badge{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.25);
+  color:#fff;
+  white-space:nowrap;
+}
+#help .badge-blue{ border-color: rgba(41,182,246,0.55); }
+#help .badge-green{ border-color: rgba(0,230,118,0.55); }
+#help .badge-amber{ border-color: rgba(255,179,0,0.55); }
+#help .badge-pink{ border-color: rgba(255,82,82,0.55); }
+
+#help .help-rule{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+#help .help-rule h3{
+  margin:0 0 6px 0;
+  font-size:14px;
+}
+#help .help-rule ul{
+  margin:8px 0 0 18px;
+  padding:0;
+  color: rgba(255,255,255,0.86);
+  font-size:13px;
+  line-height:1.45;
+}
+#help .help-rule li{
+  margin:6px 0;
+}
+#help .help-rule code{
+  background: rgba(0,0,0,0.35);
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.10);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+}
+
+#help .help-grid{
+  margin-top:12px;
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap:10px;
+}
+#help .help-card{
+  grid-column: span 12;
+  background:#303134;
+  border-radius:14px;
+  padding:12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+@media (min-width: 860px){
+  #help .help-card.span-6{ grid-column: span 6; }
+  #help .help-card.span-4{ grid-column: span 4; }
+  #help .help-card.span-8{ grid-column: span 8; }
+}
+#help .help-card h3{
+  margin:0 0 6px 0;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+#help .help-card p{
+  margin:0 0 8px 0;
+  color: rgba(255,255,255,0.84);
+  font-size:13px;
+  line-height:1.45;
+}
+#help .help-card ul{
+  margin:6px 0 0 18px;
+  padding:0;
+  color: rgba(255,255,255,0.86) !important;
+  font-size:13px !important;
+  line-height:1.45;
+}
+#help .help-kbd{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:8px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size:12px;
+  margin:0 2px;
+}
+#help .accent{
+  color:#29b6f6;
+  font-weight:700;
+}
+#help .accent2{
+  color:#00e676;
+  font-weight:700;
+}
+#help .accent3{
+  color:#ffb300;
+  font-weight:700;
+}
+#help .help-callout{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.10);
+  background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(41,182,246,0.08));
+}
+#help .help-callout h3{
+  margin:0 0 6px 0;
+  font-size:14px;
+}
+#help .help-callout p{
+  margin:0;
+  color: rgba(255,255,255,0.84);
+  font-size:13px;
+  line-height:1.45;
+}
+#help .help-footer{
+  margin-top:10px;
+  text-align:center;
+  color: rgba(255,255,255,0.65);
+  font-size:12px;
+}
+#help .help-divider{
+  height:1px;
+  background: rgba(255,255,255,0.10);
+  margin:10px 0;
+}
+
+</style>
 </head>
 <body>
   <!-- VUE PRINCIPALE -->
@@ -1260,6 +1603,13 @@
     <section id="dashboard" class="no-select">
       <button id="btn-back-from-dashboard">← Retour au terrain</button>
       <h2>Tableau de bord</h2>
+      <div id="dash-actions">
+        <button id="btn-dashboard-print" class="btn-dash">Imprimer / PDF</button>
+        <button id="btn-dashboard-share" class="btn-dash">Partager</button>
+        <button id="btn-dashboard-copy" class="btn-dash">Copier</button>
+        <button id="btn-dashboard-wa" class="btn-dash">WhatsApp</button>
+        <button id="btn-dashboard-tg" class="btn-dash">Telegram</button>
+      </div>
 
       <div id="set-selector-dashboard">
         <span>Set :</span>
@@ -1285,13 +1635,57 @@
         </span>
       </div>
 
-      <div id="dash-team-summary">
+      <div id="dash-team-summary" class="dash-section dash-team">
         <h3>Nos stats (set <span id="dash-team-set-label">1</span>)</h3>
         <div id="dash-team-body"></div>
       </div>
 
-      <div id="dash-opponent-summary">
-        ...
+            <div id="dash-opponent-summary" class="dash-section dash-opp">
+        <h3>Stats adverses (set <span id="dash-opp-set-label">1</span>)</h3>
+
+        <div class="dash-opp-grid">
+          <div class="dash-opp-row">
+            <div class="dash-opp-label">Services</div>
+            <div class="dash-opp-val"><span id="dash-opp-service-fautes">0</span> fautes / <span id="dash-opp-service-points">0</span> points</div>
+          </div>
+
+          <div class="dash-opp-row">
+            <div class="dash-opp-label">Bloc</div>
+            <div class="dash-opp-val"><span id="dash-opp-bloc-points">0</span> points pour eux</div>
+          </div>
+
+          <div class="dash-opp-row">
+            <div class="dash-opp-label">Cadeaux (points offerts)</div>
+            <div class="dash-opp-val"><span id="dash-opp-cadeaux">0</span> points pour nous</div>
+          </div>
+
+          <div class="dash-opp-row">
+            <div class="dash-opp-label">Points (hors service)</div>
+            <div class="dash-opp-val"><span id="dash-opp-points-pourNous">0</span> pour nous / <span id="dash-opp-points-pourEux">0</span> pour eux</div>
+          </div>
+        </div>
+
+        <div class="dash-note">
+          Total de nos fautes estimées pour ce set : <strong><span id="dash-total-fautes-pour-eux">0</span></strong> (points offerts)
+        </div>
+      </div>
+
+      <div id="dash-compare-summary" class="dash-section dash-compare">
+        <h3>Comparatif – Nous vs Eux</h3>
+        <div class="dash-compare-grid">
+          <div class="dash-compare-row">
+            <div class="dash-compare-label">Actions positives</div>
+            <div class="dash-compare-val">Nous : <strong><span id="dash-our-pos">0</span></strong> | Eux : <strong><span id="dash-opp-pos">0</span></strong></div>
+          </div>
+          <div class="dash-compare-row">
+            <div class="dash-compare-label">Actions négatives</div>
+            <div class="dash-compare-val">Nous : <strong><span id="dash-our-neg">0</span></strong> | Eux : <strong><span id="dash-opp-neg">0</span></strong></div>
+          </div>
+          <div class="dash-compare-row">
+            <div class="dash-compare-label">Impact fautes</div>
+            <div class="dash-compare-val">Nos fautes → points adverses : <strong><span id="dash-impact-theirs">0%</span></strong> | Leurs fautes → nos points : <strong><span id="dash-impact-ours">0%</span></strong></div>
+          </div>
+        </div>
       </div>
 
            <div id="match-awards">
@@ -1346,167 +1740,134 @@
   </div>
     <!-- TUTORIEL / AIDE -->
   <div class="container" id="help-container" style="display:none;">
-       <section id="help" class="no-select">
-      <button id="btn-back-from-help">← Retour au terrain</button>
-     <h2>Tutoriel rapide – stat2match-volley 6x6</h2>
+    <section id="help" class="no-select help-page">
+      <button id="btn-back-from-help" class="help-back">← Retour au terrain</button>
 
-      <p style="font-size:13px;color:#ccc;">
-        Cette page résume comment utiliser l’application en match : préparer l’effectif,
-        placer les joueur·euses, utiliser le mode <strong>rallye</strong>, gérer le score,
-        les temps morts, lire les bilans et archiver les matchs.
-      </p>
+      <div class="help-hero">
+        <div class="help-hero-top">
+          <div>
+            <h2>Stat2Match Volley 6x6 — Guide express</h2>
+            <p>
+              Objectif : <strong>noter vite</strong> sans casser le rythme.
+              Le <strong>mode Rallye</strong> sert uniquement à capturer un <em>échange long</em>.
+            </p>
+          </div>
+          <div class="help-badges">
+            <span class="help-badge badge-green">✅ Offline OK</span>
+            <span class="help-badge badge-blue">⚡ Saisie rapide</span>
+            <span class="help-badge badge-amber">📊 Dashboard + Awards</span>
+            <span class="help-badge badge-pink">🧠 Rallye intelligent</span>
+          </div>
+        </div>
 
-      <h3>1. Préparer l’effectif et l’effectif de match</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Clique sur <strong>« Gérer l’effectif »</strong>.</li>
-        <li>Ajoute chaque joueur·euse : <strong>Prénom, n°, poste, licence, couleur</strong>.</li>
-        <li>La case <strong>« Dans l’effectif du match »</strong> détermine qui est disponible pour ce match :
-          seuls les joueurs cochés apparaissent sur le terrain et sur le banc.</li>
-        <li>Après avoir modifié ces cases, clique sur <strong>« Valider l’effectif du match »</strong> pour mettre à jour
-          les listes du terrain, le banc et les récompenses.</li>
-        <li>Tu peux décocher quelqu’un (blessure, absence) : il disparaît du banc et des listes du terrain,
-          mais reste dans l’effectif général.</li>
-        <li>Tout est <strong>enregistré automatiquement</strong> dans le navigateur (même hors ligne).</li>
-      </ul>
+        <div class="help-rule">
+          <h3>🧠 Règle d’or du mode Rallye</h3>
+          <p style="margin:0;color:rgba(255,255,255,0.86);font-size:13px;line-height:1.45;">
+            On <strong>ouvre</strong> un rallye uniquement quand on veut noter l’enchaînement :
+            <span class="accent">Défense +</span> ou <span class="accent">Passe +</span>.
+            Tout le reste est soit <strong>instantané</strong>, soit une <strong>fin de rallye</strong>.
+          </p>
 
+          <div class="help-divider"></div>
 
-      <h3>2. Placer les joueur·euses sur le terrain et gérer le banc</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Dans la zone <strong>« Terrain (6 joueuses) »</strong>, choisis une joueuse dans chaque liste déroulante
-          (Avant gauche, Avant centre, Avant droit, Arrière gauche, Arrière centre, Arrière droit).</li>
-        <li>Une joueuse déjà sur le terrain ne peut pas être choisie à un autre poste :
-          elle est marquée comme déjà utilisée.</li>
-        <li>Le <strong>banc</strong> liste automatiquement tous les joueurs :
           <ul>
-            <li>cochés « dans l’effectif du match » ;</li>
-            <li>et qui ne sont pas actuellement sur le terrain.</li>
+            <li><strong>Dans un rallye</strong>, <span class="accent">Défense +</span> et <span class="accent">Passe +</span> = ça <strong>continue</strong> l’échange (le rallye reste ouvert).</li>
+            <li><strong>Attaque / Service / Bloc / Réception</strong> : saisie <strong>instantanée</strong>. La fenêtre affiche le nom de l’action et se ferme dès que tu choisis la joueuse.</li>
+            <li><strong>Le rallye se termine uniquement</strong> si tu cliques une action qui “met fin aux débats” :
+              <ul>
+                <li><code>Passe −</code> ou <code>Défense −</code> (faute / ballon perdu)</li>
+                <li><code>Attaque +</code> ou <code>Attaque −</code> (point ou faute en attaque)</li>
+                <li><code>Bloc +</code> ou <code>Bloc −</code> (point au bloc ou faute au bloc)</li>
+                <li><code>Point adverse +</code> ou <code>Point adverse −</code> (ils marquent / ou on leur donne)</li>
+              </ul>
+            </li>
+            <li>Important : un rallye <strong>ne peut pas</strong> se terminer par <code>Service</code> ou <code>Réception</code> (par définition, on est déjà “dans l’échange”).</li>
           </ul>
-        </li>
-        <li>La composition du terrain est <strong>mémorisée</strong> : si tu rafraîchis la page,
-          les postes et le banc sont récupérés depuis la sauvegarde.</li>
-        <li>Tu peux utiliser les boutons <strong>« Rotation (sens horaire) »</strong> et
-          <strong>« Rotation (sens inverse) »</strong> pour faire tourner automatiquement les 6 postes
-          dans le sens d’une rotation de volley.</li>
-      </ul>
+        </div>
+      </div>
 
-
-      <h3>3. Utiliser le bandeau « rallye » en live</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Le bandeau sous le score propose 6 catégories :
-          <strong>Attaque, Service, Bloc, Récep., Défense, Passe</strong>, chacune avec un bouton <strong>+ / -</strong>.</li>
-        <li>À chaque <strong>rallye</strong> :
+      <div class="help-grid">
+        <div class="help-card span-6">
+          <h3>1) 👥 Effectif</h3>
+          <p>Construis ta base de joueuses, puis active l’effectif du match.</p>
           <ul>
-            <li>appuie sur la catégorie concernée (<strong>+ = point marqué</strong>,
-              <strong>- = faute / point perdu</strong>) ;</li>
-            <li>une fenêtre s’ouvre avec les <strong>joueuses du terrain</strong> ;</li>
-            <li>tapote sur le nom de la ou des joueuses impliquées :
-              chaque clic ajoute 1 action, le compteur <strong>x2, x3…</strong> s’affiche à côté du nom.</li>
+            <li>Clique <span class="help-kbd">Gérer l’effectif</span></li>
+            <li>Ajoute/modifie : <strong>Prénom, n°, poste, licence, couleur</strong></li>
+            <li>Coche <strong>Dans l’effectif du match</strong> pour afficher terrain + banc</li>
+            <li>Puis clique <span class="help-kbd">Valider l’effectif du match</span> (rafraîchit listes + awards)</li>
           </ul>
-        </li>
-        <li>Quand l’échange est terminé, appuie sur <strong>« Terminer le rallye »</strong> pour fermer la fenêtre.</li>
-        <li>Les stats sont automatiquement ajoutées dans la fiche individuelle de chaque joueuse,
-          pour le <strong>set en cours</strong>.</li>
-        <li>Tu peux ensuite affiner / corriger dans la fiche stats si besoin.</li>
-      </ul>
+        </div>
 
-      <h3>4. Voir et corriger les stats individuelles</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Sur le terrain ou le banc, clique sur une joueuse pour ouvrir sa <strong>fiche stats</strong>.</li>
-        <li>Choisis le <strong>set</strong> en haut, puis utilise <strong>+ / -</strong> pour ajuster attaque,
-          service, bloc, réception, défense, passe.</li>
-        <li>Le bloc <strong>« Récap du set »</strong> affiche fautes, points, delta et impact
-          dans le set / dans le match.</li>
-        <li>Le bloc <strong>« Bilan saison (matchs archivés) »</strong> résume ses stats sur tous les matchs clos.</li>
-      </ul>
-
-      <h3>5. Gérer le score du match et les temps morts</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Dans <strong>« Score du match »</strong> :
+        <div class="help-card span-6">
+          <h3>2) 🏐 Terrain + rotations</h3>
+          <p>Assigne tes 6 postes et utilise la rotation pour gagner du temps.</p>
           <ul>
-            <li>choisis le set (1 à 5) avec les boutons en haut ;</li>
-            <li>utilise <strong>+ / -</strong> pour mettre à jour le score de chaque équipe.</li>
+            <li>AG / AC / AD / ARG / ARC / ARD</li>
+            <li>Anti-doublon : une joueuse ne peut pas être 2 fois sur le terrain</li>
+            <li><span class="help-kbd">Rotation (horaire)</span> / <span class="help-kbd">Rotation (inverse)</span></li>
           </ul>
-        </li>
-        <li>Les <strong>temps morts</strong> sont gérés dans la barre juste sous le score :
+        </div>
+
+        <div class="help-card span-8">
+          <h3>3) ✍️ Saisie des actions</h3>
+          <p>
+            En dehors du rallye, tout est <span class="accent2">instantané</span> :
+            tu cliques, tu choisis la joueuse, c’est enregistré, ça se ferme.
+          </p>
           <ul>
-            <li><strong>TM tech.</strong> : 2 temps morts techniques communs aux deux équipes ;</li>
-            <li><strong>Temps morts nous</strong> : 2 temps morts pour ton équipe ;</li>
-            <li><strong>Temps morts eux</strong> : 2 temps morts pour l’adversaire.</li>
+            <li><strong>Instantané</strong> : Attaque / Service / Bloc / Réception (hors rallye)</li>
+            <li><strong>Rallye</strong> : uniquement Défense <strong>+</strong> et Passe <strong>+</strong> (enchaînements)</li>
+            <li>Dans un rallye, si tu cliques une action “finissante” (Attaque, Bloc, Passe−, Défense−, Point adverse), ça <strong>termine le rallye automatiquement</strong>.</li>
           </ul>
-        </li>
-        <li>Clique sur chaque <strong>pastille</strong> pour marquer un temps mort pris
-          (le compteur passe de 0/2 à 1/2, puis 2/2).</li>
-      </ul>
+        </div>
 
-      <h3>6. Renseigner les stats adverses</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Dans la carte <strong>« Stats adversaires – [Nom] »</strong>, tu peux suivre :
-          <strong>services, bloc, cadeaux, points hors service</strong>.</li>
-        <li>Ces données alimentent le tableau de bord et le rapport final,
-          notamment pour mesurer les <strong>points offerts</strong> à l’adversaire.</li>
-      </ul>
-
-      <h3>7. Utiliser le tableau de bord</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Clique sur <strong>« Tableau de bord »</strong> pour ouvrir la vue synthèse.</li>
-        <li>Choisis le set en haut : tu vois alors le score, nos fautes estimées,
-          et une <strong>vue d’ensemble par secteur de jeu</strong> (attaque, service, bloc, etc.).</li>
-        <li>Le bloc <strong>« Distinctions du match »</strong> te permet de choisir :
-          <strong>MVP, meilleur·e bloqueur·euse, meilleur soutien</strong>.</li>
-        <li>Quand tout est saisi, clique sur <strong>« Clôturer ce match et l’archiver »</strong>
-          pour enregistrer le match dans l’historique.</li>
-      </ul>
-
-      <h3>8. Historique des matchs & rapports PDF</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Dans <strong>« Historique »</strong>, chaque match archivé affiche :
-          <strong>nom du match, score, adversaire, date</strong>.</li>
-        <li>Pour chaque match, tu peux :
+        <div class="help-card span-4">
+          <h3>4) 🎯 Points adverses</h3>
+          <p>Si l’adversaire marque pendant l’échange, tu le notes côté adverse.</p>
           <ul>
-            <li>Afficher / cacher les <strong>résumés</strong> (détaillé + court).</li>
-            <li><strong>Copier</strong> un résumé pour l’envoyer dans WhatsApp / mail.</li>
-            <li>Ouvrir une <strong>page imprimable</strong> :
-              depuis cette page tu peux imprimer ou exporter en PDF.</li>
-            <li><strong>Supprimer</strong> un match de l’historique si besoin.</li>
+            <li><strong>Point adverse +</strong> : ils gagnent l’échange “sur leur jeu”</li>
+            <li><strong>Point adverse −</strong> : on leur donne (faute / cadeau)</li>
+            <li>Dans un rallye : ça <strong>termine</strong> le rallye</li>
           </ul>
-        </li>
-      </ul>
+        </div>
 
-      <h3>9. Rapport individuel joueuse / joueur</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Dans la fiche stats d’une joueuse, la zone
-          <strong>« Rapport individuel à partager »</strong> génère un texte prêt à envoyer.</li>
-        <li>Clique sur <strong>« Générer & copier le rapport individuel »</strong> :
-          le texte est copié, tu peux le coller dans WhatsApp, mail, etc.</li>
-        <li>Ce rapport ne concerne que la joueuse affichée : pour le bilan complet,
-          utilise l’onglet <strong>« Historique »</strong>.</li>
-      </ul>
-
-      <h3>10. Sauvegarder / partager la configuration</h3>
-      <ul style="font-size:13px;color:#ddd;">
-        <li>Dans <strong>« Effectif »</strong>, la zone <strong>« Export / import configuration »</strong> te permet de :
+        <div class="help-card span-6">
+          <h3>5) 📊 Tableau de bord</h3>
+          <p>Lecture rapide + comparatif Nous vs Eux.</p>
           <ul>
-            <li>cliquer sur <strong>« Exporter la configuration »</strong> pour copier effectif + noms d’équipes +
-              composition du terrain ;</li>
-            <li>coller ce texte dans WhatsApp, mail ou notes ;</li>
-            <li>sur un autre appareil, coller ce texte puis cliquer sur
-              <strong>« Importer la configuration »</strong> pour retrouver la même équipe.</li>
+            <li>Nos stats / Stats adverses / Comparatif</li>
+            <li>Impact des fautes (qui donne des points à qui)</li>
+            <li>Distinctions : <strong>MVP</strong>, <strong>Meilleur bloqueur·euse</strong>, <strong>Meilleur soutien</strong></li>
           </ul>
-        </li>
-      </ul>
+        </div>
 
-      <p style="font-size:12px;color:#888;margin-top:10px;">
-        Astuce : tu peux utiliser l’app sur un seul téléphone pendant le match, ou bien
-        partager la configuration à un adjoint (deuxième appareil) pour qu’il suive
-        les stats pendant que tu te concentres sur le coaching.
-      </p>
+        <div class="help-card span-6">
+          <h3>6) 🏅 Distinctions (rappel des règles)</h3>
+          <p>Les sélections se pré-remplissent selon les stats du moment.</p>
+          <ul>
+            <li><strong>MVP</strong> : total d’actions <span class="accent2">positives</span> le plus élevé, avec un <strong>delta positif obligatoire</strong></li>
+            <li><strong>Meilleur soutien</strong> : <strong>Défense +</strong> + <strong>Réception +</strong> le plus élevé</li>
+            <li><strong>Meilleur·e bloqueur·euse</strong> : <strong>Bloc +</strong> le plus élevé</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="help-callout">
+        <h3>🚀 Routine “propre” en match</h3>
+        <p>
+          Si tu vises la perf : garde l’agressivité… mais chasse les cadeaux.
+          Ton focus : <strong>moins de fautes gratuites</strong>, et une saisie fluide.
+          L’appli est faite pour que tu notes <strong>en 2 clics max</strong> dans 90% des cas.
+        </p>
+      </div>
+
+      <div class="help-footer">
+        Astuce : si quelqu’un te dit “c’est trop de boutons”, c’est qu’il n’a pas encore le rythme.
+        Deux sets d’habitude, et ça devient automatique. 🏐
+      </div>
     </section>
-
   </div>
-
-
-
-  <script>
+<script>
        const STORAGE_KEY  = "volley-team-4x4";
     const STATS_KEY    = "volley-team-4x4-stats";
     const SETS_KEY     = "volley-team-4x4-sets";
@@ -1600,86 +1961,167 @@
     }
 
     function openRallyOverlay(cat, outcome) {
-  rallyCurrentCat = cat;
-  rallyCurrentOutcome = outcome;
+  // Règles :
+  // - Attaque / Service / Bloc / Réception : action instantanée (un clic joueur = enregistré + fermeture)
+  // - Défense / Passe : mode rallye uniquement sur les (+) et on peut cumuler sans fermer
+  // - Toute action "(-)" met fin au rallye (et s’enregistre en instant)
+  const NON_RALLY = new Set(["attaque","service","bloc","reception"]);
+  const RALLY_PLUS = new Set(["defense","passe"]);
+
+  // Si un rallye multi est ouvert et que je clique autre chose que (defense/passe +),
+  // on ferme d’abord (le rallye est fini).
+  if (window.__rallyMode === "multi") {
+    const keepMulti = RALLY_PLUS.has(cat) && outcome === "plus";
+    if (!keepMulti) closeRallyOverlay();
+  }
+
+  // Cas instant
+  if (NON_RALLY.has(cat) || outcome === "minus" || !RALLY_PLUS.has(cat)) {
+    window.__rallyMode = "single";
+    window.__rallyCat = cat;
+    window.__rallyOutcome = outcome;
+
+    const overlay = document.getElementById("rally-overlay");
+    const hintEl  = document.getElementById("rally-overlay-hint");
+    const listEl  = document.getElementById("rally-player-list");
+    const multiWrap = document.getElementById("rally-multi-wrap");
+    const closeBtn = document.getElementById("rally-close-btn");
+
+    const titleEl = document.getElementById("rally-overlay-title");
+    const subEl   = document.getElementById("rally-overlay-subtitle");
+    if (!overlay || !listEl) return;
+
+    if (multiWrap) multiWrap.style.display = "none";
+    listEl.style.display = "block";
+    if (closeBtn) closeBtn.style.display = "none";
+
+    const labelMap = {
+      attaque: "Attaque",
+      service: "Service",
+      bloc: "Bloc",
+      reception: "Réception",
+      defense: "Défense",
+      passe: "Passe"
+    };
+    const outcomeLabel = outcome === "plus" ? "action + (point / réussite)" : "action - (faute / point perdu)";
+    if (titleEl) titleEl.textContent = (labelMap[cat] || cat);
+    if (subEl) { subEl.textContent = ""; subEl.style.display = "none"; }
+    if (hintEl) hintEl.textContent = (labelMap[cat] || cat) + " : " + "choisis la joueuse (" + outcomeLabel + ").";
+
+    listEl.innerHTML = "";
+    const onCourt = getOnCourtPlayers();
+    if (onCourt.length === 0) {
+      const msg = document.createElement("div");
+      msg.textContent = "Aucune joueuse sur le terrain. Renseigne les 6 postes.";
+      msg.style.fontSize = "12px";
+      msg.style.color = "#f88";
+      listEl.appendChild(msg);
+    } else {
+      onCourt.forEach((p) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "rally-player-btn";
+        btn.innerHTML = `
+          <span>${p.number || "-"}</span>
+          <span style="flex:1; text-align:left;">${p.name || ""}</span>
+          <span class="rally-count"></span>
+        `;
+        btn.addEventListener("click", () => {
+          addRallyStat(p.id, cat, outcome === "plus");
+          closeRallyOverlay(); // instant = on ferme direct
+        });
+        listEl.appendChild(btn);
+      });
+    }
+
+    overlay.style.display = "block";
+    return;
+  }
+
+  // Cas rallye multi (Défense / Passe sur les +)
+  window.__rallyMode = "multi";
 
   const overlay = document.getElementById("rally-overlay");
-  const titleEl = document.getElementById("rally-overlay-title");
-  const hintEl = document.getElementById("rally-overlay-hint");
-  const listEl = document.getElementById("rally-player-list");
+  const hintEl  = document.getElementById("rally-overlay-hint");
+  const listSingle  = document.getElementById("rally-player-list");
+  const multiWrap = document.getElementById("rally-multi-wrap");
+  const listDef = document.getElementById("rally-player-list-defense");
+  const listPass = document.getElementById("rally-player-list-passe");
+  const closeBtn = document.getElementById("rally-close-btn");
 
-  if (!overlay || !titleEl || !listEl) return;
+    const titleEl = document.getElementById("rally-overlay-title");
+    const subEl   = document.getElementById("rally-overlay-subtitle");
+  if (!overlay || !multiWrap || !listDef || !listPass) return;
+  if (titleEl) titleEl.textContent = "Rallye";
+  if (subEl) { subEl.textContent = "Défense & Passe"; subEl.style.display = "block"; }
 
-  const labelMap = {
-    attaque: "Attaque",
-    service: "Service",
-    bloc: "Bloc",
-    reception: "Réception",
-    defense: "Défense",
-    passe: "Passe"
-  };
-  const outcomeLabel = outcome === "plus"
-    ? "point gagné"
-    : "faute / point perdu";
-
-  titleEl.textContent = labelMap[cat] || cat;
-  hintEl.textContent =
-    "Tape sur le ou les noms pour ajouter " + outcomeLabel + " sur ce rallye.";
-
-  // On vide la liste et on recrée les boutons
-  listEl.innerHTML = "";
+  if (hintEl) hintEl.textContent = "Rallye en cours : clique sur les noms pour cumuler Défense(+) et Passe(+). Une faute (-) ou une action adverse clôture le rallye.";
+  if (listSingle) listSingle.style.display = "none";
+  multiWrap.style.display = "flex";
+  if (closeBtn) closeBtn.style.display = "block";
 
   const onCourt = getOnCourtPlayers();
+  const countsDef = (window.__rallyCountsDef ||= {});
+  const countsPass = (window.__rallyCountsPass ||= {});
+
+  function makeBtn(p, type) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "rally-player-btn";
+    const count = type === "def" ? (countsDef[p.id] || 0) : (countsPass[p.id] || 0);
+    btn.innerHTML = `
+      <span>${p.number || "-"}</span>
+      <span style="flex:1; text-align:left;">${p.name || ""}</span>
+      <span class="rally-count">${count ? "x" + count : ""}</span>
+    `;
+    btn.addEventListener("click", () => {
+      if (type === "def") {
+        addRallyStat(p.id, "defense", true);
+        countsDef[p.id] = (countsDef[p.id] || 0) + 1;
+      } else {
+        addRallyStat(p.id, "passe", true);
+        countsPass[p.id] = (countsPass[p.id] || 0) + 1;
+      }
+      // refresh the count only
+      const cEl = btn.querySelector(".rally-count");
+      if (cEl) {
+        const newCount = type === "def" ? countsDef[p.id] : countsPass[p.id];
+        cEl.textContent = newCount ? ("x" + newCount) : "";
+      }
+    });
+    return btn;
+  }
+
+  listDef.innerHTML = "";
+  listPass.innerHTML = "";
+
   if (onCourt.length === 0) {
     const msg = document.createElement("div");
-    msg.textContent = "Aucune joueuse sur le terrain. Renseigne les 4 postes.";
+    msg.textContent = "Aucune joueuse sur le terrain. Renseigne les 6 postes.";
     msg.style.fontSize = "12px";
     msg.style.color = "#f88";
-    listEl.appendChild(msg);
+    listDef.appendChild(msg.cloneNode(true));
+    listPass.appendChild(msg);
   } else {
     onCourt.forEach((p) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "rally-player-btn";
-
-      const numSpan = document.createElement("span");
-      numSpan.textContent = p.number || "-";
-
-      const nameSpan = document.createElement("span");
-      nameSpan.textContent = p.name || "";
-
-      const countSpan = document.createElement("span");
-      countSpan.className = "rally-count";
-      countSpan.textContent = "";
-
-      btn.appendChild(numSpan);
-      btn.appendChild(nameSpan);
-      btn.appendChild(countSpan);
-
-      let count = 0;
-      btn.addEventListener("click", () => {
-        const isPlus = outcome === "plus";
-        addRallyStat(p.id, cat, isPlus);
-        count++;
-        countSpan.textContent = count > 0 ? " x" + count : "";
-      });
-
-      listEl.appendChild(btn);
+      listDef.appendChild(makeBtn(p, "def"));
+      listPass.appendChild(makeBtn(p, "pass"));
     });
   }
 
-  overlay.style.display = "flex";
+  overlay.style.display = "block";
 }
 
 
     function closeRallyOverlay() {
-      const overlay = document.getElementById("rally-overlay");
-      if (overlay) {
-        overlay.style.display = "none";
-      }
-      rallyCurrentCat = null;
-      rallyCurrentOutcome = null;
-    }
+  const overlay = document.getElementById("rally-overlay");
+  if (overlay) overlay.style.display = "none";
+  window.__rallyMode = null;
+  window.__rallyCat = null;
+  window.__rallyOutcome = null;
+  window.__rallyCountsDef = {};
+  window.__rallyCountsPass = {};
+}
 
     /* --------- stockage scores sets ---------- */
     function loadSetScores() {
@@ -3874,6 +4316,20 @@ if (btnValidateRoster) {
       document.getElementById("dashboard-container").style.display = "none";
       document.getElementById("main-view").style.display = "block";
     };
+
+  // Boutons Tableau de bord (export)
+  const btnDashPrint = document.getElementById("btn-dashboard-print");
+  const btnDashShare = document.getElementById("btn-dashboard-share");
+  const btnDashCopy  = document.getElementById("btn-dashboard-copy");
+  const btnDashWA    = document.getElementById("btn-dashboard-wa");
+  const btnDashTG    = document.getElementById("btn-dashboard-tg");
+
+  if (btnDashPrint) btnDashPrint.onclick = printDashboardNow;
+  if (btnDashShare) btnDashShare.onclick = shareDashboardNow;
+  if (btnDashCopy)  btnDashCopy.onclick  = copyDashboardNow;
+  if (btnDashWA)    btnDashWA.onclick    = shareDashboardWhatsApp;
+  if (btnDashTG)    btnDashTG.onclick    = shareDashboardTelegram;
+
       // Bouton Historique
     document.getElementById("btn-history").addEventListener("click", function(){
       document.getElementById("main-view").style.display = "none";
@@ -3998,6 +4454,12 @@ if (btnRotateCourtCCW) {
   const rallyBackdrop = document.getElementById("rally-overlay-backdrop");
   const rallyCloseBtn = document.getElementById("rally-close-btn");
 
+  const rallyCloseX = document.getElementById("rally-close-x");
+  if (rallyCloseX) rallyCloseX.onclick = closeRallyOverlay;
+
+  // Rend le panneau rallye déplaçable
+  makeRallyPanelDraggable();
+
   if (rallyBackdrop) {
     rallyBackdrop.onclick = closeRallyOverlay;
   }
@@ -4016,20 +4478,316 @@ if (btnRotateCourtCCW) {
      }
    });
  
+
+/* ===== Dashboard export + distinctions auto (v2) ===== */
+function getPlayerMatchAgg(playerId) {
+  // Agrège sur le set courant uniquement (pour le tableau de bord).
+  const s = getPlayerSetStats(playerId, currentSet) || {};
+  const plus =
+    (s.attaquePlus||0)+(s.servicePlus||0)+(s.blocPlus||0)+(s.receptionPlus||0)+
+    (s.defensePlus||0)+(s.passePlus||0);
+  const minus =
+    (s.attaqueMinus||0)+(s.serviceMinus||0)+(s.blocMinus||0)+(s.receptionMinus||0)+
+    (s.defenseMinus||0)+(s.passeMinus||0);
+  return { plus, minus, delta: plus - minus, s };
+}
+
+function suggestAwardsFromCurrentSet() {
+  const onMatchPlayers = players.filter(p => p && p.id);
+  let bestSupport = null;
+  let bestSupportScore = -1;
+
+  let bestMVP = null;
+  let bestMVPPlus = -1;
+
+  let bestBlocker = null;
+  let bestBlockPts = -1;
+
+  onMatchPlayers.forEach(p => {
+    const { plus, delta, s } = getPlayerMatchAgg(p.id);
+
+    // Meilleur soutien = defenses+ + recep+ (positives)
+    const supportScore = (s.defensePlus||0) + (s.receptionPlus||0);
+    if (supportScore > bestSupportScore) {
+      bestSupportScore = supportScore;
+      bestSupport = p;
+    }
+
+    // MVP = plus le + de +, delta doit être positif
+    if (delta > 0) {
+      if (plus > bestMVPPlus) {
+        bestMVPPlus = plus;
+        bestMVP = p;
+      }
+    }
+
+    // Meilleur bloqueur
+    const b = (s.blocPlus||0);
+    if (b > bestBlockPts) {
+      bestBlockPts = b;
+      bestBlocker = p;
+    }
+  });
+
+  return {
+    bestSupport,
+    bestSupportScore,
+    bestMVP,
+    bestMVPPlus,
+    bestBlocker,
+    bestBlockPts
+  };
+}
+
+function applyAwardsAutofill() {
+  const mvpSelect = document.getElementById("select-mvp");
+  const supportSelect = document.getElementById("select-best-support");
+  const blockSelect = document.getElementById("select-best-block");
+  const mvpHint = document.getElementById("mvp-suggestion");
+  const supportHint = document.getElementById("support-suggestion");
+  const blockHint = document.getElementById("block-suggestion");
+
+  if (!mvpSelect && !supportSelect && !blockSelect) return;
+
+  // s'assure que les options existent
+  if (typeof refreshAwardsSelectors === "function") {
+    refreshAwardsSelectors();
+  }
+
+  const sug = suggestAwardsFromCurrentSet();
+
+  if (sug.bestMVP && mvpSelect && !mvpSelect.value) {
+    mvpSelect.value = sug.bestMVP.id;
+  }
+  if (sug.bestSupport && supportSelect && !supportSelect.value) {
+    supportSelect.value = sug.bestSupport.id;
+  }
+  if (sug.bestBlocker && blockSelect && !blockSelect.value) {
+    blockSelect.value = sug.bestBlocker.id;
+  }
+
+  function fmtPlayer(p){
+    if (!p) return "—";
+    return (p.number ? "#"+p.number+" " : "") + (p.name||"");
+  }
+
+  if (mvpHint) {
+    if (sug.bestMVP) mvpHint.textContent = `Suggestion auto : ${fmtPlayer(sug.bestMVP)} — Actions + : ${sug.bestMVPPlus} (Δ positif obligatoire)`;
+    else mvpHint.textContent = "Suggestion auto : — (aucune joueuse avec Δ positif pour l’instant)";
+  }
+  if (blockHint) {
+    blockHint.textContent = `Suggestion auto : ${fmtPlayer(sug.bestBlocker)} — Bloc + : ${sug.bestBlockPts}`;
+  }
+  if (supportHint) {
+    supportHint.textContent = `Suggestion auto : ${fmtPlayer(sug.bestSupport)} — Défense+ ${((sug.bestSupport && getPlayerSetStats(sug.bestSupport.id,currentSet).defensePlus)||0)} + Récep+ ${((sug.bestSupport && getPlayerSetStats(sug.bestSupport.id,currentSet).receptionPlus)||0)} = ${sug.bestSupportScore}`;
+  }
+}
+
+function buildDashboardShareText(setNum) {
+  const our = document.getElementById("dash-team-body")?.innerText?.trim() || "";
+  const scoreLabel = document.getElementById("dash-score-set-label")?.innerText?.trim() || `Set ${setNum}`;
+  const scoreLine = document.getElementById("dash-score-line")?.innerText?.trim() || "";
+  const oppName = (typeof getOppTeamName === "function" ? getOppTeamName() : "") || "Adversaire";
+  const oppServiceF = document.getElementById("dash-opp-service-fautes")?.innerText || "0";
+  const oppServiceP = document.getElementById("dash-opp-service-points")?.innerText || "0";
+  const oppBlocP = document.getElementById("dash-opp-bloc-points")?.innerText || "0";
+  const oppCad = document.getElementById("dash-opp-cadeaux")?.innerText || "0";
+  const oppPNous = document.getElementById("dash-opp-points-pourNous")?.innerText || "0";
+  const oppPEux = document.getElementById("dash-opp-points-pourEux")?.innerText || "0";
+  const totFautes = document.getElementById("dash-total-fautes-pour-eux")?.innerText || "0";
+
+  const ourPos = document.getElementById("dash-our-pos")?.innerText || "0";
+  const oppPos = document.getElementById("dash-opp-pos")?.innerText || "0";
+  const ourNeg = document.getElementById("dash-our-neg")?.innerText || "0";
+  const oppNeg = document.getElementById("dash-opp-neg")?.innerText || "0";
+  const impactTheirs = document.getElementById("dash-impact-theirs")?.innerText || "0%";
+  const impactOurs = document.getElementById("dash-impact-ours")?.innerText || "0%";
+
+  const mvp = document.getElementById("select-mvp")?.selectedOptions?.[0]?.textContent || "—";
+  const block = document.getElementById("select-best-block")?.selectedOptions?.[0]?.textContent || "—";
+  const support = document.getElementById("select-best-support")?.selectedOptions?.[0]?.textContent || "—";
+
+  return [
+    "📊 Stat2Match — Tableau de bord ("+scoreLabel+")",
+    scoreLine ? scoreLine : "",
+    "",
+    "🟩 Nos stats (set "+setNum+")",
+    our,
+    "",
+    "🟥 Stats adverses — "+oppName+" (set "+setNum+")",
+    `Services : ${oppServiceF} fautes / ${oppServiceP} points`,
+    `Bloc : ${oppBlocP} points pour eux`,
+    `Cadeaux : ${oppCad} points pour nous`,
+    `Points (hors service) : ${oppPNous} pour nous / ${oppPEux} pour eux`,
+    `Total de nos fautes estimées : ${totFautes}`,
+    "",
+    "🟦 Comparatif — Nous vs Eux",
+    `Actions positives : Nous ${ourPos} | Eux ${oppPos}`,
+    `Actions négatives : Nous ${ourNeg} | Eux ${oppNeg}`,
+    `Impact fautes : Nos fautes → points adverses ${impactTheirs} | Leurs fautes → nos points ${impactOurs}`,
+    "",
+    "🏅 Distinctions (auto / sélection)",
+    `MVP : ${mvp}`,
+    `Meilleur·e bloqueur·euse : ${block}`,
+    `Meilleur soutien : ${support}`,
+  ].filter(Boolean).join("\n");
+}
+
+function copyDashboardNow() {
+  const txt = buildDashboardShareText(currentSet);
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(txt).then(() => alert("Tableau de bord copié ✅"));
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = txt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    alert("Tableau de bord copié ✅");
+  }
+}
+
+async function shareDashboardNow() {
+  const txt = buildDashboardShareText(currentSet);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "Stat2Match – Tableau de bord", text: txt });
+      return;
+    } catch (e) { /* fallback below */ }
+  }
+  copyDashboardNow();
+}
+
+function shareDashboardWhatsApp() {
+  const txt = buildDashboardShareText(currentSet);
+  const url = "https://wa.me/?text=" + encodeURIComponent(txt);
+  window.open(url, "_blank");
+}
+
+function shareDashboardTelegram() {
+  const txt = buildDashboardShareText(currentSet);
+  const url = "https://t.me/share/url?text=" + encodeURIComponent(txt);
+  window.open(url, "_blank");
+}
+
+function printDashboardNow() {
+  // On imprime l'écran dashboard tel quel (le navigateur gère PDF)
+  window.print();
+}
+
+/* ===== Rallye : fermeture auto sur actions adverses + drag ===== */
+function makeRallyPanelDraggable() {
+  const panel = document.getElementById("rally-overlay-panel");
+  const handle = document.getElementById("rally-drag-handle");
+  if (!panel || !handle) return;
+
+  let dragging = false;
+  let startX = 0, startY = 0;
+  let startLeft = 0, startTop = 0;
+
+  const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+
+  function getXY(ev){
+    if (ev.touches && ev.touches[0]) return {x: ev.touches[0].clientX, y: ev.touches[0].clientY};
+    return {x: ev.clientX, y: ev.clientY};
+  }
+
+  function onDown(ev){
+    // ignore clicks on close button
+    if (ev.target && (ev.target.id === "rally-close-x" || ev.target.closest && ev.target.closest("#rally-close-x"))) return;
+    dragging = true;
+    ev.preventDefault();
+    const rect = panel.getBoundingClientRect();
+    const pos = getXY(ev);
+    startX = pos.x;
+    startY = pos.y;
+    startLeft = rect.left;
+    startTop = rect.top;
+
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+    panel.style.left = startLeft + "px";
+    panel.style.top  = startTop + "px";
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+    document.addEventListener("touchmove", onMove, {passive:false});
+    document.addEventListener("touchend", onUp);
+  }
+
+  function onMove(ev){
+    if (!dragging) return;
+    ev.preventDefault();
+    const pos = getXY(ev);
+    const dx = pos.x - startX;
+    const dy = pos.y - startY;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const rect = panel.getBoundingClientRect();
+
+    const newLeft = clamp(startLeft + dx, 10, vw - rect.width - 10);
+    const newTop  = clamp(startTop + dy, 10, vh - rect.height - 10);
+
+    panel.style.left = newLeft + "px";
+    panel.style.top  = newTop  + "px";
+  }
+
+  function onUp(){
+    dragging = false;
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onUp);
+    document.removeEventListener("touchmove", onMove);
+    document.removeEventListener("touchend", onUp);
+  }
+
+  handle.addEventListener("mousedown", onDown);
+  handle.addEventListener("touchstart", onDown, {passive:false});
+}
+
+// Fermeture auto du rallye si action adverse (bloc / points / etc)
+document.addEventListener("click", (e) => {
+  if (window.__rallyMode !== "multi") return;
+  const t = e.target;
+  if (!t) return;
+  if (t.closest && t.closest("#opponent-stats-list")) {
+    closeRallyOverlay();
+  }
+}, true);
+
 </script>
 
   <!-- OVERLAY RALLYE : LISTE DES JOUEUSES SUR LE TERRAIN -->
   <div id="rally-overlay">
     <div id="rally-overlay-backdrop"></div>
     <div id="rally-overlay-panel">
-      <h3 id="rally-overlay-title">Action</h3>
-      <p id="rally-overlay-hint">
-        Tape sur le ou les noms pour ajouter l’action à ce rallye.
-      </p>
+      <div id="rally-drag-handle">
+        <div>
+          <span id="rally-overlay-title">Rallye</span>
+          <small id="rally-overlay-subtitle" style="display:block;opacity:.8;">Défense & Passe</small>
+        </div>
+        <button id="rally-close-x" type="button" aria-label="Fermer">×</button>
+      </div>
+
+      <p id="rally-overlay-hint">Tape sur un nom pour enregistrer l’action.</p>
+
+      <!-- Mode "instant" (attaque/service/bloc/réception + fautes) -->
       <div id="rally-player-list"></div>
-      <button id="rally-close-btn" type="button">
-        Terminer le rallye
-      </button>
+
+      <!-- Mode "rallye" (multi) : Défense + Passe visibles en même temps -->
+      <div id="rally-multi-wrap">
+        <div class="rally-col def">
+          <h4>Défense (+)</h4>
+          <div id="rally-player-list-defense"></div>
+        </div>
+        <div class="rally-col pass">
+          <h4>Passe (+)</h4>
+          <div id="rally-player-list-passe"></div>
+        </div>
+      </div>
+
+      <button id="rally-close-btn" type="button">Terminer le rallye</button>
     </div>
   </div>
 
