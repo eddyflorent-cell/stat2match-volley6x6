@@ -1707,15 +1707,29 @@
             <option value="">— Aucune —</option>
           </select>
         </div>
+        <div id="best-block-suggestion" class="award-hint"></div>
+
         <div id="block-suggestion" class="award-hint"></div>
 
-        <!-- Meilleur soutien -->
+        
+        <!-- Meilleur·e attaquant·e -->
+        <div class="award-row">
+          <label for="select-best-attack">Meilleur·e attaquant·e</label>
+          <select id="select-best-attack">
+            <option value="">— Aucune —</option>
+          </select>
+        </div>
+        <div id="best-attack-suggestion" class="award-hint"></div>
+
+<!-- Meilleur soutien -->
         <div class="award-row">
           <label for="select-best-support">Meilleur soutien</label>
           <select id="select-best-support">
             <option value="">— Aucune —</option>
           </select>
         </div>
+        <div id="best-support-suggestion" class="award-hint"></div>
+
         <div id="support-suggestion" class="award-hint"></div>
       </div>
 
@@ -1772,7 +1786,6 @@
 
           <ul>
             <li><strong>Dans un rallye</strong>, <span class="accent">Défense +</span> et <span class="accent">Passe +</span> = ça <strong>continue</strong> l’échange (le rallye reste ouvert).</li>
-            <li><strong>Attaque / Service / Bloc / Réception</strong> : saisie <strong>instantanée</strong>. La fenêtre affiche le nom de l’action et se ferme dès que tu choisis la joueuse.</li>
             <li><strong>Le rallye se termine uniquement</strong> si tu cliques une action qui “met fin aux débats” :
               <ul>
                 <li><code>Passe −</code> ou <code>Défense −</code> (faute / ballon perdu)</li>
@@ -1837,7 +1850,7 @@
           <ul>
             <li>Nos stats / Stats adverses / Comparatif</li>
             <li>Impact des fautes (qui donne des points à qui)</li>
-            <li>Distinctions : <strong>MVP</strong>, <strong>Meilleur bloqueur·euse</strong>, <strong>Meilleur soutien</strong></li>
+            <li>Distinctions : <strong>MVP</strong>, <strong>Meilleur·e bloqueur·euse</strong>, <strong>Meilleur·e attaquant·e</strong>, <strong>Meilleur soutien</strong> (auto, modifiable)</li>
           </ul>
         </div>
 
@@ -1845,10 +1858,14 @@
           <h3>6) 🏅 Distinctions (rappel des règles)</h3>
           <p>Les sélections se pré-remplissent selon les stats du moment.</p>
           <ul>
-            <li><strong>MVP</strong> : total d’actions <span class="accent2">positives</span> le plus élevé, avec un <strong>delta positif obligatoire</strong></li>
-            <li><strong>Meilleur soutien</strong> : <strong>Défense +</strong> + <strong>Réception +</strong> le plus élevé</li>
+            <li><strong>MVP</strong> : total d’actions <span class="accent2">positives</span> le plus élevé, avec un <strong>delta (Δ) &gt; 0 obligatoire</strong></li>
+            <li><strong>Meilleur·e attaquant·e</strong> : <strong>Attaque +</strong> le plus élevé (en cas d’égalité : meilleur Δ en attaque)</li>
             <li><strong>Meilleur·e bloqueur·euse</strong> : <strong>Bloc +</strong> le plus élevé</li>
+            <li><strong>Meilleur soutien</strong> : <strong>Défense +</strong> + <strong>Réception +</strong> le plus élevé</li>
           </ul>
+          <p style="margin:8px 0 0;color:rgba(255,255,255,0.78);font-size:12px;line-height:1.35;">
+            Tu peux toujours modifier manuellement : l’auto-suggestion sert de base, elle ne remplace pas ton jugement de coach.
+          </p>
         </div>
       </div>
 
@@ -1987,8 +2004,6 @@
     const multiWrap = document.getElementById("rally-multi-wrap");
     const closeBtn = document.getElementById("rally-close-btn");
 
-    const titleEl = document.getElementById("rally-overlay-title");
-    const subEl   = document.getElementById("rally-overlay-subtitle");
     if (!overlay || !listEl) return;
 
     if (multiWrap) multiWrap.style.display = "none";
@@ -2003,12 +2018,27 @@
       defense: "Défense",
       passe: "Passe"
     };
-    const outcomeLabel = outcome === "plus" ? "action + (point / réussite)" : "action - (faute / point perdu)";
-    if (titleEl) titleEl.textContent = (labelMap[cat] || cat);
-    if (subEl) { subEl.textContent = ""; subEl.style.display = "none"; }
-    if (hintEl) hintEl.textContent = (labelMap[cat] || cat) + " : " + "choisis la joueuse (" + outcomeLabel + ").";
 
-    listEl.innerHTML = "";
+    const outcomeLabel = outcome === "plus"
+      ? "action + (point / réussite)"
+      : "action - (faute / point perdu)";
+
+    const titleEl = document.getElementById("rally-overlay-title");
+    const subEl   = document.getElementById("rally-overlay-subtitle");
+
+    const label = (labelMap[cat] || cat);
+
+    // ✅ Affichage clair : "Rallye" uniquement quand on est sur Défense / Passe (gestion des échanges longs)
+    if (cat === "defense" || cat === "passe") {
+      if (titleEl) titleEl.textContent = "Rallye";
+      if (subEl) { subEl.textContent = "Défense & Passe"; subEl.style.display = "block"; }
+    } else {
+      if (titleEl) titleEl.textContent = label;
+      if (subEl) { subEl.textContent = outcomeLabel; subEl.style.display = "block"; }
+    }
+
+    if (hintEl) hintEl.textContent = label + " : choisis la joueuse (" + outcomeLabel + ").";
+listEl.innerHTML = "";
     const onCourt = getOnCourtPlayers();
     if (onCourt.length === 0) {
       const msg = document.createElement("div");
@@ -2049,11 +2079,7 @@
   const listPass = document.getElementById("rally-player-list-passe");
   const closeBtn = document.getElementById("rally-close-btn");
 
-    const titleEl = document.getElementById("rally-overlay-title");
-    const subEl   = document.getElementById("rally-overlay-subtitle");
   if (!overlay || !multiWrap || !listDef || !listPass) return;
-  if (titleEl) titleEl.textContent = "Rallye";
-  if (subEl) { subEl.textContent = "Défense & Passe"; subEl.style.display = "block"; }
 
   if (hintEl) hintEl.textContent = "Rallye en cours : clique sur les noms pour cumuler Défense(+) et Passe(+). Une faute (-) ou une action adverse clôture le rallye.";
   if (listSingle) listSingle.style.display = "none";
@@ -2437,6 +2463,10 @@
       } catch (e) {
         alert("Sélectionne le texte et copie-le manuellement.");
       }
+
+      // Met à jour les distinctions (liste + suggestions) sans forcer si l'utilisateur a choisi
+      if (typeof refreshAwardsUI === "function") refreshAwardsUI();
+
     }
 
        /* --------- rendu effectif ---------- */
@@ -3501,9 +3531,168 @@ function initStatsControls() {
       const totalFautesPourEux = totalMinus;
       if (elTotFautes) elTotFautes.textContent = totalFautesPourEux;
 
+      // Distinctions auto (pré-sélection + suggestions)
+      if (typeof refreshAwardsUI === "function") refreshAwardsUI();
+
+
     }
 
-          /* --------- ARCHIVER MATCH + RÉSUMÉS ---------- */
+          
+    /* --------- DISTINCTIONS AUTO (6x6) ---------- */
+
+    function getInMatchPlayers() {
+      return (players || []).filter(p => p && p.name && (p.inMatch !== false));
+    }
+
+    function getPlayerTotalsForSet(playerId, setNumber) {
+      const s = getPlayerSetStats(playerId, setNumber);
+      let plus = 0, minus = 0;
+      STAT_CATEGORIES.forEach(cat => {
+        plus  += (s[cat + "Plus"]  || 0);
+        minus += (s[cat + "Minus"] || 0);
+      });
+      const delta = plus - minus;
+
+      const attaquePlus  = s.attaquePlus  || 0, attaqueMinus  = s.attaqueMinus  || 0;
+      const blocPlus     = s.blocPlus     || 0, blocMinus     = s.blocMinus     || 0;
+      const defensePlus  = s.defensePlus  || 0;
+      const receptionPlus= s.receptionPlus|| 0;
+
+      return {
+        plus, minus, delta,
+        attaquePlus, attaqueMinus,
+        blocPlus, blocMinus,
+        supportPlus: defensePlus + receptionPlus
+      };
+    }
+
+    function computeAutoAwards(setNumber) {
+      const cand = getInMatchPlayers();
+      const rows = cand.map(p => ({ p, t: getPlayerTotalsForSet(p.id, setNumber) }));
+
+      // MVP: max actions +, delta strictement positif
+      const mvpRow = rows
+        .filter(r => (r.t.delta > 0))
+        .sort((a,b) => (b.t.plus - a.t.plus) || (b.t.delta - a.t.delta))[0];
+
+      // Best block: max blocPlus
+      const bestBlockRow = rows
+        .sort((a,b) => (b.t.blocPlus - a.t.blocPlus) || (b.t.delta - a.t.delta))[0];
+
+      // Best attack: max attaquePlus, idéalement delta attaque positif (tie-break)
+      const bestAttackRow = rows
+        .sort((a,b) => (b.t.attaquePlus - a.t.attaquePlus) || (( (b.t.attaquePlus - b.t.attaqueMinus) - (a.t.attaquePlus - a.t.attaqueMinus) )))[0];
+
+      // Best support: max (defense+ + reception+)
+      const bestSupportRow = rows
+        .sort((a,b) => (b.t.supportPlus - a.t.supportPlus) || (b.t.delta - a.t.delta))[0];
+
+      return {
+        mvp: mvpRow?.p || null,
+        mvpMeta: mvpRow?.t || null,
+        bestBlock: bestBlockRow?.p || null,
+        bestBlockMeta: bestBlockRow?.t || null,
+        bestAttack: bestAttackRow?.p || null,
+        bestAttackMeta: bestAttackRow?.t || null,
+        bestSupport: bestSupportRow?.p || null,
+        bestSupportMeta: bestSupportRow?.t || null
+      };
+    }
+
+    function fillAwardSelect(selectEl) {
+      if (!selectEl) return;
+      const prev = selectEl.value;
+      const locked = selectEl.dataset.locked === "1";
+
+      // Keep first option
+      const firstOpt = selectEl.querySelector("option[value='']") || selectEl.querySelector("option");
+      selectEl.innerHTML = "";
+      const optNone = document.createElement("option");
+      optNone.value = "";
+      optNone.textContent = "— Aucune —";
+      selectEl.appendChild(optNone);
+
+      getInMatchPlayers().forEach(p => {
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = (p.number ? (p.number + " ") : "") + p.name;
+        selectEl.appendChild(opt);
+      });
+
+      if (locked && prev) {
+        selectEl.value = prev;
+      }
+    }
+
+    function applyAutoAwardToSelect(selectEl, playerObj) {
+      if (!selectEl) return;
+      const locked = selectEl.dataset.locked === "1";
+      if (locked) return; // l'utilisateur a choisi manuellement
+      selectEl.value = playerObj ? playerObj.id : "";
+    }
+
+    function wireAwardSelectLock(selectEl) {
+      if (!selectEl) return;
+      if (selectEl.dataset.wired === "1") return;
+      selectEl.dataset.wired = "1";
+      selectEl.addEventListener("change", () => {
+        selectEl.dataset.locked = "1";
+      });
+    }
+
+    function refreshAwardsUI() {
+      const mvpSel   = document.getElementById("select-mvp");
+      const blkSel   = document.getElementById("select-best-block");
+      const atkSel   = document.getElementById("select-best-attack");
+      const supSel   = document.getElementById("select-best-support");
+
+      fillAwardSelect(mvpSel);
+      fillAwardSelect(blkSel);
+      fillAwardSelect(atkSel);
+      fillAwardSelect(supSel);
+
+      wireAwardSelectLock(mvpSel);
+      wireAwardSelectLock(blkSel);
+      wireAwardSelectLock(atkSel);
+      wireAwardSelectLock(supSel);
+
+      const sug = computeAutoAwards(currentSet);
+
+      // Preselect if not manually overridden
+      applyAutoAwardToSelect(mvpSel, sug.mvp);
+      applyAutoAwardToSelect(blkSel, sug.bestBlock);
+      applyAutoAwardToSelect(atkSel, sug.bestAttack);
+      applyAutoAwardToSelect(supSel, sug.bestSupport);
+
+      // Hints
+      const mvpHint = document.getElementById("mvp-suggestion");
+      const blkHint = document.getElementById("best-block-suggestion");
+      const atkHint = document.getElementById("best-attack-suggestion");
+      const supHint = document.getElementById("best-support-suggestion");
+
+      if (mvpHint) {
+        if (!sug.mvp) mvpHint.textContent = "Suggestion auto : aucune (Δ doit être positif).";
+        else mvpHint.textContent = `Suggestion auto : ${sug.mvp.name} — Actions+ ${sug.mvpMeta.plus} | Actions- ${sug.mvpMeta.minus} | Δ ${sug.mvpMeta.delta}`;
+      }
+      if (blkHint) {
+        if (!sug.bestBlock) blkHint.textContent = "Suggestion auto : aucune.";
+        else blkHint.textContent = `Suggestion auto : ${sug.bestBlock.name} — Bloc+ ${sug.bestBlockMeta.blocPlus}`;
+      }
+      if (atkHint) {
+        if (!sug.bestAttack) atkHint.textContent = "Suggestion auto : aucune.";
+        else {
+          const dAtk = (sug.bestAttackMeta.attaquePlus - sug.bestAttackMeta.attaqueMinus);
+          atkHint.textContent = `Suggestion auto : ${sug.bestAttack.name} — Attaque+ ${sug.bestAttackMeta.attaquePlus} | Δ attaque ${dAtk}`;
+        }
+      }
+      if (supHint) {
+        if (!sug.bestSupport) supHint.textContent = "Suggestion auto : aucune.";
+        else supHint.textContent = `Suggestion auto : ${sug.bestSupport.name} — Défense+ + Récep+ = ${sug.bestSupportMeta.supportPlus}`;
+      }
+    }
+
+
+/* --------- ARCHIVER MATCH + RÉSUMÉS ---------- */
 
     function computeMatchScoresFromSnapshot(setScoresSnapshot) {
       let ourMatchPts = 0;
