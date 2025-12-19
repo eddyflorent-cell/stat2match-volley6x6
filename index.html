@@ -203,8 +203,9 @@
       height: 26px;
       border-radius: 6px;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: flex-start;
+      justify-content: flex-end;
+      padding: 90px 18px 18px;
       font-weight: 700;
       color: #fff;
       font-size: 13px;
@@ -528,18 +529,47 @@
     #rally-overlay-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.35);
     }
     #rally-overlay-panel {
-      position: relative;
+      position: fixed;
+      right: 18px;
+      top: 110px;
       background: #202124;
-      border-radius: 10px;
+      border-radius: 14px;
       padding: 12px;
-      width: 90%;
-      max-width: 360px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.7);
+      width: min(360px, calc(100vw - 36px));
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 14px 50px rgba(0,0,0,0.65);
       z-index: 1;
     }
+
+    /* Accent "funky" selon la rubrique ouverte */
+    #rally-overlay-panel::before{
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width:8px;
+      border-radius:14px 0 0 14px;
+      opacity:.95;
+      background: rgba(255,255,255,0.08);
+    }
+    #rally-overlay-panel[data-cat="attaque"]::before{ background: rgba(255,82,82,0.95); }
+    #rally-overlay-panel[data-cat="service"]::before{ background: rgba(0,230,118,0.95); }
+    #rally-overlay-panel[data-cat="bloc"]::before{ background: rgba(255,145,0,0.95); }
+    #rally-overlay-panel[data-cat="reception"]::before{ background: rgba(64,196,255,0.95); }
+    #rally-overlay-panel[data-cat="defense"]::before{ background: rgba(105,240,174,0.95); }
+    #rally-overlay-panel[data-cat="passe"]::before{ background: rgba(179,136,255,0.95); }
+    #rally-overlay-panel[data-cat="rally"]::before{ background: linear-gradient(180deg, rgba(105,240,174,0.95), rgba(179,136,255,0.95)); }
+
+    #rally-overlay-panel[data-cat="attaque"] #rally-drag-handle{ background: linear-gradient(135deg, rgba(255,82,82,0.22), rgba(255,255,255,0.06)); }
+    #rally-overlay-panel[data-cat="service"] #rally-drag-handle{ background: linear-gradient(135deg, rgba(0,230,118,0.18), rgba(255,255,255,0.06)); }
+    #rally-overlay-panel[data-cat="bloc"] #rally-drag-handle{ background: linear-gradient(135deg, rgba(255,145,0,0.18), rgba(255,255,255,0.06)); }
+    #rally-overlay-panel[data-cat="reception"] #rally-drag-handle{ background: linear-gradient(135deg, rgba(64,196,255,0.18), rgba(255,255,255,0.06)); }
+    #rally-overlay-panel[data-cat="defense"] #rally-drag-handle{ background: linear-gradient(135deg, rgba(105,240,174,0.18), rgba(255,255,255,0.06)); }
+    #rally-overlay-panel[data-cat="passe"] #rally-drag-handle{ background: linear-gradient(135deg, rgba(179,136,255,0.18), rgba(255,255,255,0.06)); }
+    #rally-overlay-panel[data-cat="rally"] #rally-drag-handle{ background: linear-gradient(135deg, rgba(105,240,174,0.20), rgba(179,136,255,0.16)); }
+
     #rally-overlay-title {
       margin: 0 0 4px;
       font-size: 16px;
@@ -571,6 +601,20 @@
       margin-right: 4px;
       font-weight: 600;
     }
+
+    /* Boutons joueuses : bordure accordée à la rubrique */
+    #rally-overlay-panel[data-cat="attaque"] .rally-player-btn{ border-color: rgba(255,82,82,0.9); }
+    #rally-overlay-panel[data-cat="service"] .rally-player-btn{ border-color: rgba(0,230,118,0.85); }
+    #rally-overlay-panel[data-cat="bloc"] .rally-player-btn{ border-color: rgba(255,145,0,0.85); }
+    #rally-overlay-panel[data-cat="reception"] .rally-player-btn{ border-color: rgba(64,196,255,0.85); }
+    #rally-overlay-panel[data-cat="defense"] .rally-player-btn{ border-color: rgba(105,240,174,0.85); }
+    #rally-overlay-panel[data-cat="passe"] .rally-player-btn{ border-color: rgba(179,136,255,0.85); }
+    #rally-overlay-panel[data-cat="rally"] .rally-player-btn{ border-color: rgba(179,136,255,0.55); }
+
+    #rally-overlay-panel .rally-player-btn:hover{
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-1px);
+    }
     .rally-count {
   margin-left: 4px;
   font-weight: 400;
@@ -591,6 +635,7 @@
 
    /* Cartes s (joueuse / adversaire / dashboard / historique / aide) */
 #s-view,
+#stats-view,
 #opponent,
 #dashboard,
 #history,
@@ -708,66 +753,298 @@
     }
 
     /* Historique */
-    .history-item {
-      border: 1px solid #444;
-      border-radius: 8px;
-      padding: 8px;
-      margin-bottom: 8px;
-      background: #202124;
+    .history-item{
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.25));
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
     }
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-      flex-wrap: wrap;
+    .history-item::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(circle at 20% 0%, rgba(73,146,219,.20), transparent 45%),
+                  radial-gradient(circle at 90% 20%, rgba(236,79,33,.18), transparent 55%),
+                  radial-gradient(circle at 40% 90%, rgba(158,206,9,.14), transparent 55%);
+      pointer-events:none;
+      filter: blur(.2px);
     }
-    .history-meta {
-      font-size: 12px;
-      color: #bbb;
-      margin-bottom: 6px;
+    .history-header{
+      position:relative;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:4px;
+    }
+    .history-header h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+    .history-score{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+      color:#fff;
+      font-weight:700;
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .history-meta{
+      position:relative;
+      font-size:12px;
+      color:rgba(255,255,255,.72);
+      margin-bottom:8px;
+    }
+    .history-actions{
+      position:relative;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin: 8px 0 6px;
     }
     .btn-history-toggle,
     .btn-history-delete,
-    .btn-history-copy {
+    .btn-history-copy,
+    .btn-history-print,
+    .btn-history-share,
+    .btn-history-wa,
+    .btn-history-tg{
       border-radius: 999px;
-      border: none;
-      padding: 4px 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 7px 12px;
       font-size: 12px;
       cursor: pointer;
-      margin-right: 6px;
-      margin-top: 4px;
-    }
-    .btn-history-toggle {
-      background: #0077ff;
+      background: rgba(0,0,0,.22);
       color: #fff;
+      transition: transform .08s ease, opacity .12s ease;
     }
-    .btn-history-delete {
-      background: #b71c1c;
-      color: #fff;
+    .btn-history-toggle:hover,
+    .btn-history-delete:hover,
+    .btn-history-copy:hover,
+    .btn-history-print:hover,
+    .btn-history-share:hover,
+    .btn-history-wa:hover,
+    .btn-history-tg:hover{ transform: translateY(-1px); }
+    .btn-history-toggle{ border-color: rgba(73,146,219,.35); }
+    .btn-history-print{ border-color: rgba(244,154,30,.35); }
+    .btn-history-copy{ border-color: rgba(158,206,9,.35); }
+    .btn-history-share{ border-color: rgba(236,79,33,.35); }
+    .btn-history-wa{ border-color: rgba(0,200,83,.35); }
+    .btn-history-tg{ border-color: rgba(73,146,219,.25); }
+    .btn-history-delete{ border-color: rgba(255,70,70,.35); }
+
+    .history-body{
+      position:relative;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(255,255,255,.12);
     }
-    .btn-history-copy {
-      background: #00c853;
-      color: #fff;
-    }
-    .history-body {
-      margin-top: 6px;
-    }
-    .history-body textarea {
+    .history-body textarea{
       width: 100%;
-      min-height: 120px;
-      border-radius: 6px;
-      border: 1px solid #555;
-      background: #171717;
-      color: #eee;
-      padding: 6px;
+      min-height: 140px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.92);
+      padding: 10px;
       resize: vertical;
       font-size: 12px;
-      font-family: "SF Mono", "Consolas", monospace;
-      margin-bottom: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin-bottom: 8px;
     }
-    /* Distinctions du match (MVP / soutien) */
+
+    /* Stats joueuses – barre d’actions + export */
+    .stats-export-bar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin: 8px 0 10px;
+    }
+    .stats-export-bar .btn{
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .stats-export-bar .btn:hover{ transform: translateY(-1px); }
+    .stats-export-bar .btn.copy{ border-color: rgba(158,206,9,.35); }
+    .stats-export-bar .btn.share{ border-color: rgba(236,79,33,.35); }
+    .stats-export-bar .btn.wa{ border-color: rgba(0,200,83,.35); }
+    .stats-export-bar .btn.tg{ border-color: rgba(73,146,219,.30); }
+    .stats-export-bar .btn.print{ border-color: rgba(244,154,30,.35); }
+    #player-report-text{
+      border: 1px solid rgba(255,255,255,.10) !important;
+      background: rgba(0,0,0,.25) !important;
+      border-radius: 14px !important;
+    }
+
+/* =========================
+   STATS JOUEUSES (FUNKY)
+   ========================= */
+#stats-view{
+  position:relative;
+  overflow:hidden;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.22));
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+#stats-view::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(73,146,219,.22), transparent 45%),
+    radial-gradient(circle at 85% 20%, rgba(236,79,33,.18), transparent 55%),
+    radial-gradient(circle at 35% 95%, rgba(158,206,9,.14), transparent 55%);
+  pointer-events:none;
+}
+#stats-view > *{ position:relative; }
+
+.stats-hero{
+  margin:10px 0 10px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.22);
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.stats-hero p{
+  margin:0;
+  color: rgba(255,255,255,.82);
+  font-size:13px;
+  line-height:1.35;
+}
+.stats-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.stats-badge{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  white-space:nowrap;
+}
+.stats-badge.orange{ border-color: rgba(236,79,33,.55); }
+.stats-badge.blue{ border-color: rgba(73,146,219,.55); }
+.stats-badge.green{ border-color: rgba(158,206,9,.55); }
+.stats-badge.yellow{ border-color: rgba(244,154,30,.55); }
+
+#stats-list{
+  border-top: 0;
+  padding-top: 0;
+}
+#stats-view .stat-row{
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  padding: 10px 8px;
+  border-radius: 14px;
+  margin: 8px 0;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.06);
+}
+#stats-view .stat-label{
+  font-weight:800;
+  letter-spacing:.2px;
+}
+#stats-view .stat-controls .btn-stat-plus,
+#stats-view .stat-controls .btn-stat-minus{
+  box-shadow: 0 8px 18px rgba(0,0,0,.30);
+}
+#stats-view .stat-controls .stat-value{
+  min-width: 26px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+#stats-view .stat-row[data-cat="attaque"]{ border-left: 8px solid rgba(236,79,33,.95); }
+#stats-view .stat-row[data-cat="service"]{ border-left: 8px solid rgba(244,154,30,.95); }
+#stats-view .stat-row[data-cat="bloc"]{ border-left: 8px solid rgba(73,146,219,.95); }
+#stats-view .stat-row[data-cat="reception"]{ border-left: 8px solid rgba(158,206,9,.95); }
+#stats-view .stat-row[data-cat="defense"]{ border-left: 8px solid rgba(0,137,123,.95); }
+#stats-view .stat-row[data-cat="passe"]{ border-left: 8px solid rgba(142,36,170,.95); }
+
+#stats-view .stat-row{
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 10px 10px;
+  margin: 10px 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.28);
+}
+#stats-view .stat-row:hover{ background: rgba(255,255,255,0.05); }
+
+#stats-view .stat-row[data-cat="attaque"]{ background: linear-gradient(90deg, rgba(255,82,82,0.16), rgba(0,0,0,0.10)); }
+#stats-view .stat-row[data-cat="service"]{ background: linear-gradient(90deg, rgba(0,230,118,0.14), rgba(0,0,0,0.10)); }
+#stats-view .stat-row[data-cat="bloc"]{ background: linear-gradient(90deg, rgba(255,145,0,0.14), rgba(0,0,0,0.10)); }
+#stats-view .stat-row[data-cat="reception"]{ background: linear-gradient(90deg, rgba(64,196,255,0.14), rgba(0,0,0,0.10)); }
+#stats-view .stat-row[data-cat="defense"]{ background: linear-gradient(90deg, rgba(105,240,174,0.12), rgba(0,0,0,0.10)); }
+#stats-view .stat-row[data-cat="passe"]{ background: linear-gradient(90deg, rgba(179,136,255,0.12), rgba(0,0,0,0.10)); }
+
+#stats-view .stat-label{
+  font-weight: 900;
+  letter-spacing: .2px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+#stats-view .stat-row[data-cat="attaque"] .stat-label::before{ content:"🎯"; }
+#stats-view .stat-row[data-cat="service"] .stat-label::before{ content:"🚀"; }
+#stats-view .stat-row[data-cat="bloc"] .stat-label::before{ content:"🧱"; }
+#stats-view .stat-row[data-cat="reception"] .stat-label::before{ content:"🛡️"; }
+#stats-view .stat-row[data-cat="defense"] .stat-label::before{ content:"🧤"; }
+#stats-view .stat-row[data-cat="passe"] .stat-label::before{ content:"🎛️"; }
+
+#stats-view .btn-stat-minus,
+#stats-view .btn-stat-plus{
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  font-weight: 900;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.22);
+}
+#stats-view .btn-stat-plus:hover{ filter: brightness(1.08); }
+#stats-view .btn-stat-minus:hover{ filter: brightness(1.08); }
+
+#player-stats-summary{
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: linear-gradient(135deg, rgba(0,119,255,0.10), rgba(0,0,0,0.22));
+}
+#player-stats-summary h3{ margin-top:0; }
+#player-stats-summary strong{ color:#fff; }
+
+#player-report-text{
+  background: rgba(0,0,0,.25) !important;
+}
+/* Distinctions du match (MVP / soutien) */
     #match-awards {
       margin-top: 10px;
       padding: 8px;
@@ -913,6 +1190,48 @@
 .dash-opp-label, .dash-compare-label{ color:#eee; font-weight:600; }
 .dash-opp-val, .dash-compare-val{ color:#ddd; text-align:right; }
 
+
+/* Highlights (fun + lisible) */
+#dash-highlights-summary{
+  margin-top:10px;
+  padding:10px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  border-left:8px solid #d81b60;
+  background:
+    linear-gradient(135deg, rgba(216,27,96,0.12), rgba(0,119,255,0.06)),
+    rgba(0,0,0,0.22);
+}
+#dash-highlights-summary h3{
+  margin:0 0 8px 0;
+}
+.dash-hl-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  background: rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.06);
+  margin:8px 0;
+}
+.dash-hl-label{ color:#fff; font-weight:700; }
+.dash-hl-val{ color:#ddd; text-align:right; font-weight:600; }
+.dash-pill{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  margin-left:6px;
+  font-size:12px;
+  white-space:nowrap;
+}
+.dash-pill.pink{ border-color: rgba(216,27,96,0.45); background: rgba(216,27,96,0.12); }
+.dash-pill.blue{ border-color: rgba(0,119,255,0.45); background: rgba(0,119,255,0.12); }
+.dash-pill.green{ border-color: rgba(0,200,83,0.45); background: rgba(0,200,83,0.12); }
+.dash-pill.orange{ border-color: rgba(255,152,0,0.45); background: rgba(255,152,0,0.12); }
+
 /* ===== Rallye (v2 flottant, déplaçable, multi Défense/Passe) ===== */
 #rally-overlay{
   display:none; /* shown via JS */
@@ -953,7 +1272,7 @@
   font-weight:500;
   opacity:.85;
 }
-#rally-close-x{
+#rally-close-x{ pointer-events:auto; z-index:5; 
   border:0;
   background:transparent;
   color:#fff;
@@ -1202,6 +1521,91 @@
   height:1px;
   background: rgba(255,255,255,0.10);
   margin:10px 0;
+}
+
+
+
+/* ===== Match I/O (export/import) ===== */
+#matchio-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+#matchio-panel{
+  width: min(860px, 96vw);
+  max-height: min(78vh, 740px);
+  background: rgba(28,28,30,0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+  overflow: hidden;
+}
+.matchio-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(90deg, rgba(0,119,255,0.22), rgba(255,46,146,0.18), rgba(255,153,0,0.16));
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  cursor: move;
+}
+.matchio-title{ font-weight: 900; letter-spacing: .2px; }
+.matchio-sub{ font-size: 12px; opacity: .88; margin-top: 2px; }
+.matchio-x{
+  border: none;
+  background: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.92);
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+.matchio-x:hover{ background: rgba(255,255,255,0.16); }
+
+.matchio-body{ padding: 14px 16px 16px; }
+#matchio-text{
+  width: 100%;
+  min-height: 240px;
+  max-height: 44vh;
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.92);
+  background: rgba(10,10,10,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 12px;
+  outline: none;
+}
+#matchio-text:focus{
+  border-color: rgba(0,119,255,0.55);
+  box-shadow: 0 0 0 4px rgba(0,119,255,0.18);
+}
+.matchio-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+.matchio-hint{
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: .88;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 12px;
+  border-radius: 14px;
 }
 
 </style>
@@ -1497,6 +1901,18 @@
       <button id="btn-back">← Retour au terrain</button>
       <h2 id="stats-player-title">Statistiques :</h2>
 
+      <div class="stats-hero">
+        <div>
+          <p><strong>Objectif :</strong> lire vite, comprendre vite, corriger vite. Les compteurs sont par set (sélecteur) et le rapport se génère sur tout le match.</p>
+        </div>
+        <div class="stats-badges">
+          <span class="stats-badge blue">📈 Impact</span>
+          <span class="stats-badge orange">⚡ Δ (delta)</span>
+          <span class="stats-badge green">🛡️ Déf/Récep</span>
+          <span class="stats-badge yellow">📤 Export</span>
+        </div>
+      </div>
+
       <div id="set-selector-stats">
         <span>Set :</span>
         <button class="set-btn-stats active" data-set="1">1</button>
@@ -1589,11 +2005,15 @@
       </div>
 
       <h3>Rapport individuel à partager</h3>
+      <div class="stats-export-bar">
+        <button id="btn-player-report-copy" class="btn copy" type="button">Générer & copier</button>
+        <button id="btn-player-report-share" class="btn share" type="button">Partager</button>
+        <button id="btn-player-report-wa" class="btn wa" type="button">WhatsApp</button>
+        <button id="btn-player-report-tg" class="btn tg" type="button">Telegram</button>
+        <button id="btn-player-report-print" class="btn print" type="button">Imprimer / PDF</button>
+      </div>
       <textarea id="player-report-text"
-        placeholder="Le rapport sera généré automatiquement après chaque rallye."></textarea>
-      <button id="btn-player-report-copy" type="button">
-        Générer & copier le rapport individuel
-      </button>
+        placeholder="Le rapport est généré à partir des stats enregistrées (tous sets)."></textarea>
     </section>
   </div>
 
@@ -1609,6 +2029,40 @@
         <button id="btn-dashboard-copy" class="btn-dash">Copier</button>
         <button id="btn-dashboard-wa" class="btn-dash">WhatsApp</button>
         <button id="btn-dashboard-tg" class="btn-dash">Telegram</button>
+<button id="btn-dashboard-save-match" class="btn-dash">Sauvegarder match</button>
+<button id="btn-dashboard-load-match" class="btn-dash">Importer match</button>
+<input type="file" id="file-import-match" accept="application/json,.json,.stat2match" style="display:none;" />
+
+      </div>
+
+      <!-- Match I/O (export / import JSON) -->
+      <div id="matchio-overlay" style="display:none;">
+        <div id="matchio-panel" role="dialog" aria-modal="true" aria-label="Sauvegarde et import de match">
+          <div class="matchio-head" id="matchio-drag-handle">
+            <div>
+              <div class="matchio-title">Match — Sauvegarde / Import</div>
+              <div class="matchio-sub">Export JSON (relecture vidéo) ou import pour reprendre un match.</div>
+            </div>
+            <button id="matchio-close" class="matchio-x" title="Fermer">×</button>
+          </div>
+
+          <div class="matchio-body">
+            <textarea id="matchio-text" placeholder="1) Clique sur “Sauvegarder match” pour générer le JSON
+2) Copie/partage le texte
+3) Plus tard : colle ici le JSON puis clique sur “Importer”.
+
+(Option) Tu peux aussi choisir un fichier .json"></textarea>
+            <div class="matchio-actions">
+              <button id="matchio-pickfile" class="btn-dash">Choisir un fichier…</button>
+              <button id="matchio-import" class="btn-dash btn-dash-accent">Importer</button>
+              <button id="matchio-copy" class="btn-dash">Copier</button>
+              <button id="matchio-download" class="btn-dash">Télécharger .json</button>
+            </div>
+            <div class="matchio-hint">
+              Astuce : tu peux <strong>sauvegarder</strong> même avant de clôturer, revenir dessus, corriger après vidéo, puis continuer.
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="set-selector-dashboard">
@@ -1688,6 +2142,13 @@
         </div>
       </div>
 
+
+      <div id="dash-highlights-summary" class="dash-section dash-highlights">
+        <h3>⭐ Highlights – Ce qui ressort</h3>
+        <div id="dash-highlights-body"></div>
+      </div>
+
+
            <div id="match-awards">
         <h3>Distinctions du match</h3>
 
@@ -1763,7 +2224,7 @@
             <h2>Stat2Match Volley 6x6 — Guide express</h2>
             <p>
               Objectif : <strong>noter vite</strong> sans casser le rythme.
-              Le <strong>mode Rallye</strong> sert uniquement à capturer un <em>échange long</em>.
+              Le <strong>mode Rallye</strong> sert uniquement à capturer un <em>échange long</em> (défense + passe).
             </p>
           </div>
           <div class="help-badges">
@@ -1781,6 +2242,11 @@
             <span class="accent">Défense +</span> ou <span class="accent">Passe +</span>.
             Tout le reste est soit <strong>instantané</strong>, soit une <strong>fin de rallye</strong>.
           </p>
+          <p class="help-tip" style="margin:10px 0 0;color:rgba(255,255,255,0.85);font-size:13px;line-height:1.45;">
+            💡 <strong>Astuce :</strong> la fenêtre de sélection (les noms) est <strong>flottante et déplaçable</strong>.
+            Attrape la <strong>barre du haut</strong> pour la bouger si elle masque une rubrique.
+          </p>
+
 
           <div class="help-divider"></div>
 
@@ -1799,7 +2265,16 @@
         </div>
       </div>
 
-      <div class="help-grid">
+      <div class="help-rule" style="margin-top:12px;">
+  <h3>✅ Comment un rallye se termine</h3>
+  <p style="margin:0;color:rgba(255,255,255,0.86);font-size:13px;line-height:1.45;">
+    Un rallye <strong>ne peut pas</strong> se terminer par un <strong>service</strong> ni une <strong>réception</strong> (par définition, on est déjà “dans l’échange”).
+    Il se clôture uniquement sur :
+    <strong>attaque</strong>, <strong>bloc</strong>, <strong>défense</strong> ou <strong>passe</strong> (bon ou mauvais), ou un <strong>point adverse</strong>.
+  </p>
+</div>
+
+        <div class="help-grid">
         <div class="help-card span-6">
           <h3>1) 👥 Effectif</h3>
           <p>Construis ta base de joueuses, puis active l’effectif du match.</p>
@@ -1855,6 +2330,22 @@
         </div>
 
         <div class="help-card span-6">
+  <h3>7) 💾 Sauvegarde / Import de match (relecture vidéo)</h3>
+  <p>
+    Tu peux <strong>sauvegarder un match à tout moment</strong> (même avant de clôturer),
+    puis le <strong>réimporter</strong> plus tard pour corriger après vidéo ou continuer la saisie.
+  </p>
+  <ol style="margin:0;padding-left:18px;">
+    <li>Dans le <strong>Tableau de bord</strong>, clique sur <strong>“Sauvegarder match”</strong>.</li>
+    <li>Le JSON apparaît : <strong>copie</strong>, <strong>partage</strong> ou <strong>télécharge</strong> le fichier.</li>
+    <li>Pour reprendre : clique sur <strong>“Importer match”</strong> ou colle le JSON, puis <strong>Importer</strong>.</li>
+  </ol>
+  <p style="margin:10px 0 0;opacity:.9;">
+    Objectif : pouvoir faire des stats “au ralenti” sur vidéo, sans perdre le travail déjà saisi.
+  </p>
+</div>
+
+<div class="help-card span-6">
           <h3>6) 🏅 Distinctions (rappel des règles)</h3>
           <p>Les sélections se pré-remplissent selon les stats du moment.</p>
           <ul>
@@ -1876,7 +2367,30 @@
           Ton focus : <strong>moins de fautes gratuites</strong>, et une saisie fluide.
           L’appli est faite pour que tu notes <strong>en 2 clics max</strong> dans 90% des cas.
         </p>
-      </div>
+      
+        <div class="help-card span-6">
+          <h3>7) 🕘 Historique (matchs archivés)</h3>
+          <p>À la fin du match, archive-le. Tu pourras relire et partager les rapports quand tu veux.</p>
+          <ul>
+            <li>Depuis le tableau de bord : <span class="help-kbd">Clôturer ce match et l’archiver</span></li>
+            <li>Dans <strong>Historique</strong> : ouvre un match puis utilise les boutons :</li>
+            <li><span class="help-kbd">Imprimer / PDF</span> (page propre + export PDF)</li>
+            <li><span class="help-kbd">Partager</span> (partage natif, sinon copie auto)</li>
+            <li><span class="help-kbd">WhatsApp</span> / <span class="help-kbd">Telegram</span> (message prêt à envoyer)</li>
+            <li>Tu peux aussi copier le <strong>résumé détaillé</strong> ou le <strong>résumé court</strong></li>
+          </ul>
+        </div>
+
+        <div class="help-card span-6">
+          <h3>8) 📈 Stats joueuses (lecture + export)</h3>
+          <p>Va dans la fiche d’une joueuse pour analyser et partager son match.</p>
+          <ul>
+            <li>Sélectionne une joueuse → tu vois ses stats par set + sur le match</li>
+            <li>En bas : <strong>Rapport individuel à partager</strong></li>
+            <li>Boutons : <span class="help-kbd">Générer &amp; copier</span>, <span class="help-kbd">Partager</span>, <span class="help-kbd">WhatsApp</span>, <span class="help-kbd">Telegram</span>, <span class="help-kbd">Imprimer / PDF</span></li>
+          </ul>
+        </div>
+</div>
 
       <div class="help-footer">
         Astuce : si quelqu’un te dit “c’est trop de boutons”, c’est qu’il n’a pas encore le rythme.
@@ -1899,6 +2413,47 @@
     const DEFAULT_OPP_LABEL     = "Adversaire";
 
     const STAT_CATEGORIES   = ["attaque","service","bloc","reception","defense","passe"];
+
+/* ===== Dashboard Highlights ===== */
+function computeSetPlayerTotals(setNumber) {
+  const out = [];
+  for (const p of (players || [])) {
+    const s = (stats[p.id] && stats[p.id][setNumber]) ? stats[p.id][setNumber] : {};
+    let plus = 0, minus = 0;
+    for (const cat of STAT_CATEGORIES) {
+      plus  += Number(s[cat + "Plus"]  || 0);
+      minus += Number(s[cat + "Minus"] || 0);
+    }
+    const delta = plus - minus;
+    const support = Number(s.defensePlus||0) + Number(s.receptionPlus||0);
+    const attack  = Number(s.attaquePlus||0);
+    const block   = Number(s.blocPlus||0);
+    out.push({ id: p.id, plus, minus, delta, support, attack, block });
+  }
+  return out;
+}
+
+function getSetHighlights(setNumber) {
+  const totals = computeSetPlayerTotals(setNumber);
+
+  const topDelta   = totals.slice().sort((a,b)=> (b.delta - a.delta) || (b.plus - a.plus)).slice(0,3);
+  const topSupport = totals.slice().sort((a,b)=> (b.support - a.support) || (b.delta - a.delta)).slice(0,3);
+  const topAttack  = totals.slice().sort((a,b)=> (b.attack - a.attack) || (b.delta - a.delta)).slice(0,3);
+  const topFaults  = totals.slice().sort((a,b)=> (b.minus - a.minus) || (a.delta - b.delta)).slice(0,3);
+
+  return { topDelta, topSupport, topAttack, topFaults };
+}
+
+function formatTopList(list, key, prefixSign=false) {
+  const getName = (id) => (players||[]).find(x => x.id === id)?.name || id || "—";
+  return (list||[]).filter(x => (x[key]||0) > 0 || (key==="delta"))
+    .map(x => {
+      const v = Number(x[key]||0);
+      const sv = prefixSign && v>=0 ? ("+"+v) : String(v);
+      return `${getName(x.id)} ${sv}`;
+    }).join(" • ");
+}
+
 
     const POINT_CATEGORIES  = ["attaque","service","bloc"];
     const FAULT_CATEGORIES  = ["attaque","service","bloc","reception","defense","passe"];
@@ -1924,7 +2479,227 @@
     };
 
 
-    /* --------- stockage joueurs ---------- */
+    /* ===== Match I/O (export / import JSON) ===== */
+function buildMatchSnapshot() {
+  // On capture TOUT ce qui permet de reprendre la saisie
+  const snap = {
+    app: "Stat2Match Volley 6x6",
+    schema: "stat2match.match.v1",
+    createdAt: new Date().toISOString(),
+    teamNames: {
+      our: (teamNames && teamNames.our) ? teamNames.our : "",
+      opp: (teamNames && teamNames.opp) ? teamNames.opp : ""
+    },
+    currentSet: currentSet || 1,
+    players: Array.isArray(players) ? players : [],
+    stats: stats || {},
+    setScores: setScores || {},
+    opponentStats: opponentStats || {},
+    court: (typeof getCourtAssignments === "function") ? getCourtAssignments() : {},
+    awards: {
+      mvp: document.getElementById("select-mvp")?.value || "",
+      bestBlock: document.getElementById("select-best-block")?.value || "",
+      bestAttack: document.getElementById("select-best-attack")?.value || "",
+      bestSupport: document.getElementById("select-best-support")?.value || ""
+    }
+  };
+  return snap;
+}
+
+function safeJSONStringify(obj) {
+  try { return JSON.stringify(obj, null, 2); } catch(e) { return ""; }
+}
+
+function openMatchIOModal(prefillText) {
+  const overlay = document.getElementById("matchio-overlay");
+  const ta = document.getElementById("matchio-text");
+  if (!overlay || !ta) return;
+  overlay.style.display = "flex";
+  ta.value = prefillText || "";
+  ta.focus();
+  makeMatchIOPanelDraggable();
+}
+
+function closeMatchIOModal() {
+  const overlay = document.getElementById("matchio-overlay");
+  if (overlay) overlay.style.display = "none";
+}
+
+function copyTextToClipboard(txt) {
+  if (!txt) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).catch(() => {});
+    return;
+  }
+  // fallback
+  const ta = document.createElement("textarea");
+  ta.value = txt;
+  ta.style.position = "fixed";
+  ta.style.left = "-9999px";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+function downloadTextFile(filename, txt, mime="application/json") {
+  try {
+    const blob = new Blob([txt], {type: mime});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 800);
+  } catch(e) {}
+}
+
+function setLocalStorageJSON(key, value){
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch(e) {}
+}
+
+function applyMatchSnapshot(snap) {
+  if (!snap || typeof snap !== "object") throw new Error("Snapshot invalide.");
+
+  // 1) Etat principal
+  players = Array.isArray(snap.players) ? snap.players : [];
+  stats = (snap.stats && typeof snap.stats === "object") ? snap.stats : {};
+  setScores = (snap.setScores && typeof snap.setScores === "object") ? snap.setScores : {};
+  opponentStats = (snap.opponentStats && typeof snap.opponentStats === "object") ? snap.opponentStats : {};
+
+  // 2) Noms d'équipes
+  if (snap.teamNames && typeof snap.teamNames === "object") {
+    teamNames = {
+      our: snap.teamNames.our || DEFAULT_OUR_TEAM_NAME,
+      opp: snap.teamNames.opp || DEFAULT_OPP_LABEL
+    };
+  }
+
+  // 3) Persist local (pour ne pas perdre en recharge)
+  setLocalStorageJSON(STORAGE_KEY, players);
+  setLocalStorageJSON(STATS_KEY, stats);
+  setLocalStorageJSON(SETS_KEY, setScores);
+  setLocalStorageJSON(OPP_KEY, opponentStats);
+  setLocalStorageJSON(TEAM_KEY, teamNames);
+
+  // 4) Terrain (positions)
+  const court = (snap.court && typeof snap.court === "object") ? snap.court : {};
+  setLocalStorageJSON(COURT_KEY, court);
+
+  // 5) Awards
+  if (snap.awards && typeof snap.awards === "object") {
+    const mvpSel = document.getElementById("select-mvp");
+    const bbSel  = document.getElementById("select-best-block");
+    const baSel  = document.getElementById("select-best-attack");
+    const bsSel  = document.getElementById("select-best-support");
+    if (mvpSel && snap.awards.mvp) mvpSel.value = snap.awards.mvp;
+    if (bbSel && snap.awards.bestBlock) bbSel.value = snap.awards.bestBlock;
+    if (baSel && snap.awards.bestAttack) baSel.value = snap.awards.bestAttack;
+    if (bsSel && snap.awards.bestSupport) bsSel.value = snap.awards.bestSupport;
+  }
+
+  // 6) Refresh UI (ordre important)
+  try { renderPlayers(); } catch(e) {}
+  try { renderBench(); } catch(e) {}
+  try { applyCourtFromStorage(); } catch(e) {}
+  try { renderTeamNamesUI(); } catch(e) {}
+  try { setCurrentSet(parseInt(snap.currentSet || 1, 10)); } catch(e) { setCurrentSet(1); }
+  try { renderStatsPlayerList(); } catch(e) {}
+  try { renderDashboard(); } catch(e) {}
+}
+
+function importMatchSnapshotFromText(txt){
+  if (!txt || !txt.trim()) throw new Error("Colle un JSON de match dans le champ.");
+  let snap;
+  try { snap = JSON.parse(txt); } catch(e) { throw new Error("JSON invalide (copie incomplète ?)."); }
+  applyMatchSnapshot(snap);
+}
+
+/* Drag pour Match I/O */
+function makeMatchIOPanelDraggable() {
+  const overlay = document.getElementById("matchio-overlay");
+  const panel = document.getElementById("matchio-panel");
+  const handle = document.getElementById("matchio-drag-handle");
+  if (!overlay || !panel || !handle) return;
+
+  let dragging = false;
+  let startX = 0, startY = 0;
+  let startLeft = 0, startTop = 0;
+
+  // position initiale
+  if (!panel.dataset.floatInit) {
+    panel.style.position = "relative";
+    panel.style.left = "0px";
+    panel.style.top = "0px";
+    panel.dataset.floatInit = "1";
+  }
+
+  const clamp = (v,min,max)=>Math.min(Math.max(v,min),max);
+
+  function getXY(ev){
+    if (ev.touches && ev.touches[0]) return {x: ev.touches[0].clientX, y: ev.touches[0].clientY};
+    return {x: ev.clientX, y: ev.clientY};
+  }
+
+  function onDown(ev){
+    ev.preventDefault();
+    dragging = true;
+    const xy=getXY(ev);
+    startX = xy.x; startY = xy.y;
+    const rect=panel.getBoundingClientRect();
+    const orect=overlay.getBoundingClientRect();
+    startLeft = rect.left - orect.left;
+    startTop  = rect.top - orect.top;
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+    document.addEventListener("touchmove", onMove, {passive:false});
+    document.addEventListener("touchend", onUp);
+  }
+
+  function onMove(ev){
+    if (!dragging) return;
+    ev.preventDefault();
+    const xy=getXY(ev);
+    const dx = xy.x - startX;
+    const dy = xy.y - startY;
+
+    const orect=overlay.getBoundingClientRect();
+    const prect=panel.getBoundingClientRect();
+
+    const maxLeft = orect.width - prect.width;
+    const maxTop  = orect.height - prect.height;
+
+    const left = clamp(startLeft + dx, 0, Math.max(0,maxLeft));
+    const top  = clamp(startTop  + dy, 0, Math.max(0,maxTop));
+
+    panel.style.position = "absolute";
+    panel.style.left = left + "px";
+    panel.style.top  = top  + "px";
+  }
+
+  function onUp(){
+    dragging = false;
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onUp);
+    document.removeEventListener("touchmove", onMove);
+    document.removeEventListener("touchend", onUp);
+  }
+
+  handle.addEventListener("mousedown", onDown);
+  handle.addEventListener("touchstart", onDown, {passive:false});
+}
+
+// ferme modal si clic sur fond sombre
+document.addEventListener("click", (e) => {
+  const overlay = document.getElementById("matchio-overlay");
+  if (!overlay || overlay.style.display === "none") return;
+  if (e.target === overlay) closeMatchIOModal();
+});
+
+/* --------- stockage joueurs ---------- */
     function loadPlayers() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
@@ -1977,7 +2752,47 @@
       renderDashboard();
     }
 
-    function openRallyOverlay(cat, outcome) {
+    
+// --- Rally Overlay wiring (robuste : fonctionne même si le script est avant le HTML) ---
+let __rallyOverlayInitDone = false;
+function initRallyOverlayWiring() {
+  if (__rallyOverlayInitDone) return;
+  // On tente plusieurs fois : certains éléments peuvent ne pas exister au tout début.
+  const overlay = document.getElementById("rally-overlay");
+  const panel   = document.getElementById("rally-overlay-panel");
+  const handle  = document.getElementById("rally-drag-handle");
+  const closeX  = document.getElementById("rally-close-x");
+  const closeBtn= document.getElementById("rally-close-btn");
+  const backdrop= document.getElementById("rally-overlay-backdrop");
+
+  if (!overlay || !panel || !handle) return; // pas encore dans le DOM
+
+  __rallyOverlayInitDone = true;
+
+  if (closeX) closeX.onclick = closeRallyOverlay;
+  if (closeBtn) closeBtn.onclick = closeRallyOverlay;
+  if (backdrop) backdrop.onclick = closeRallyOverlay;
+
+  // Esc pour fermer
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay && overlay.style.display === "block") closeRallyOverlay();
+  });
+
+  // Déplaçable
+  makeRallyPanelDraggable();
+}
+
+// S'assure que le wiring se fait quand le DOM est prêt
+document.addEventListener("DOMContentLoaded", () => {
+  // tente immédiatement + petit retry (au cas où la vue est injectée / reflow)
+  initRallyOverlayWiring();
+  setTimeout(initRallyOverlayWiring, 50);
+  setTimeout(initRallyOverlayWiring, 250);
+});
+
+function openRallyOverlay(cat, outcome) {
+  initRallyOverlayWiring();
+
   // Règles :
   // - Attaque / Service / Bloc / Réception : action instantanée (un clic joueur = enregistré + fermeture)
   // - Défense / Passe : mode rallye uniquement sur les (+) et on peut cumuler sans fermer
@@ -2005,6 +2820,8 @@
     const closeBtn = document.getElementById("rally-close-btn");
 
     if (!overlay || !listEl) return;
+    const panel = document.getElementById("rally-overlay-panel");
+    if (panel) { panel.dataset.cat = cat; panel.dataset.outcome = outcome; panel.dataset.mode = window.__rallyMode || "single"; }
 
     if (multiWrap) multiWrap.style.display = "none";
     listEl.style.display = "block";
@@ -2080,6 +2897,8 @@ listEl.innerHTML = "";
   const closeBtn = document.getElementById("rally-close-btn");
 
   if (!overlay || !multiWrap || !listDef || !listPass) return;
+  const panel = document.getElementById("rally-overlay-panel");
+  if (panel) { panel.dataset.cat = "rally"; panel.dataset.outcome = "plus"; panel.dataset.mode = "multi"; }
 
   if (hintEl) hintEl.textContent = "Rallye en cours : clique sur les noms pour cumuler Défense(+) et Passe(+). Une faute (-) ou une action adverse clôture le rallye.";
   if (listSingle) listSingle.style.display = "none";
@@ -3382,25 +4201,75 @@ function initStatsControls() {
   }
 
   const btnCopy = document.getElementById("btn-player-report-copy");
+  const btnShare = document.getElementById("btn-player-report-share");
+  const btnWA    = document.getElementById("btn-player-report-wa");
+  const btnTG    = document.getElementById("btn-player-report-tg");
+  const btnPrint = document.getElementById("btn-player-report-print");
+
+  function getCurrentPlayerReportText() {
+    const area = document.getElementById("player-report-text");
+    if (!area) return "";
+    // Toujours régénérer à partir des stats (tous sets) pour éviter les infos périmées
+    if (currentStatsPlayerId) {
+      area.value = buildPlayerReportText(currentStatsPlayerId);
+    }
+    return area.value || "";
+  }
+
   if (btnCopy) {
     btnCopy.addEventListener("click", function() {
-      const area = document.getElementById("player-report-text");
-      if (!area) {
-        alert("Aucun rapport à copier.");
+      const txt = getCurrentPlayerReportText();
+      if (!txt.trim()) {
+        alert("Aucun rapport à copier (sélectionne une joueuse).");
         return;
       }
-      const text = area.value || "";
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text)
-          .then(() => {
-            alert("Rapport copié, prêt à coller dans WhatsApp / mail.");
-          })
-          .catch(() => {
-            fallbackCopy(area);
-          });
-      } else {
-        fallbackCopy(area);
+      copyTextToClipboard(txt, "Rapport individuel copié ✅");
+    });
+  }
+
+  if (btnShare) {
+    btnShare.addEventListener("click", function() {
+      const txt = getCurrentPlayerReportText();
+      if (!txt.trim()) {
+        alert("Aucun rapport à partager (sélectionne une joueuse).");
+        return;
       }
+      shareTextSmart("Stat2Match – Rapport individuel", txt, "Rapport copié ✅");
+    });
+  }
+
+  if (btnWA) {
+    btnWA.addEventListener("click", function() {
+      const txt = getCurrentPlayerReportText();
+      if (!txt.trim()) {
+        alert("Aucun rapport à envoyer (sélectionne une joueuse).");
+        return;
+      }
+      openShareWhatsApp(txt);
+    });
+  }
+
+  if (btnTG) {
+    btnTG.addEventListener("click", function() {
+      const txt = getCurrentPlayerReportText();
+      if (!txt.trim()) {
+        alert("Aucun rapport à envoyer (sélectionne une joueuse).");
+        return;
+      }
+      openShareTelegram(txt);
+    });
+  }
+
+  if (btnPrint) {
+    btnPrint.addEventListener("click", function() {
+      const txt = getCurrentPlayerReportText();
+      if (!txt.trim()) {
+        alert("Aucun rapport à imprimer (sélectionne une joueuse).");
+        return;
+      }
+      const p = players.find(x => x.id === currentStatsPlayerId);
+      const who = p ? ((p.number ? "#" + p.number + " " : "") + (p.name || "")) : "Joueuse";
+      openPrintableTextPage("Stat2Match – Rapport individuel", who, txt);
     });
   }
 }
@@ -3531,8 +4400,82 @@ function initStatsControls() {
       const totalFautesPourEux = totalMinus;
       if (elTotFautes) elTotFautes.textContent = totalFautesPourEux;
 
-      // Distinctions auto (pré-sélection + suggestions)
-      if (typeof refreshAwardsUI === "function") refreshAwardsUI();
+
+// --- Comparatif (nous vs eux) ---
+const elOurPos = document.getElementById("dash-our-pos");
+const elOurNeg = document.getElementById("dash-our-neg");
+const elOppPos = document.getElementById("dash-opp-pos");
+const elOppNeg = document.getElementById("dash-opp-neg");
+const elImpactTheirs = document.getElementById("dash-impact-theirs");
+const elImpactOurs   = document.getElementById("dash-impact-ours");
+
+const ourPosVal = totalPlus;
+const ourNegVal = totalMinus;
+
+const oppPosVal = (os.servicePlus||0) + (os.blocPlus||0) + (os.pointsPlus||0);
+const oppNegVal = (os.serviceMinus||0) + (os.cadeauxPlus||0) + (os.pointsMinus||0);
+
+if (elOurPos) elOurPos.textContent = ourPosVal;
+if (elOurNeg) elOurNeg.textContent = ourNegVal;
+if (elOppPos) elOppPos.textContent = oppPosVal;
+if (elOppNeg) elOppNeg.textContent = oppNegVal;
+
+const impactTheirsPct = score.eux ? Math.round(100 * (ourNegVal / score.eux)) : 0;
+const impactOursPct   = score.nous ? Math.round(100 * (oppNegVal / score.nous)) : 0;
+if (elImpactTheirs) elImpactTheirs.textContent = impactTheirsPct + "%";
+if (elImpactOurs)   elImpactOurs.textContent   = impactOursPct + "%";
+
+// --- Highlights (top Δ / soutien / attaque / fautes) ---
+const hiBody = document.getElementById("dash-highlights-body");
+if (hiBody && typeof getSetHighlights === "function") {
+  hiBody.innerHTML = "";
+
+  const hi = getSetHighlights(currentSet);
+  const getName = (id) => (players||[]).find(x => x.id === id)?.name || id || "—";
+
+  const mkRow = (labelText) => {
+    const row = document.createElement("div");
+    row.className = "dash-hl-row";
+    const l = document.createElement("div");
+    l.className = "dash-hl-label";
+    l.textContent = labelText;
+    const v = document.createElement("div");
+    v.className = "dash-hl-val";
+    row.appendChild(l);
+    row.appendChild(v);
+    hiBody.appendChild(row);
+    return v;
+  };
+
+  const addPills = (container, list, key, pillClass, signPlus=false) => {
+    const items = (list||[]).slice(0,3);
+    if (!items.length) { container.textContent = "—"; return; }
+    container.innerHTML = "";
+    items.forEach((x, i) => {
+      const pill = document.createElement("span");
+      pill.className = "dash-pill " + pillClass;
+      const val = Number(x[key]||0);
+      const sval = signPlus && val>=0 ? ("+"+val) : String(val);
+      pill.textContent = `${getName(x.id)} ${sval}`;
+      container.appendChild(pill);
+    });
+  };
+
+  const v1 = mkRow("Top Δ (impact net)");
+  addPills(v1, hi.topDelta, "delta", "pink", true);
+
+  const v2 = mkRow("Top soutien (défense+ + récep+)");
+  addPills(v2, hi.topSupport, "support", "green", false);
+
+  const v3 = mkRow("Top attaque (points attaque+)");
+  addPills(v3, hi.topAttack, "attack", "orange", false);
+
+  const v4 = mkRow("Fautes à surveiller");
+  addPills(v4, hi.topFaults, "minus", "blue", false);
+}
+
+// Distinctions auto (pré-sélection + suggestions)
+if (typeof refreshAwardsUI === "function") refreshAwardsUI();
 
 
     }
@@ -4224,8 +5167,32 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
 
         const btnPrint = document.createElement("button");
         btnPrint.className = "btn-history-print";
-        btnPrint.textContent = "Ouvrir en page imprimable";
+        btnPrint.textContent = "Imprimer / PDF";
         btnPrint.dataset.id = id;
+
+        const btnShare = document.createElement("button");
+        btnShare.className = "btn-history-share";
+        btnShare.textContent = "Partager";
+        btnShare.dataset.id = id;
+
+        const btnWA = document.createElement("button");
+        btnWA.className = "btn-history-wa";
+        btnWA.textContent = "WhatsApp";
+        btnWA.dataset.id = id;
+
+        const btnTG = document.createElement("button");
+        btnTG.className = "btn-history-tg";
+        btnTG.textContent = "Telegram";
+        btnTG.dataset.id = id;
+
+        const actions = document.createElement("div");
+        actions.className = "history-actions";
+        actions.appendChild(btnToggle);
+        actions.appendChild(btnPrint);
+        actions.appendChild(btnShare);
+        actions.appendChild(btnWA);
+        actions.appendChild(btnTG);
+        actions.appendChild(btnDelete);
 
         const body = document.createElement("div");
         body.className = "history-body";
@@ -4272,9 +5239,7 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
 
         item.appendChild(header);
         item.appendChild(meta);
-        item.appendChild(btnToggle);
-        item.appendChild(btnDelete);
-        item.appendChild(btnPrint);
+        item.appendChild(actions);
         item.appendChild(body);
 
         listDiv.appendChild(item);
@@ -4290,6 +5255,9 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
         const btnDelete = e.target.closest(".btn-history-delete");
         const btnCopy   = e.target.closest(".btn-history-copy");
         const btnPrint  = e.target.closest(".btn-history-print");
+        const btnShare  = e.target.closest(".btn-history-share");
+        const btnWA     = e.target.closest(".btn-history-wa");
+        const btnTG     = e.target.closest(".btn-history-tg");
 
         if (btnToggle) {
           const id = btnToggle.dataset.id;
@@ -4335,6 +5303,39 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
           if (!entry) return;
           openPrintableMatchReport(entry);
         }
+
+        if (btnShare) {
+          const id = btnShare.dataset.id;
+          const entry = historyMatches.find(m => m.id === id);
+          if (!entry) return;
+          const txt =
+            entry.summaryText && entry.summaryText.trim()
+              ? entry.summaryText
+              : buildMatchSummaryText(entry);
+          shareTextSmart("Stat2Match – Rapport de match", txt, "Rapport copié ✅");
+        }
+
+        if (btnWA) {
+          const id = btnWA.dataset.id;
+          const entry = historyMatches.find(m => m.id === id);
+          if (!entry) return;
+          const txt =
+            entry.summaryText && entry.summaryText.trim()
+              ? entry.summaryText
+              : buildMatchSummaryText(entry);
+          openShareWhatsApp(txt);
+        }
+
+        if (btnTG) {
+          const id = btnTG.dataset.id;
+          const entry = historyMatches.find(m => m.id === id);
+          if (!entry) return;
+          const txt =
+            entry.summaryText && entry.summaryText.trim()
+              ? entry.summaryText
+              : buildMatchSummaryText(entry);
+          openShareTelegram(txt);
+        }
       });
     }
 
@@ -4344,85 +5345,22 @@ function computeOurTeamTotalsFromSnapshot(statsSnapshot) {
           ? entry.summaryText
           : buildMatchSummaryText(entry);
 
-      const win = window.open("", "_blank");
-      if (!win) {
-        alert(
-          "Impossible d’ouvrir la fenêtre d’impression. Autorise les pop-ups pour ce fichier si besoin."
-        );
-        return;
-      }
-
-      const title = entry.label || "Rapport de match";
-      const dateStr = entry.createdAt
-        ? new Date(entry.createdAt).toLocaleString("fr-FR", {
-            dateStyle: "short",
-            timeStyle: "short"
-          })
+      const createdAt = entry.createdAt || entry.date || "";
+      const dateStr = createdAt
+        ? new Date(createdAt).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" })
         : "";
 
-      const safeText = (fullText || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+      const setScoresSnapshot = entry.setScoresSnapshot || entry.setScores || entry.scores || {};
+      const score = computeMatchScoresFromSnapshot(setScoresSnapshot || {});
+      const nameUs  = (entry.teamNameUs || entry.nameUs || entry.teamUs || "Nous");
+      const nameOpp = (entry.teamNameOpp || entry.nameOpp || entry.opponent || "Adversaire");
 
-      win.document.write(`<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <title>${title}</title>
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding: 24px;
-      color: #222;
-    }
-    h1 {
-      font-size: 20px;
-      margin: 0 0 4px;
-    }
-    p.meta {
-      margin: 0 0 16px;
-      font-size: 12px;
-      color: #555;
-    }
-    pre {
-      white-space: pre-wrap;
-      font-family: inherit;
-      font-size: 13px;
-      line-height: 1.5;
-      border-top: 1px solid #ccc;
-      padding-top: 12px;
-      margin-top: 12px;
-    }
-    .print-btn {
-      margin-bottom: 16px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: none;
-      background: #444;
-      color: #fff;
-      cursor: pointer;
-    }
-    @media print {
-      .print-btn {
-        display: none;
-      }
-    }
-  </style>
-</head>
-<body>
-  <button class="print-btn" onclick="window.print()">Imprimer / Exporter en PDF</button>
-  <h1>Rapport de match</h1>
-  <p class="meta">${title}${dateStr ? " · " + dateStr : ""}</p>
-  <pre>${safeText}</pre>
-</body>
-</html>`);
-      win.document.close();
-      win.focus();
+      const meta = `${nameUs} ${score.ourMatchPts ?? 0} – ${score.oppMatchPts ?? 0} ${nameOpp}${dateStr ? " · " + dateStr : ""}`;
+
+      openPrintableTextPage("Stat2Match – Rapport de match", meta, fullText);
     }
 
-
-   /* --------- formulaire joueur ---------- */
+/* --------- formulaire joueur ---------- */
 document.getElementById("player-form").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -4518,6 +5456,70 @@ if (btnValidateRoster) {
   if (btnDashCopy)  btnDashCopy.onclick  = copyDashboardNow;
   if (btnDashWA)    btnDashWA.onclick    = shareDashboardWhatsApp;
   if (btnDashTG)    btnDashTG.onclick    = shareDashboardTelegram;
+
+
+// Match I/O (save/import)
+const btnDashSaveMatch = document.getElementById("btn-dashboard-save-match");
+const btnDashLoadMatch = document.getElementById("btn-dashboard-load-match");
+const fileImportMatch  = document.getElementById("file-import-match");
+
+if (btnDashSaveMatch) btnDashSaveMatch.onclick = () => {
+  const snap = buildMatchSnapshot();
+  const txt = safeJSONStringify(snap);
+  openMatchIOModal(txt);
+};
+
+if (btnDashLoadMatch) btnDashLoadMatch.onclick = () => openMatchIOModal("");
+
+// Modal actions
+const matchioClose = document.getElementById("matchio-close");
+const matchioPick  = document.getElementById("matchio-pickfile");
+const matchioImport= document.getElementById("matchio-import");
+const matchioCopy  = document.getElementById("matchio-copy");
+const matchioDown  = document.getElementById("matchio-download");
+
+if (matchioClose) matchioClose.onclick = closeMatchIOModal;
+
+if (matchioPick) matchioPick.onclick = () => {
+  if (fileImportMatch) fileImportMatch.click();
+};
+
+if (fileImportMatch) fileImportMatch.addEventListener("change", async (e) => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  try {
+    const txt = await f.text();
+    const ta = document.getElementById("matchio-text");
+    if (ta) ta.value = txt;
+  } catch(err) {}
+  // reset pour permettre re-choisir le même fichier
+  e.target.value = "";
+});
+
+if (matchioImport) matchioImport.onclick = () => {
+  const ta = document.getElementById("matchio-text");
+  const txt = (ta && ta.value) ? ta.value : "";
+  try{
+    importMatchSnapshotFromText(txt);
+    closeMatchIOModal();
+    alert("Match importé ✅ Tu peux continuer la saisie.");
+  }catch(err){
+    alert(err.message || "Import impossible.");
+  }
+};
+
+if (matchioCopy) matchioCopy.onclick = () => {
+  const ta = document.getElementById("matchio-text");
+  const txt = (ta && ta.value) ? ta.value : "";
+  copyTextToClipboard(txt);
+};
+
+if (matchioDown) matchioDown.onclick = () => {
+  const ta = document.getElementById("matchio-text");
+  const txt = (ta && ta.value) ? ta.value : "";
+  const name = (getOurTeamName().replace(/\s+/g,'_') || "Stat2Match") + "_" + new Date().toISOString().slice(0,10) + ".json";
+  downloadTextFile(name, txt || safeJSONStringify(buildMatchSnapshot()));
+};
 
       // Bouton Historique
     document.getElementById("btn-history").addEventListener("click", function(){
@@ -4643,18 +5645,8 @@ if (btnRotateCourtCCW) {
   const rallyBackdrop = document.getElementById("rally-overlay-backdrop");
   const rallyCloseBtn = document.getElementById("rally-close-btn");
 
-  const rallyCloseX = document.getElementById("rally-close-x");
-  if (rallyCloseX) rallyCloseX.onclick = closeRallyOverlay;
-
-  // Rend le panneau rallye déplaçable
-  makeRallyPanelDraggable();
-
-  if (rallyBackdrop) {
-    rallyBackdrop.onclick = closeRallyOverlay;
-  }
-  if (rallyCloseBtn) {
-    rallyCloseBtn.onclick = closeRallyOverlay;
-  }
+  // Wiring rally overlay (close + drag) – robust
+  initRallyOverlayWiring();
   // Sécurité : si le bouton de fin de rallye est créé après ce script,
    // on capte le clic au niveau du document.
    document.addEventListener("click", function(e) {
@@ -4791,10 +5783,29 @@ function buildDashboardShareText(setNum) {
   const oppNeg = document.getElementById("dash-opp-neg")?.innerText || "0";
   const impactTheirs = document.getElementById("dash-impact-theirs")?.innerText || "0%";
   const impactOurs = document.getElementById("dash-impact-ours")?.innerText || "0%";
+const mvp = document.getElementById("select-mvp")?.selectedOptions?.[0]?.textContent || "—";
+const block = document.getElementById("select-best-block")?.selectedOptions?.[0]?.textContent || "—";
+const attack = document.getElementById("select-best-attack")?.selectedOptions?.[0]?.textContent || "—";
+const support = document.getElementById("select-best-support")?.selectedOptions?.[0]?.textContent || "—";
 
-  const mvp = document.getElementById("select-mvp")?.selectedOptions?.[0]?.textContent || "—";
-  const block = document.getElementById("select-best-block")?.selectedOptions?.[0]?.textContent || "—";
-  const support = document.getElementById("select-best-support")?.selectedOptions?.[0]?.textContent || "—";
+// Highlights (Top Δ / soutien / attaque / fautes)
+let hlText = "";
+if (typeof getSetHighlights === "function") {
+  const hi = getSetHighlights(setNum);
+  const a = formatTopList(hi.topDelta, "delta", true);
+  const b = formatTopList(hi.topSupport, "support", false);
+  const c = formatTopList(hi.topAttack, "attack", false);
+  const d = formatTopList(hi.topFaults, "minus", false);
+
+  const lines = [];
+  lines.push("⭐ Highlights");
+  if (a) lines.push("Top Δ : " + a);
+  if (b) lines.push("Top soutien : " + b);
+  if (c) lines.push("Top attaque : " + c);
+  if (d) lines.push("Fautes à surveiller : " + d);
+  if (lines.length > 1) hlText = lines.join("\n");
+}
+
 
   return [
     "📊 Stat2Match — Tableau de bord ("+scoreLabel+")",
@@ -4815,9 +5826,11 @@ function buildDashboardShareText(setNum) {
     `Actions négatives : Nous ${ourNeg} | Eux ${oppNeg}`,
     `Impact fautes : Nos fautes → points adverses ${impactTheirs} | Leurs fautes → nos points ${impactOurs}`,
     "",
+        (hlText ? (hlText + "\n\n") : ""),
     "🏅 Distinctions (auto / sélection)",
     `MVP : ${mvp}`,
     `Meilleur·e bloqueur·euse : ${block}`,
+    `Meilleur·e attaquant·e : ${attack}`,
     `Meilleur soutien : ${support}`,
   ].filter(Boolean).join("\n");
 }
@@ -4860,11 +5873,284 @@ function shareDashboardTelegram() {
   window.open(url, "_blank");
 }
 
-function printDashboardNow() {
-  // On imprime l'écran dashboard tel quel (le navigateur gère PDF)
-  window.print();
+
+/* ---------- PARTAGE & COPIE (génériques) ---------- */
+function openShareWhatsApp(text) {
+  const url = "https://wa.me/?text=" + encodeURIComponent(text || "");
+  window.open(url, "_blank");
+}
+function openShareTelegram(text) {
+  const url = "https://t.me/share/url?text=" + encodeURIComponent(text || "");
+  window.open(url, "_blank");
+}
+function copyTextToClipboard(text, okMsg) {
+  const t = String(text || "");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(() => {
+      if (okMsg) alert(okMsg);
+    }).catch(() => fallbackCopyPlainText(t, okMsg));
+  } else {
+    fallbackCopyPlainText(t, okMsg);
+  }
+}
+function fallbackCopyPlainText(text, okMsg) {
+  const tmp = document.createElement("textarea");
+  tmp.value = String(text || "");
+  tmp.style.position = "fixed";
+  tmp.style.opacity = "0";
+  document.body.appendChild(tmp);
+  tmp.focus();
+  tmp.select();
+  tmp.setSelectionRange(0, tmp.value.length);
+  try { document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(tmp);
+  if (okMsg) alert(okMsg);
+}
+async function shareTextSmart(title, text, okMsg) {
+  const t = String(text || "");
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: title || "Stat2Match", text: t });
+      return true;
+    } catch (e) { /* fallback below */ }
+  }
+  copyTextToClipboard(t, okMsg || "Texte copié ✅");
+  return false;
 }
 
+/* ---------- IMPRESSION (générique funky) ---------- */
+function buildFunkyPrintHTML(title, metaLine, text) {
+  const esc = (v) => String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  const safeTitle = esc(title || "Stat2Match");
+  const safeMeta = esc(metaLine || "");
+  const safeText = esc(text || "");
+  return `<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>${safeTitle}</title>
+  <style>
+    :root{
+      --blue:#4992db; --orange:#ec4f21; --yellow:#f49a1e; --green:#9ece09;
+    }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#111;
+      background: radial-gradient(circle at 20% 10%, rgba(73,146,219,.18), transparent 45%),
+                  radial-gradient(circle at 85% 15%, rgba(236,79,33,.16), transparent 55%),
+                  radial-gradient(circle at 45% 85%, rgba(158,206,9,.14), transparent 55%),
+                  #f6f7fb;
+      padding: 22px;
+    }
+    .wrap{ max-width: 880px; margin:0 auto; }
+    .card{
+      background: #ffffffcc;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 18px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.12);
+      padding: 16px 16px 18px;
+    }
+    h1{ margin:0; font-size: 22px; letter-spacing: .2px; }
+    .meta{
+      margin-top: 6px;
+      color: #444;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .actions{ margin: 14px 0 10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .btn{
+      border: 1px solid rgba(0,0,0,.12);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor:pointer;
+    }
+    pre{
+      margin: 12px 0 0;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      background: rgba(0,0,0,.03);
+      border: 1px dashed rgba(0,0,0,.12);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    @media print{
+      body{ padding:0; background:#fff; }
+      .card{ box-shadow:none; border:none; border-radius:0; }
+      .actions{ display:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>${safeTitle}</h1>
+      ${safeMeta ? `<div class="meta">${safeMeta}</div>` : ``}
+      <div class="actions">
+        <button class="btn" onclick="window.print()">Imprimer / PDF</button>
+      </div>
+      <pre>${safeText}</pre>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+function openPrintableTextPage(title, metaLine, text) {
+  const win = window.open("", "_blank");
+  if (!win) {
+    alert("Impossible d’ouvrir la fenêtre d’impression. Autorise les pop-ups si besoin.");
+    return;
+  }
+  win.document.open();
+  win.document.write(buildFunkyPrintHTML(title, metaLine, text));
+  win.document.close();
+}
+
+
+function buildDashboardPrintHTML(setNum) {
+  const esc = (v) => String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  const title = `Stat2Match — Tableau de bord (set ${setNum})`;
+  const scoreLine = document.getElementById("dash-score-line")?.innerText?.trim() || "";
+  const ourBody = document.getElementById("dash-team-body")?.innerHTML || "";
+  const oppName = (typeof getOppTeamName === "function" ? getOppTeamName() : "") || (document.getElementById("dash-team-name-opponent")?.innerText || "Adversaire");
+  const oppServiceF = document.getElementById("dash-opp-service-fautes")?.innerText || "0";
+  const oppServiceP = document.getElementById("dash-opp-service-points")?.innerText || "0";
+  const oppBlocP = document.getElementById("dash-opp-bloc-points")?.innerText || "0";
+  const oppCad = document.getElementById("dash-opp-cadeaux")?.innerText || "0";
+  const oppPNous = document.getElementById("dash-opp-points-pourNous")?.innerText || "0";
+  const oppPEux = document.getElementById("dash-opp-points-pourEux")?.innerText || "0";
+
+  const ourPos = document.getElementById("dash-our-pos")?.innerText || "0";
+  const oppPos = document.getElementById("dash-opp-pos")?.innerText || "0";
+  const ourNeg = document.getElementById("dash-our-neg")?.innerText || "0";
+  const oppNeg = document.getElementById("dash-opp-neg")?.innerText || "0";
+  const impactTheirs = document.getElementById("dash-impact-theirs")?.innerText || "0%";
+  const impactOurs   = document.getElementById("dash-impact-ours")?.innerText || "0%";
+
+  const mvp = document.getElementById("select-mvp")?.selectedOptions?.[0]?.textContent || "—";
+  const block = document.getElementById("select-best-blocker")?.selectedOptions?.[0]?.textContent || "—";
+  const attack = document.getElementById("select-best-attack")?.selectedOptions?.[0]?.textContent || "—";
+  const support = document.getElementById("select-best-support")?.selectedOptions?.[0]?.textContent || "—";
+
+  const hi = (typeof getSetHighlights === "function") ? getSetHighlights(setNum) : null;
+  const hlDelta = hi ? formatTopList(hi.topDelta, "delta", true) : "";
+  const hlSupport = hi ? formatTopList(hi.topSupport, "support", false) : "";
+  const hlAttack = hi ? formatTopList(hi.topAttack, "attack", false) : "";
+  const hlFaults = hi ? formatTopList(hi.topFaults, "minus", false) : "";
+
+  return `<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>${esc(title)}</title>
+<style>
+  body{ font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif; margin:0; background:#0b0b0e; color:#fff; }
+  .wrap{ max-width:820px; margin:0 auto; padding:18px; }
+  .card{ border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:14px; background: rgba(255,255,255,0.06); margin:12px 0; }
+  h1{ font-size:20px; margin:0 0 6px; }
+  h2{ font-size:15px; margin:0 0 10px; opacity:.95; }
+  .score{ font-weight:800; font-size:16px; }
+  .btnbar{ display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0; }
+  .btn{ border:none; border-radius:999px; padding:10px 14px; background:#d81b60; color:#fff; cursor:pointer; font-weight:700; }
+  .btn.secondary{ background:#111; border:1px solid rgba(255,255,255,.18); }
+  .row{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.10); }
+  .row:last-child{ border-bottom:none; }
+  .k{ color:#ddd; font-weight:700; }
+  .v{ color:#fff; font-weight:700; text-align:right; }
+  .pill{ display:inline-block; margin:4px 6px 0 0; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.18); background: rgba(0,0,0,.25); font-size:12px; }
+  .pill.pink{ border-color: rgba(216,27,96,.55); background: rgba(216,27,96,.14); }
+  .pill.green{ border-color: rgba(0,200,83,.55); background: rgba(0,200,83,.14); }
+  .pill.orange{ border-color: rgba(255,152,0,.55); background: rgba(255,152,0,.14); }
+  .pill.blue{ border-color: rgba(0,119,255,.55); background: rgba(0,119,255,.14); }
+  table{ width:100%; border-collapse:collapse; }
+  /* dash-team-body is divs, keep it readable */
+  .stat-row{ display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.10); }
+  .stat-row:last-child{ border-bottom:none; }
+  .stat-label{ font-weight:700; color:#ddd; }
+  .stat-controls{ font-weight:700; color:#fff; }
+  .stat-sep{ color:#bbb; margin:0 6px; font-weight:600; }
+  @media print{
+    body{ background:#fff; color:#000; }
+    .card{ background:#fff; border-color:#ddd; }
+    .btnbar{ display:none; }
+    .k{ color:#111; }
+    .stat-sep{ color:#333; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>${esc(title)}</h1>
+      <div class="score">${esc(scoreLine)}</div>
+      <div class="btnbar">
+        <button class="btn" onclick="window.print()">Imprimer / PDF</button>
+        <button class="btn secondary" onclick="window.close()">Fermer</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🟩 Nos stats</h2>
+      ${ourBody}
+    </div>
+
+    <div class="card">
+      <h2>🟥 Stats adverses — ${esc(oppName)}</h2>
+      <div class="row"><div class="k">Services</div><div class="v">${esc(oppServiceF)} fautes / ${esc(oppServiceP)} points</div></div>
+      <div class="row"><div class="k">Bloc</div><div class="v">${esc(oppBlocP)} points</div></div>
+      <div class="row"><div class="k">Cadeaux</div><div class="v">${esc(oppCad)} points pour nous</div></div>
+      <div class="row"><div class="k">Points (hors service)</div><div class="v">${esc(oppPNous)} pour nous / ${esc(oppPEux)} pour eux</div></div>
+    </div>
+
+    <div class="card">
+      <h2>🟦 Comparatif — Nous vs Eux</h2>
+      <div class="row"><div class="k">Actions positives</div><div class="v">Nous ${esc(ourPos)} | Eux ${esc(oppPos)}</div></div>
+      <div class="row"><div class="k">Actions négatives</div><div class="v">Nous ${esc(ourNeg)} | Eux ${esc(oppNeg)}</div></div>
+      <div class="row"><div class="k">Impact fautes</div><div class="v">Nos fautes → ${esc(impactTheirs)} | Leurs fautes → ${esc(impactOurs)}</div></div>
+    </div>
+
+    <div class="card">
+      <h2>⭐ Highlights</h2>
+      ${(hlDelta? `<span class="pill pink">Top Δ : ${esc(hlDelta)}</span>`:"")}
+      ${(hlSupport? `<span class="pill green">Top soutien : ${esc(hlSupport)}</span>`:"")}
+      ${(hlAttack? `<span class="pill orange">Top attaque : ${esc(hlAttack)}</span>`:"")}
+      ${(hlFaults? `<span class="pill blue">Fautes : ${esc(hlFaults)}</span>`:"")}
+      ${(!hlDelta && !hlSupport && !hlAttack && !hlFaults) ? "<div style=\"opacity:.75\">—</div>" : ""}
+    </div>
+
+    <div class="card">
+      <h2>🏅 Distinctions</h2>
+      <div class="row"><div class="k">MVP</div><div class="v">${esc(mvp)}</div></div>
+      <div class="row"><div class="k">Meilleur·e bloqueur·euse</div><div class="v">${esc(block)}</div></div>
+      <div class="row"><div class="k">Meilleur·e attaquant·e</div><div class="v">${esc(attack)}</div></div>
+      <div class="row"><div class="k">Meilleur soutien</div><div class="v">${esc(support)}</div></div>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
+function printDashboardNow() {
+  const html = buildDashboardPrintHTML(currentSet);
+  const w = window.open("", "_blank");
+  if (!w) { alert("Impossible d’ouvrir la fenêtre d’impression (popup bloquée)."); return; }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+  try { w.focus(); } catch(e) {}
+}
 /* ===== Rallye : fermeture auto sur actions adverses + drag ===== */
 function makeRallyPanelDraggable() {
   const panel = document.getElementById("rally-overlay-panel");
